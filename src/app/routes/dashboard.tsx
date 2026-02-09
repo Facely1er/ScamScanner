@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { FileText, Trash2, Clock, Settings, Home, Download, Upload } from 'lucide-react';
+import { FileText, Trash2, Clock, Settings, Home, Download, Upload, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { usePreferences } from '../../contexts/PreferencesContext';
+import { useSessionStore } from '../../state/sessionStore';
 
 interface Report {
   id: string;
@@ -25,8 +26,9 @@ export default function Dashboard() {
   const [allReports, setAllReports] = useLocalStorage<Report[]>('cyberstition_reports', []);
   const [allDocuments, setAllDocuments] = useLocalStorage<Document[]>('cyberstition_documents', []);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'reports' | 'documents'>('reports');
+  const [activeTab, setActiveTab] = useState<'sessions' | 'reports' | 'documents'>('sessions');
   const { preferences, updatePreferences } = usePreferences();
+  const { sessions } = useSessionStore();
 
   const reports = allReports;
   const documents = allDocuments;
@@ -144,6 +146,21 @@ export default function Dashboard() {
       <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
         <div style={{ display: 'flex', borderBottom: '1px solid #e0e0e0' }}>
           <button
+            onClick={() => setActiveTab('sessions')}
+            className={activeTab === 'sessions' ? 'tab-active' : 'tab'}
+            style={{
+              flex: 1,
+              padding: '12px 20px',
+              border: 'none',
+              background: activeTab === 'sessions' ? 'white' : 'transparent',
+              borderBottom: activeTab === 'sessions' ? '2px solid var(--primary)' : 'none',
+              fontWeight: activeTab === 'sessions' ? 600 : 400,
+              cursor: 'pointer',
+            }}
+          >
+            Scan Sessions ({sessions.length})
+          </button>
+          <button
             onClick={() => setActiveTab('reports')}
             className={activeTab === 'reports' ? 'tab-active' : 'tab'}
             style={{
@@ -182,6 +199,71 @@ export default function Dashboard() {
             </div>
           ) : (
             <>
+              {activeTab === 'sessions' && (
+                <div>
+                  {sessions.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: 40 }}>
+                      <Shield size={48} style={{ margin: '0 auto 16px', opacity: 0.3 }} />
+                      <p className="p">No scan sessions yet.</p>
+                      <p className="small" style={{ marginTop: 8, marginBottom: 16 }}>
+                        Start a guided scan to analyze content with context-aware pattern detection.
+                      </p>
+                      <Link to="/scan" className="btn primary">Start Your First Scan</Link>
+                    </div>
+                  ) : (
+                    <div className="grid" style={{ gap: 12 }}>
+                      {sessions.slice().reverse().map((session) => (
+                        <Link
+                          key={session.id}
+                          to="/scan"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.location.href = `/scan?session=${session.id}`;
+                          }}
+                          className="card"
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: 16,
+                            textDecoration: 'none'
+                          }}
+                        >
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <h3 className="h3" style={{ margin: 0 }}>
+                                {session.context.senderName || 'Unknown Sender'}
+                              </h3>
+                              <span
+                                className="badge"
+                                style={{
+                                  backgroundColor: getRiskColor(session.overallRiskLevel),
+                                  color: 'white',
+                                  textTransform: 'capitalize',
+                                }}
+                              >
+                                {session.overallRiskLevel} risk
+                              </span>
+                            </div>
+                            <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
+                              <span style={{ textTransform: 'capitalize' }}>
+                                {session.context.origin.replace('_', ' ')}
+                              </span>
+                              <span style={{ opacity: 0.6 }}>
+                                {session.evidence.length} evidence • {session.patternMatches.length} patterns
+                              </span>
+                              <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                                <Clock size={12} /> {formatDate(new Date(session.updatedAt).toISOString())}
+                              </span>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {activeTab === 'reports' && (
                 <div>
                   {reports.length === 0 ? (

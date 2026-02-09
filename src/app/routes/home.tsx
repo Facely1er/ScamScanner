@@ -74,12 +74,27 @@ export default function Home() {
       <section className="card">
         <h1 className="h1">Question what looks real online.</h1>
         <p className="p">
-          Identify scams, fake profiles, manipulated images, and suspicious emails using on-device analysis. All processing happens locally—no data collection, no tracking.
+          Context-aware scam detection that guides you through comprehensive analysis. Identify phishing, fraud, and deception using intelligent pattern matching. All processing happens locally—no data collection, no tracking.
         </p>
         <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-          <Link className="btn primary" to="/messages">Start with Messages</Link>
+          <Link className="btn primary" to="/scan">Start Guided Scan</Link>
           <Link className="btn" to="/about">How it works</Link>
         </div>
+      </section>
+
+      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Shield size={16} /> Smart Analysis Workflow
+        </div>
+        <p className="p" style={{ marginTop: 8 }}>
+          Our guided scan analyzes multiple signals together, detects patterns across evidence, and provides context-aware recommendations based on what you're investigating.
+        </p>
+        <ul style={{ marginTop: 12, paddingLeft: 20 }}>
+          <li className="small" style={{ marginTop: 6 }}>Collect context about the situation</li>
+          <li className="small" style={{ marginTop: 6 }}>Analyze message content, sender profiles, email headers, and images</li>
+          <li className="small" style={{ marginTop: 6 }}>Detect cross-signal patterns and inconsistencies</li>
+          <li className="small" style={{ marginTop: 6 }}>Get confidence-rated risk assessment with clear reasoning</li>
+        </ul>
       </section>
 
       <div className="grid cols-2">
@@ -89,14 +104,12 @@ export default function Home() {
         <ToolCard to="/email" title="Email Analyzer" desc="Analyze email headers for spoofing and routing anomalies." icon={<Mail size={18} />} />
       </div>
 
-      <NextSteps entryPoint="messages" />
-
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
         <div className="kicker" style={{ color: 'var(--text)' }}>
           <FileText size={16} /> Analysis History
         </div>
         <p className="p" style={{ marginTop: 8 }}>
-          Access your saved reports and analysis history from the dashboard.
+          Access your complete scan sessions and analysis history from the dashboard. Review findings, patterns detected, and confidence scores.
         </p>
         <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
           <Link className="btn primary" to="/dashboard">View Dashboard</Link>
