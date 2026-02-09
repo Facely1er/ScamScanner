@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home as HomeIcon, MessageSquare, Settings, Users, Image as ImageIcon, Mail, MoreHorizontal, FileText } from 'lucide-react';
+import { Home as HomeIcon, Shield, MessageSquare, Settings, Users, Image as ImageIcon, Mail, MoreHorizontal, FileText } from 'lucide-react';
 import ThemeToggle from '../../components/common/ThemeToggle';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
@@ -37,6 +37,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
           <nav className="topnav" aria-label="Primary">
             <NavItem to="/" label="Home" icon={<HomeIcon size={18} />} end />
+            <NavItem to="/scan" label="Scan" icon={<Shield size={18} />} />
             <NavItem to="/messages" label="Messages" icon={<MessageSquare size={18} />} />
             <NavItem to="/profiles" label="Profiles" icon={<Users size={18} />} />
             <NavItem to="/images" label="Images" icon={<ImageIcon size={18} />} />
@@ -69,10 +70,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       <nav className="bottomnav" aria-label="Primary">
         <NavItem to="/" label="Home" icon={<HomeIcon size={18} />} end />
-        <NavItem to="/messages" label="Messages" icon={<MessageSquare size={18} />} />
-        <NavItem to="/profiles" label="Profiles" icon={<Users size={18} />} />
-        <NavItem to="/images" label="Images" icon={<ImageIcon size={18} />} />
-        <NavItem to="/email" label="Email" icon={<Mail size={18} />} />
+        <NavItem to="/scan" label="Scan" icon={<Shield size={18} />} />
+        <NavItem to="/dashboard" label="History" icon={<FileText size={18} />} />
+        <NavItem to="/account" label="Settings" icon={<Settings size={18} />} />
         <NavItem to="/more" label="More" icon={<MoreHorizontal size={18} />} />
       </nav>
 
