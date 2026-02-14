@@ -23,10 +23,6 @@ export default function Home() {
             All processing happens locally—no data collection, no tracking.
           </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-            <button onClick={handleGetApp} className="btn primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-              <Download size={16} />
-              Get the app — {priceLabel}
-            </button>
             <Link className="btn" to="/about">How it works</Link>
           </div>
         </section>
