@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, BookOpen, LayoutGrid, Settings, ChevronRight } from 'lucide-react';
+import { Home, BookOpen, LayoutGrid, Settings, ChevronRight, Wrench, HelpCircle } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
 
 export default function More() {
@@ -21,10 +21,22 @@ export default function More() {
             description="Return to the overview and access all tools."
           />
           <MoreLink
+            to="/tools"
+            icon={<Wrench size={16} />}
+            title="Analysis Tools"
+            description="Quick access to all 4 specialized analyzers in one place."
+          />
+          <MoreLink
+            to="/how-it-works"
+            icon={<HelpCircle size={16} />}
+            title="How It Works"
+            description="Learn how Cyberstition analyzes content and detects scams."
+          />
+          <MoreLink
             to="/about"
             icon={<BookOpen size={16} />}
-            title="How It Works"
-            description="Learn how Cyberstition analyzes content and generates indicators."
+            title="About"
+            description="Learn about Cyberstition and our mission."
           />
         </div>
       </section>

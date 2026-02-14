@@ -4,6 +4,8 @@ import { PreferencesProvider } from './contexts/PreferencesContext';
 import AppShell from './app/layout/AppShell';
 import Home from './app/routes/home';
 import Scan from './app/routes/scan';
+import Tools from './app/routes/tools';
+import HowItWorks from './app/routes/how-it-works';
 import Messages from './app/routes/messages';
 import Profiles from './app/routes/profiles';
 import Images from './app/routes/images';
@@ -21,10 +23,12 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/scan" element={<Scan />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/profiles" element={<Profiles />} />
-          <Route path="/images" element={<Images />} />
-          <Route path="/email" element={<Email />} />
+          <Route path="/tools" element={<Tools />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/messages" element={<Navigate to="/tools" replace />} />
+          <Route path="/profiles" element={<Navigate to="/tools" replace />} />
+          <Route path="/images" element={<Navigate to="/tools" replace />} />
+          <Route path="/email" element={<Navigate to="/tools" replace />} />
           <Route path="/about" element={<About />} />
           <Route path="/more" element={<More />} />
           <Route path="/dashboard" element={<Dashboard />} />

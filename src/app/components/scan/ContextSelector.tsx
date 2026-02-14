@@ -16,6 +16,9 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
   const [relationship, setRelationship] = useState('');
   const [requestedAction, setRequestedAction] = useState('');
   const [additionalNotes, setAdditionalNotes] = useState('');
+  const [hasImage, setHasImage] = useState<string>('');
+  const [imageReceived, setImageReceived] = useState('');
+  const [imageContext, setImageContext] = useState('');
 
   const origins = [
     {
@@ -64,12 +67,17 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
     e.preventDefault();
     if (!selectedOrigin) return;
 
+    const contextNotes = [
+      additionalNotes,
+      hasImage === 'yes' ? `Image received: ${imageReceived}. Context: ${imageContext}` : null
+    ].filter(Boolean).join(' | ');
+
     createSession({
       origin: selectedOrigin,
       senderName: senderName || undefined,
       relationship: relationship || undefined,
       requestedAction: requestedAction || undefined,
-      additionalNotes: additionalNotes || undefined
+      additionalNotes: contextNotes || undefined
     });
 
     onComplete();
@@ -213,14 +221,62 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
 
           <div>
             <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
-              Additional context
+              Did they send an image, photo, or screenshot?
             </label>
-            <textarea
+            <select
+              value={hasImage}
+              onChange={(e) => setHasImage(e.target.value)}
+              className="btn"
+              style={{ width: '100%', textAlign: 'left' }}
+            >
+              <option value="">Select...</option>
+              <option value="yes">Yes, they sent an image</option>
+              <option value="no">No image included</option>
+            </select>
+          </div>
+
+          {hasImage === 'yes' && (
+            <>
+              <div>
+                <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+                  How was the image received?
+                </label>
+                <input
+                  type="text"
+                  value={imageReceived}
+                  onChange={(e) => setImageReceived(e.target.value)}
+                  className="btn"
+                  style={{ width: '100%', textAlign: 'left' }}
+                  placeholder="e.g., attached to email, in chat message, via link"
+                />
+              </div>
+
+              <div>
+                <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+                  What was the image about and why did they send it?
+                </label>
+                <textarea
+                  value={imageContext}
+                  onChange={(e) => setImageContext(e.target.value)}
+                  className="btn"
+                  style={{ width: '100%', textAlign: 'left', minHeight: 60, resize: 'vertical' }}
+                  placeholder="e.g., proof of payment, verification document, identity card, product photo"
+                />
+              </div>
+            </>
+          )}
+
+          <div>
+            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              When did you receive this?
+            </label>
+            <input
+              type="text"
               value={additionalNotes}
               onChange={(e) => setAdditionalNotes(e.target.value)}
               className="btn"
-              style={{ width: '100%', textAlign: 'left', minHeight: 80, resize: 'vertical' }}
-              placeholder="Any other details that might be relevant..."
+              style={{ width: '100%', textAlign: 'left' }}
+              placeholder="e.g., today, yesterday, 2 days ago, last week"
             />
           </div>
 
