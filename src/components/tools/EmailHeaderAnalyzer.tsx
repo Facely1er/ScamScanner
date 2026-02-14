@@ -23,13 +23,20 @@ const EmailHeaderAnalyzer: React.FC = () => {
 
     // Create alert if suspicious
     if (analysis.isSuspicious) {
-      const alert = mapEmailAnalysisToAlert(analysis, { 
+      const alert = mapEmailAnalysisToAlert(analysis, {
         id: `email-${Date.now()}`,
-        from: analysis.headerInfo.from 
+        from: analysis.headerInfo.from
       });
       if (alert) {
         addAlert(alert);
       }
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleAnalyze();
     }
   };
 
@@ -112,8 +119,10 @@ const EmailHeaderAnalyzer: React.FC = () => {
             ref={textareaRef}
             value={headerText}
             onChange={(e) => setHeaderText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            autoFocus
             rows={12}
-            className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm 
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm
                        bg-white dark:bg-gray-900 text-gray-900 dark:text-white
                        focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent
                        placeholder-gray-400 dark:placeholder-gray-500 font-mono"
@@ -121,7 +130,7 @@ const EmailHeaderAnalyzer: React.FC = () => {
           />
         </div>
 
-        <div className="flex space-x-3">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleAnalyze}
             disabled={!headerText.trim()}
@@ -159,14 +168,17 @@ const EmailHeaderAnalyzer: React.FC = () => {
           <button
             onClick={handleClear}
             disabled={!headerText && !result}
-            className="inline-flex items-center px-6 py-3 rounded-lg text-sm font-medium 
-                       border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 
+            className="inline-flex items-center px-6 py-3 rounded-lg text-sm font-medium
+                       border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300
                        hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
                        disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <XCircle className="h-4 w-4 mr-2" />
             Clear
           </button>
+          <span className="text-xs text-gray-500 dark:text-gray-400 ml-auto">
+            Ctrl+Enter to analyze
+          </span>
         </div>
       </div>
 

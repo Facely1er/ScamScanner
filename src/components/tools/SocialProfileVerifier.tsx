@@ -156,6 +156,12 @@ const SocialProfileVerifier: React.FC = () => {
               type="text"
               value={profileUrl}
               onChange={(e) => setProfileUrl(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleUrlSubmit();
+                }
+              }}
               onPaste={(e) => {
                 const pastedUrl = e.clipboardData.getData('text');
                 setTimeout(() => {
@@ -167,6 +173,7 @@ const SocialProfileVerifier: React.FC = () => {
                   }
                 }, 0);
               }}
+              autoFocus
               placeholder="https://twitter.com/username or https://instagram.com/username"
               className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-base
                          bg-white dark:bg-gray-900 text-gray-900 dark:text-white
@@ -326,7 +333,7 @@ const SocialProfileVerifier: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex space-x-3 pt-4">
+        <div className="flex flex-wrap items-center gap-3 pt-4">
           <button
             onClick={handleAnalyze}
             disabled={!profileData.username && !profileData.displayName}
@@ -339,18 +346,21 @@ const SocialProfileVerifier: React.FC = () => {
             <User className="h-4 w-4 mr-2" />
             Analyze Profile
           </button>
-          
+
           <button
             onClick={handleClear}
             disabled={!profileData.username && !result}
-            className="inline-flex items-center px-6 py-3 rounded-lg text-base font-medium 
-                       border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 
+            className="inline-flex items-center px-6 py-3 rounded-lg text-base font-medium
+                       border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300
                        hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
                        disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <XCircle className="h-4 w-4 mr-2" />
             Clear
           </button>
+          <span className="text-xs text-gray-500 dark:text-gray-400 ml-auto">
+            Press Enter to extract URL
+          </span>
         </div>
       </div>
 

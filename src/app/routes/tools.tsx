@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageSquare, Mail, Image as ImageIcon, User, ChevronDown, ChevronUp } from 'lucide-react';
 import AICheckMessagePanel from '../../components/tools/AICheckMessagePanel';
 import EmailHeaderAnalyzer from '../../components/tools/EmailHeaderAnalyzer';
@@ -8,7 +8,29 @@ import SocialProfileVerifier from '../../components/tools/SocialProfileVerifier'
 type ToolType = 'message' | 'email' | 'image' | 'profile' | null;
 
 export default function Tools() {
-  const [activeTool, setActiveTool] = useState<ToolType>(null);
+  const [activeTool, setActiveTool] = useState<ToolType>('message');
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      const toolMap: Record<string, ToolType> = {
+        '1': 'message',
+        '2': 'email',
+        '3': 'image',
+        '4': 'profile'
+      };
+
+      if (toolMap[e.key]) {
+        setActiveTool(activeTool === toolMap[e.key] ? null : toolMap[e.key]);
+      } else if (e.key === 'Escape') {
+        setActiveTool(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [activeTool]);
 
   const tools = [
     {
@@ -52,6 +74,19 @@ export default function Tools() {
         <p className="p">
           Use these specialized tools to analyze different types of suspicious content. Each tool focuses on specific indicators and patterns.
         </p>
+        <div style={{
+          marginTop: 12,
+          padding: 12,
+          backgroundColor: 'var(--bg-secondary)',
+          borderRadius: 6,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          flexWrap: 'wrap'
+        }}>
+          <span className="small" style={{ fontWeight: 600, opacity: 0.7 }}>Keyboard shortcuts:</span>
+          <span className="small" style={{ opacity: 0.6 }}>1-4 to toggle tools • Esc to close</span>
+        </div>
       </section>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

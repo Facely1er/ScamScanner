@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSessionStore } from '../../../state/sessionStore';
 import { Mail, MessageCircle, MessageSquare, Smartphone, HelpCircle, ArrowRight } from 'lucide-react';
 import { ContextOrigin } from '../../../types/scan';
@@ -19,6 +19,31 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
   const [hasImage, setHasImage] = useState<string>('');
   const [imageReceived, setImageReceived] = useState('');
   const [imageContext, setImageContext] = useState('');
+
+  const firstInputRef = useRef<HTMLInputElement>(null);
+  const imageReceivedRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showDetails && firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, [showDetails]);
+
+  useEffect(() => {
+    if (hasImage === 'yes' && imageReceivedRef.current) {
+      imageReceivedRef.current.focus();
+    }
+  }, [hasImage]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showDetails) {
+        handleBack();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [showDetails]);
 
   const origins = [
     {
@@ -60,7 +85,7 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
 
   const handleOriginSelect = (origin: ContextOrigin) => {
     setSelectedOrigin(origin);
-    setShowDetails(true);
+    setTimeout(() => setShowDetails(true), 100);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -176,6 +201,7 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
               Sender Name
             </label>
             <input
+              ref={firstInputRef}
               type="text"
               value={senderName}
               onChange={(e) => setSenderName(e.target.value)}
@@ -242,6 +268,7 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
                   How was the image received?
                 </label>
                 <input
+                  ref={imageReceivedRef}
                   type="text"
                   value={imageReceived}
                   onChange={(e) => setImageReceived(e.target.value)}
@@ -280,7 +307,7 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: 12, marginTop: 8, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 12, marginTop: 8, flexWrap: 'wrap', alignItems: 'center' }}>
             <button
               type="submit"
               className="btn primary"
@@ -295,6 +322,9 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
             >
               Back
             </button>
+            <span className="small" style={{ opacity: 0.6, marginLeft: 'auto' }}>
+              Press Enter to continue • Esc to go back
+            </span>
           </div>
         </div>
       </form>

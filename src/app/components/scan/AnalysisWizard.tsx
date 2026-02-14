@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSessionStore } from '../../../state/sessionStore';
 import { analyzeMessage, analyzeEmail, analyzeImage, analyzeProfile } from '../../../services/unifiedAnalyzer';
 import {
@@ -49,9 +49,7 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
   const hasMoreSteps = suggestedSteps.length < workflowSteps.length;
 
   const handleFinishEarly = () => {
-    if (confirm('Are you ready to view results? You can always add more evidence later.')) {
-      onComplete();
-    }
+    onComplete();
   };
 
   return (
@@ -301,6 +299,16 @@ function AnalyzerCard({ step, isNext, isActive, onClick }: any) {
 function AnalyzerPanel({ type, onAnalyze, onClose }: any) {
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
   const handleMessageAnalyze = async (text: string) => {
     setLoading(true);
     const evidence = await analyzeMessage(text);
@@ -345,14 +353,17 @@ function AnalyzerPanel({ type, onAnalyze, onClose }: any) {
 
   return (
     <section className="card" style={{ border: '2px solid var(--primary)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, gap: 12, flexWrap: 'wrap' }}>
         <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {icons[type]}
           {titles[type]}
         </div>
-        <button onClick={onClose} className="btn" style={{ minWidth: 'auto', padding: '6px 14px' }}>
-          Close
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span className="small" style={{ opacity: 0.6 }}>Press Esc to close</span>
+          <button onClick={onClose} className="btn" style={{ minWidth: 'auto', padding: '6px 14px' }}>
+            Close
+          </button>
+        </div>
       </div>
 
       {type === 'message' && <MessageAnalyzer onAnalyze={handleMessageAnalyze} loading={loading} />}
@@ -365,6 +376,24 @@ function AnalyzerPanel({ type, onAnalyze, onClose }: any) {
 
 function MessageAnalyzer({ onAnalyze, loading }: any) {
   const [text, setText] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    textareaRef.current?.focus();
+  }, []);
+
+  const handleSubmit = () => {
+    if (text.trim() && !loading) {
+      onAnalyze(text);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
 
   return (
     <div>
@@ -372,26 +401,48 @@ function MessageAnalyzer({ onAnalyze, loading }: any) {
         Paste the complete message text to analyze for scam patterns, urgency tactics, and manipulation techniques.
       </p>
       <textarea
+        ref={textareaRef}
         value={text}
         onChange={(e) => setText(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder="Paste the message text here..."
         className="btn"
         style={{ width: '100%', minHeight: 120, resize: 'vertical', textAlign: 'left' }}
       />
-      <button
-        onClick={() => text.trim() && onAnalyze(text)}
-        disabled={!text.trim() || loading}
-        className="btn primary"
-        style={{ marginTop: 12 }}
-      >
-        {loading ? 'Analyzing...' : 'Analyze Message'}
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
+        <button
+          onClick={handleSubmit}
+          disabled={!text.trim() || loading}
+          className="btn primary"
+        >
+          {loading ? 'Analyzing...' : 'Analyze Message'}
+        </button>
+        <span className="small" style={{ opacity: 0.6 }}>Ctrl+Enter to analyze</span>
+      </div>
     </div>
   );
 }
 
 function EmailAnalyzer({ onAnalyze, loading }: any) {
   const [headers, setHeaders] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    textareaRef.current?.focus();
+  }, []);
+
+  const handleSubmit = () => {
+    if (headers.trim() && !loading) {
+      onAnalyze(headers);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
 
   return (
     <div>
@@ -399,20 +450,24 @@ function EmailAnalyzer({ onAnalyze, loading }: any) {
         Paste email headers to check sender authenticity, routing paths, and spoofing indicators.
       </p>
       <textarea
+        ref={textareaRef}
         value={headers}
         onChange={(e) => setHeaders(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder="Paste email headers here (View > Show Original in most email clients)..."
         className="btn"
         style={{ width: '100%', minHeight: 120, resize: 'vertical', textAlign: 'left' }}
       />
-      <button
-        onClick={() => headers.trim() && onAnalyze(headers)}
-        disabled={!headers.trim() || loading}
-        className="btn primary"
-        style={{ marginTop: 12 }}
-      >
-        {loading ? 'Analyzing...' : 'Analyze Headers'}
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
+        <button
+          onClick={handleSubmit}
+          disabled={!headers.trim() || loading}
+          className="btn primary"
+        >
+          {loading ? 'Analyzing...' : 'Analyze Headers'}
+        </button>
+        <span className="small" style={{ opacity: 0.6 }}>Ctrl+Enter to analyze</span>
+      </div>
     </div>
   );
 }
@@ -456,8 +511,15 @@ function ProfileAnalyzer({ onAnalyze, loading }: any) {
   const [followingCount, setFollowingCount] = useState('');
   const [postCount, setPostCount] = useState('');
   const [accountAge, setAccountAge] = useState('');
+  const usernameRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    usernameRef.current?.focus();
+  }, []);
+
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!username.trim() || loading) return;
     onAnalyze({
       username,
       bio,
@@ -474,8 +536,9 @@ function ProfileAnalyzer({ onAnalyze, loading }: any) {
       <p className="small" style={{ marginBottom: 12, opacity: 0.8 }}>
         Enter profile information to check for fake account indicators and suspicious patterns.
       </p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <input
+          ref={usernameRef}
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -524,14 +587,17 @@ function ProfileAnalyzer({ onAnalyze, loading }: any) {
           className="btn"
           style={{ width: '100%', textAlign: 'left' }}
         />
-        <button
-          onClick={handleSubmit}
-          disabled={!username.trim() || loading}
-          className="btn primary"
-        >
-          {loading ? 'Analyzing...' : 'Analyze Profile'}
-        </button>
-      </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button
+            type="submit"
+            disabled={!username.trim() || loading}
+            className="btn primary"
+          >
+            {loading ? 'Analyzing...' : 'Analyze Profile'}
+          </button>
+          <span className="small" style={{ opacity: 0.6 }}>Press Enter to analyze</span>
+        </div>
+      </form>
     </div>
   );
 }

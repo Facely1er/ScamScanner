@@ -33,6 +33,13 @@ const AICheckMessagePanel: React.FC = () => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleAnalyze();
+    }
+  };
+
   const handleClear = () => {
     setText('');
     setResult(null);
@@ -119,8 +126,10 @@ const AICheckMessagePanel: React.FC = () => {
             ref={textareaRef}
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            autoFocus
             rows={8}
-            className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm 
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm
                        bg-white dark:bg-gray-900 text-gray-900 dark:text-white
                        focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
                        placeholder-gray-400 dark:placeholder-gray-500"
@@ -139,7 +148,7 @@ const AICheckMessagePanel: React.FC = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex space-x-3">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleAnalyze}
             disabled={disabled}
@@ -177,14 +186,17 @@ const AICheckMessagePanel: React.FC = () => {
           <button
             onClick={handleClear}
             disabled={!text && !result}
-            className="inline-flex items-center px-6 py-3 rounded-lg text-sm font-medium 
-                       border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 
+            className="inline-flex items-center px-6 py-3 rounded-lg text-sm font-medium
+                       border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300
                        hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
                        disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <XCircle className="h-4 w-4 mr-2" />
             Clear
           </button>
+          <span className="text-xs text-gray-500 dark:text-gray-400 ml-auto">
+            Ctrl+Enter to analyze
+          </span>
         </div>
       </div>
 
