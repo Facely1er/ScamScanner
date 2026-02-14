@@ -1,0 +1,247 @@
+import React, { useState } from 'react';
+import { useSessionStore } from '../../../state/sessionStore';
+import { Mail, MessageCircle, MessageSquare, Smartphone, HelpCircle, ArrowRight } from 'lucide-react';
+import { ContextOrigin } from '../../../types/scan';
+
+interface ContextSelectorProps {
+  onComplete: () => void;
+}
+
+export default function ContextSelector({ onComplete }: ContextSelectorProps) {
+  const { createSession } = useSessionStore();
+  const [selectedOrigin, setSelectedOrigin] = useState<ContextOrigin | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
+
+  const [senderName, setSenderName] = useState('');
+  const [relationship, setRelationship] = useState('');
+  const [requestedAction, setRequestedAction] = useState('');
+  const [additionalNotes, setAdditionalNotes] = useState('');
+
+  const origins = [
+    {
+      id: 'email' as ContextOrigin,
+      title: 'Email',
+      icon: <Mail size={32} />,
+      description: 'Received via email or email client',
+      color: '#3b82f6'
+    },
+    {
+      id: 'social_media' as ContextOrigin,
+      title: 'Social Media',
+      icon: <MessageCircle size={32} />,
+      description: 'Post, comment, or message on social platform',
+      color: '#8b5cf6'
+    },
+    {
+      id: 'direct_message' as ContextOrigin,
+      title: 'Direct Message',
+      icon: <MessageSquare size={32} />,
+      description: 'Private message on any platform',
+      color: '#10b981'
+    },
+    {
+      id: 'sms' as ContextOrigin,
+      title: 'SMS/Text',
+      icon: <Smartphone size={32} />,
+      description: 'Text message or SMS',
+      color: '#f59e0b'
+    },
+    {
+      id: 'unknown' as ContextOrigin,
+      title: 'Not Sure',
+      icon: <HelpCircle size={32} />,
+      description: 'Unknown or multiple sources',
+      color: '#6b7280'
+    }
+  ];
+
+  const handleOriginSelect = (origin: ContextOrigin) => {
+    setSelectedOrigin(origin);
+    setShowDetails(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedOrigin) return;
+
+    createSession({
+      origin: selectedOrigin,
+      senderName: senderName || undefined,
+      relationship: relationship || undefined,
+      requestedAction: requestedAction || undefined,
+      additionalNotes: additionalNotes || undefined
+    });
+
+    onComplete();
+  };
+
+  const handleBack = () => {
+    setShowDetails(false);
+    setSelectedOrigin(null);
+  };
+
+  if (!showDetails || !selectedOrigin) {
+    return (
+      <section className="card">
+        <div className="kicker" style={{ marginBottom: 8 }}>Step 1 of 3</div>
+        <h2 className="h2">Where did you receive this?</h2>
+        <p className="p" style={{ marginTop: 8 }}>
+          Select how you received the suspicious content. This helps us analyze it correctly.
+        </p>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: 16,
+          marginTop: 24
+        }}>
+          {origins.map((origin) => (
+            <button
+              key={origin.id}
+              onClick={() => handleOriginSelect(origin.id)}
+              className="card"
+              style={{
+                padding: 20,
+                border: selectedOrigin === origin.id ? `2px solid ${origin.color}` : '1px solid var(--border)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                textAlign: 'left',
+                backgroundColor: 'var(--bg)'
+              }}
+            >
+              <div style={{
+                width: 56,
+                height: 56,
+                borderRadius: 12,
+                backgroundColor: `${origin.color}15`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 12,
+                color: origin.color
+              }}>
+                {origin.icon}
+              </div>
+              <div className="small" style={{ fontWeight: 600, marginBottom: 4 }}>
+                {origin.title}
+              </div>
+              <div className="small" style={{ opacity: 0.7, fontSize: '0.85rem' }}>
+                {origin.description}
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  const selectedOriginData = origins.find(o => o.id === selectedOrigin);
+
+  return (
+    <section className="card">
+      <div className="kicker" style={{ marginBottom: 8 }}>Step 1 of 3</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+        <div style={{
+          width: 48,
+          height: 48,
+          borderRadius: 10,
+          backgroundColor: `${selectedOriginData?.color}15`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: selectedOriginData?.color
+        }}>
+          {selectedOriginData?.icon}
+        </div>
+        <div>
+          <h2 className="h2" style={{ margin: 0 }}>Tell us more details</h2>
+          <p className="small" style={{ margin: 0, marginTop: 4, opacity: 0.7 }}>
+            Optional but helpful for better analysis
+          </p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} style={{ marginTop: 24 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Sender Name
+            </label>
+            <input
+              type="text"
+              value={senderName}
+              onChange={(e) => setSenderName(e.target.value)}
+              className="btn"
+              style={{ width: '100%', textAlign: 'left' }}
+              placeholder="e.g., John Smith, Support Team, unknown number"
+            />
+          </div>
+
+          <div>
+            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Your relationship to sender
+            </label>
+            <select
+              value={relationship}
+              onChange={(e) => setRelationship(e.target.value)}
+              className="btn"
+              style={{ width: '100%', textAlign: 'left' }}
+            >
+              <option value="">Select...</option>
+              <option value="stranger">Complete stranger</option>
+              <option value="acquaintance">Acquaintance</option>
+              <option value="friend">Friend or family</option>
+              <option value="business">Business contact</option>
+              <option value="service">Service provider</option>
+              <option value="unknown">Not sure</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              What action are they requesting?
+            </label>
+            <input
+              type="text"
+              value={requestedAction}
+              onChange={(e) => setRequestedAction(e.target.value)}
+              className="btn"
+              style={{ width: '100%', textAlign: 'left' }}
+              placeholder="e.g., send money, verify account, click link, provide info"
+            />
+          </div>
+
+          <div>
+            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Additional context
+            </label>
+            <textarea
+              value={additionalNotes}
+              onChange={(e) => setAdditionalNotes(e.target.value)}
+              className="btn"
+              style={{ width: '100%', textAlign: 'left', minHeight: 80, resize: 'vertical' }}
+              placeholder="Any other details that might be relevant..."
+            />
+          </div>
+
+          <div style={{ display: 'flex', gap: 12, marginTop: 8, flexWrap: 'wrap' }}>
+            <button
+              type="submit"
+              className="btn primary"
+              style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            >
+              Continue to Analysis <ArrowRight size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={handleBack}
+              className="btn"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+  );
+}
