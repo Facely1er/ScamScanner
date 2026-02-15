@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home as HomeIcon, Shield, Wrench, HelpCircle, Settings, FileText, MoreHorizontal } from 'lucide-react';
+import { Home as HomeIcon, Shield, Wrench, HelpCircle, Settings, FileText } from 'lucide-react';
 import ThemeToggle from '../../components/common/ThemeToggle';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
@@ -47,18 +47,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <NavLink
               to="/dashboard"
               className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label="Dashboard"
+              aria-label="Dashboard - View analysis history"
               title="View Analysis History"
             >
-              <FileText size={16} />
+              <FileText size={16} aria-hidden="true" />
             </NavLink>
             <NavLink
               to="/account"
               className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label="Preferences"
-              title="Preferences"
+              aria-label="Account - Preferences and settings"
+              title="Preferences and Settings"
             >
-              <Settings size={16} />
+              <Settings size={16} aria-hidden="true" />
             </NavLink>
           </div>
         </div>
@@ -66,12 +66,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       <main className="container app-main">{children}</main>
 
-      <nav className="bottomnav" aria-label="Primary">
-        <NavItem to="/" label="Home" icon={<HomeIcon size={18} />} end />
-        <NavItem to="/scan" label="Scan" icon={<Shield size={18} />} />
-        <NavItem to="/tools" label="Tools" icon={<Wrench size={18} />} />
-        <NavItem to="/dashboard" label="History" icon={<FileText size={18} />} />
-        <NavItem to="/more" label="More" icon={<MoreHorizontal size={18} />} />
+      <nav className="bottomnav" aria-label="Primary mobile navigation">
+        <NavItem to="/" label="Home" icon={<HomeIcon size={20} />} end />
+        <NavItem to="/scan" label="Scan" icon={<Shield size={20} />} />
+        <NavItem to="/tools" label="Tools" icon={<Wrench size={20} />} />
+        <NavItem to="/dashboard" label="History" icon={<FileText size={20} />} />
+        <NavItem to="/account" label="Settings" icon={<Settings size={20} />} />
       </nav>
 
       <footer className="footer">
@@ -101,8 +101,14 @@ function NavItem({ to, label, icon, end }: { to: string; label: string; icon: Re
     : location.pathname.startsWith(to);
   
   return (
-    <NavLink to={to} end={end} className={`navitem ${isActive ? 'active' : ''}`}>
-      {icon}
+    <NavLink 
+      to={to} 
+      end={end} 
+      className={`navitem ${isActive ? 'active' : ''}`}
+      aria-label={label}
+      aria-current={isActive ? 'page' : undefined}
+    >
+      {React.cloneElement(icon as React.ReactElement, { 'aria-hidden': true })}
       <span>{label}</span>
     </NavLink>
   );

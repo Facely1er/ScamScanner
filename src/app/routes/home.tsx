@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield } from 'lucide-react';
+import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
@@ -149,6 +149,54 @@ export default function Home() {
         </p>
       </section>
 
+      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+        <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+          <Shield size={24} style={{ color: 'var(--primary)' }} />
+          Why Cyberstition?
+        </h2>
+        <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <Shield size={20} style={{ color: 'var(--primary)' }} />
+              <h3 className="h3" style={{ margin: 0 }}>100% Private</h3>
+            </div>
+            <p className="small">
+              All analysis runs on your device. Nothing leaves your browser. No data collection, no tracking.
+            </p>
+          </div>
+          
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <Download size={20} style={{ color: 'var(--primary)' }} />
+              <h3 className="h3" style={{ margin: 0 }}>One-Time Payment</h3>
+            </div>
+            <p className="small">
+              No subscription required. Pay once, use forever. Better value than monthly subscriptions.
+            </p>
+          </div>
+          
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <User size={20} style={{ color: 'var(--primary)' }} />
+              <h3 className="h3" style={{ margin: 0 }}>No Account Needed</h3>
+            </div>
+            <p className="small">
+              Start using immediately. No sign-up, no email required. Maximum privacy.
+            </p>
+          </div>
+          
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <WifiOff size={20} style={{ color: 'var(--primary)' }} />
+              <h3 className="h3" style={{ margin: 0 }}>Works Offline</h3>
+            </div>
+            <p className="small">
+              Once loaded, all tools work without internet. Perfect for sensitive content.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
         <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Shield size={16} /> How Guided Scans Work
@@ -236,10 +284,38 @@ export default function Home() {
       <div style={{ marginTop: 8 }}>
         <h2 className="h2" style={{ marginBottom: 16 }}>Or Use Individual Tools</h2>
         <div className="grid cols-2">
-          <ToolCard to="/messages" title="Message Detective" desc="Quick analysis of message text for scam patterns." icon={<MessageSquare size={18} />} />
-          <ToolCard to="/profiles" title="Profile Checker" desc="Verify social profile authenticity signals." icon={<User size={18} />} />
-          <ToolCard to="/images" title="Image Inspector" desc="Inspect image metadata and properties." icon={<ImageIcon size={18} />} />
-          <ToolCard to="/email" title="Email Analyzer" desc="Check email headers for spoofing indicators." icon={<Mail size={18} />} />
+          <ToolCard 
+            to="/messages" 
+            title="Message Detective" 
+            desc="Quick analysis of message text for scam patterns." 
+            example='Example: "Urgent! Your account will be suspended in 24 hours. Click here now!"'
+            icon={<MessageSquare size={18} />} 
+            color="#3b82f6"
+          />
+          <ToolCard 
+            to="/profiles" 
+            title="Profile Checker" 
+            desc="Verify social profile authenticity signals." 
+            example="Checks profile age, follower ratios, activity patterns, and verification status"
+            icon={<User size={18} />} 
+            color="#10b981"
+          />
+          <ToolCard 
+            to="/images" 
+            title="Image Inspector" 
+            desc="Inspect image metadata and properties." 
+            example="Detects editing software, creation dates, GPS location, and manipulation indicators"
+            icon={<ImageIcon size={18} />} 
+            color="#f59e0b"
+          />
+          <ToolCard 
+            to="/email" 
+            title="Email Analyzer" 
+            desc="Check email headers for spoofing indicators." 
+            example="Analyzes SPF, DKIM, DMARC records and routing paths to detect spoofing"
+            icon={<Mail size={18} />} 
+            color="#ef4444"
+          />
         </div>
         <p className="small" style={{ marginTop: 12, opacity: 0.7, textAlign: 'center' }}>
           Individual tools provide single-signal analysis. For comprehensive assessment, use Guided Scan.
@@ -264,28 +340,91 @@ export default function Home() {
   );
 }
 
-function ToolCard({ to, title, desc, icon }: { to?: string; title: string; desc: string; icon: React.ReactNode }) {
+function ToolCard({ to, title, desc, icon, example, color = 'var(--primary)' }: { 
+  to?: string; 
+  title: string; 
+  desc: string; 
+  icon: React.ReactNode;
+  example?: string;
+  color?: string;
+}) {
   if (IS_WEB_BUILD) {
     return (
       <div className="card" style={{ opacity: 0.8 }}>
-        <div className="kicker" style={{ justifyContent: 'space-between' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{icon} {title}</span>
-          <span className="badge">In App</span>
+        <div style={{ display: 'flex', alignItems: 'start', gap: 12 }}>
+          <div style={{ 
+            width: 48, 
+            height: 48, 
+            borderRadius: 12, 
+            background: `${color}20`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            {React.cloneElement(icon as React.ReactElement, { size: 24, color })}
+          </div>
+          <div style={{ flex: 1 }}>
+            <div className="kicker" style={{ justifyContent: 'space-between', marginBottom: 4 }}>
+              <span>{title}</span>
+              <span className="badge">In App</span>
+            </div>
+            <p className="p" style={{ marginTop: 8, marginBottom: 0 }}>{desc}</p>
+            {example && (
+              <p className="text-xs" style={{ 
+                fontStyle: 'italic', 
+                color: 'var(--text-muted)',
+                padding: 8,
+                background: 'var(--bg-secondary)',
+                borderRadius: 6,
+                marginTop: 8
+              }}>
+                {example}
+              </p>
+            )}
+            <div style={{ marginTop: 12 }} className="small">Available after purchase</div>
+          </div>
         </div>
-        <p className="p" style={{ marginTop: 10 }}>{desc}</p>
-        <div style={{ marginTop: 12 }} className="small">Available after purchase</div>
       </div>
     );
   }
 
   return (
     <Link to={to!} className="card" style={{ display: 'block' }}>
-      <div className="kicker" style={{ justifyContent: 'space-between' }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{icon} {title}</span>
-        <span className="badge">Signals</span>
+      <div style={{ display: 'flex', alignItems: 'start', gap: 12 }}>
+        <div style={{ 
+          width: 48, 
+          height: 48, 
+          borderRadius: 12, 
+          background: `${color}20`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0
+        }}>
+          {React.cloneElement(icon as React.ReactElement, { size: 24, color })}
+        </div>
+        <div style={{ flex: 1 }}>
+          <div className="kicker" style={{ justifyContent: 'space-between', marginBottom: 4 }}>
+            <span>{title}</span>
+            <span className="badge">Signals</span>
+          </div>
+          <p className="p" style={{ marginTop: 8, marginBottom: 0 }}>{desc}</p>
+          {example && (
+            <p className="text-xs" style={{ 
+              fontStyle: 'italic', 
+              color: 'var(--text-muted)',
+              padding: 8,
+              background: 'var(--bg-secondary)',
+              borderRadius: 6,
+              marginTop: 8
+            }}>
+              {example}
+            </p>
+          )}
+          <div style={{ marginTop: 12 }} className="small">High-level indicators only. Always verify before acting.</div>
+        </div>
       </div>
-      <p className="p" style={{ marginTop: 10 }}>{desc}</p>
-      <div style={{ marginTop: 12 }} className="small">High-level indicators only. Always verify before acting.</div>
     </Link>
   );
 }
