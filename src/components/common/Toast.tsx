@@ -40,12 +40,12 @@ export function ToastContainer() {
       style={{
         position: 'fixed',
         bottom: 90,
-        right: 16,
+        right: 20,
         zIndex: 9999,
         display: 'flex',
         flexDirection: 'column',
-        gap: 8,
-        maxWidth: 360,
+        gap: 10,
+        maxWidth: 400,
         pointerEvents: 'none',
       }}
     >
@@ -84,18 +84,20 @@ function ToastMessage({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: 
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 10,
-        padding: '12px 16px',
+        gap: 12,
+        padding: '14px 18px',
         borderRadius: 12,
         backgroundColor: c.bg,
-        border: `1px solid ${c.border}`,
-        backdropFilter: 'blur(12px)',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        animation: 'slideUp 0.3s ease-out',
+        border: `1.5px solid ${c.border}`,
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        boxShadow: '0 6px 16px rgba(0,0,0,0.18), 0 2px 4px rgba(0,0,0,0.08)',
+        animation: 'slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         pointerEvents: 'auto',
         color: 'var(--text)',
         fontSize: 14,
-        fontWeight: 500,
+        fontWeight: 600,
+        lineHeight: 1.5,
       }}
     >
       <span style={{ color: c.icon, flexShrink: 0, display: 'flex' }}>{icons[toast.type]}</span>
@@ -111,9 +113,12 @@ function ToastMessage({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: 
           padding: 4,
           display: 'flex',
           flexShrink: 0,
+          transition: 'color 0.2s ease',
         }}
+        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text)'}
+        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
       >
-        <X size={14} />
+        <X size={16} />
       </button>
     </div>
   );

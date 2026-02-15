@@ -22,17 +22,17 @@ interface OnboardingProps {
 
 const slides = [
   {
-    icon: <Shield size={48} />,
+    icon: <Shield size={52} strokeWidth={2} />,
     title: 'Detect Scams Before They Strike',
     body: 'Cyberstition analyzes messages, profiles, emails, and images for common scam patterns, phishing tactics, and manipulation techniques.',
   },
   {
-    icon: <Sparkles size={48} />,
+    icon: <Sparkles size={52} strokeWidth={2} />,
     title: 'Guided Multi-Signal Analysis',
     body: 'Our guided scanner combines evidence from multiple sources to detect cross-signal patterns and provide a confidence-rated risk assessment.',
   },
   {
-    icon: <Lock size={48} />,
+    icon: <Lock size={52} strokeWidth={2} />,
     title: 'Privacy First — Always',
     body: 'All analysis runs locally on your device. Nothing is uploaded, tracked, or shared. Your data stays yours.',
   },
@@ -61,37 +61,38 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 24,
-      animation: 'fadeIn 0.4s ease-out',
+      padding: 28,
+      animation: 'fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
     }}>
       <div style={{
-        maxWidth: 400,
+        maxWidth: 480,
         width: '100%',
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 24,
+        gap: 28,
       }}>
         <div style={{
-          width: 96,
-          height: 96,
-          borderRadius: 24,
+          width: 104,
+          height: 104,
+          borderRadius: 26,
           backgroundColor: 'var(--primary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: 'white',
-          animation: 'scaleIn 0.4s ease-out',
+          animation: 'scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: '0 8px 24px rgba(155,125,212,.35)',
         }}>
           {slide.icon}
         </div>
 
-        <h1 className="h2" style={{ margin: 0 }}>{slide.title}</h1>
-        <p className="p" style={{ margin: 0, maxWidth: 340 }}>{slide.body}</p>
+        <h1 className="h2" style={{ margin: 0, fontSize: 28 }}>{slide.title}</h1>
+        <p className="p" style={{ margin: 0, maxWidth: 380, fontSize: 16, lineHeight: 1.75 }}>{slide.body}</p>
 
         {/* Step indicators */}
-        <div style={{ display: 'flex', gap: 8, marginTop: 8 }} role="tablist" aria-label="Onboarding steps">
+        <div style={{ display: 'flex', gap: 10, marginTop: 12 }} role="tablist" aria-label="Onboarding steps">
           {slides.map((_, i) => (
             <div
               key={i}
@@ -99,24 +100,25 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               aria-selected={i === step}
               aria-label={`Step ${i + 1} of ${slides.length}`}
               style={{
-                width: i === step ? 24 : 8,
-                height: 8,
-                borderRadius: 4,
+                width: i === step ? 32 : 10,
+                height: 10,
+                borderRadius: 5,
                 backgroundColor: i === step ? 'var(--primary)' : 'var(--border)',
-                transition: 'all 0.3s ease',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: i === step ? '0 2px 8px rgba(155,125,212,.3)' : 'none',
               }}
             />
           ))}
         </div>
 
-        <div style={{ display: 'flex', gap: 12, marginTop: 16, width: '100%' }}>
+        <div style={{ display: 'flex', gap: 14, marginTop: 24, width: '100%' }}>
           {!isLast && (
-            <button onClick={onComplete} className="btn" style={{ flex: 1 }}>
+            <button onClick={onComplete} className="btn" style={{ flex: 1, padding: '14px 24px' }}>
               Skip
             </button>
           )}
-          <button onClick={handleNext} className="btn primary" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, minHeight: 48 }}>
-            {isLast ? 'Get Started' : 'Next'} <ArrowRight size={16} />
+          <button onClick={handleNext} className="btn primary" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '14px 28px', fontSize: 15 }}>
+            {isLast ? 'Get Started' : 'Next'} <ArrowRight size={18} strokeWidth={2.5} />
           </button>
         </div>
       </div>
