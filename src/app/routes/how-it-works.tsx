@@ -8,7 +8,7 @@ import {
 
 export default function HowItWorks() {
   return (
-    <div className="grid" style={{ gap: 20 }}>
+    <div className="grid loose">
       <section className="card">
         <div className="kicker">
           <Shield size={16} /> Understanding Cyberstition

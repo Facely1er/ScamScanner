@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { FileText, Trash2, Clock, Settings, Home, Download, Upload, Shield, MessageSquare, Image as ImageIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { FileText, Trash2, Clock, Settings, Home, Download, Upload, Shield, Search, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { usePreferences } from '../../contexts/PreferencesContext';
 import { useSessionStore } from '../../state/sessionStore';
+import EmptyState from '../../components/common/EmptyState';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 interface Report {
   id: string;
@@ -27,11 +29,46 @@ export default function Dashboard() {
   const [allDocuments, setAllDocuments] = useLocalStorage<Document[]>('cyberstition_documents', []);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'sessions' | 'reports' | 'documents'>('sessions');
+  const [searchQuery, setSearchQuery] = useState('');
   const { preferences, updatePreferences } = usePreferences();
   const { sessions } = useSessionStore();
+  const navigate = useNavigate();
 
   const reports = allReports;
   const documents = allDocuments;
+
+  // Filter sessions based on search
+  const filteredSessions = useMemo(() => {
+    if (!searchQuery.trim()) return sessions;
+    const query = searchQuery.toLowerCase();
+    return sessions.filter(session => 
+      session.context.senderName?.toLowerCase().includes(query) ||
+      session.context.origin?.toLowerCase().includes(query) ||
+      session.patternMatches.some(p => p.patternName.toLowerCase().includes(query))
+    );
+  }, [sessions, searchQuery]);
+
+  // Filter reports based on search
+  const filteredReports = useMemo(() => {
+    if (!searchQuery.trim()) return reports;
+    const query = searchQuery.toLowerCase();
+    return reports.filter(report =>
+      report.title.toLowerCase().includes(query) ||
+      report.tool_type.toLowerCase().includes(query) ||
+      report.risk_level.toLowerCase().includes(query)
+    );
+  }, [reports, searchQuery]);
+
+  // Filter documents based on search
+  const filteredDocuments = useMemo(() => {
+    if (!searchQuery.trim()) return documents;
+    const query = searchQuery.toLowerCase();
+    return documents.filter(doc =>
+      doc.title.toLowerCase().includes(query) ||
+      doc.description?.toLowerCase().includes(query) ||
+      doc.file_type.toLowerCase().includes(query)
+    );
+  }, [documents, searchQuery]);
 
   const exportData = () => {
     const data = {
@@ -108,124 +145,169 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="grid" style={{ gap: 20 }}>
-      <section className="card" style={{ border: '2px solid var(--border)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: 20, flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, minWidth: 250 }}>
-            <div className="kicker" style={{ marginBottom: 4 }}><FileText size={16} /> Dashboard</div>
-            <h1 className="h1" style={{ marginBottom: 10, paddingBottom: 0, border: 'none' }}>Analysis History</h1>
-            <p className="p" style={{ margin: 0, lineHeight: 1.7 }}>View and manage your saved reports and documents.</p>
+    <div className="grid">
+      <section className="card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+          <div>
+            <div className="kicker"><FileText size={16} /> Dashboard</div>
+            <h1 className="h1">Analysis History</h1>
+            <p className="p">View and manage your saved reports and documents.</p>
           </div>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link to="/" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <Home size={16} /> Home
+              <Home size={16} aria-hidden="true" /> <span>Home</span>
             </Link>
             <Link to="/account" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <Settings size={16} /> Preferences
+              <Settings size={16} aria-hidden="true" /> <span>Preferences</span>
             </Link>
             <button
               onClick={exportData}
               className="btn"
               style={{ display: 'flex', gap: 8, alignItems: 'center' }}
+              aria-label="Export all data"
             >
-              <Download size={16} /> Export
+              <Download size={16} aria-hidden="true" /> <span>Export</span>
             </button>
             <label className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center', cursor: 'pointer' }}>
-              <Upload size={16} /> Import
+              <Upload size={16} aria-hidden="true" /> <span>Import</span>
               <input
                 type="file"
                 accept=".json"
                 onChange={importData}
                 style={{ display: 'none' }}
+                aria-label="Import data from file"
               />
             </label>
           </div>
         </div>
       </section>
 
-      <div className="card" style={{ padding: 0, overflow: 'hidden', border: '1.5px solid var(--border)' }}>
-        <div style={{ display: 'flex', borderBottom: '2px solid var(--border)' }}>
+      <section className="card">
+        {/* Search bar */}
+        <div style={{ position: 'relative' }}>
+          <Search 
+            size={18} 
+            style={{ 
+              position: 'absolute', 
+              left: 14, 
+              top: '50%', 
+              transform: 'translateY(-50%)',
+              color: 'var(--text-muted)',
+              pointerEvents: 'none'
+            }}
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            placeholder="Search sessions, reports, documents..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="input"
+            style={{ paddingLeft: 40, paddingRight: searchQuery ? 40 : 16 }}
+            aria-label="Search dashboard"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="btn icon-only"
+              style={{ 
+                position: 'absolute', 
+                right: 4, 
+                top: '50%', 
+                transform: 'translateY(-50%)',
+                padding: 6
+              }}
+              aria-label="Clear search"
+            >
+              <X size={16} aria-hidden="true" />
+            </button>
+          )}
+        </div>
+      </section>
+
+      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid #e0e0e0' }}>
           <button
             onClick={() => setActiveTab('sessions')}
             className={activeTab === 'sessions' ? 'tab-active' : 'tab'}
             style={{
               flex: 1,
-              padding: '14px 24px',
+              padding: '12px 20px',
               border: 'none',
-              background: activeTab === 'sessions' ? 'var(--card)' : 'transparent',
-              borderBottom: activeTab === 'sessions' ? '3px solid var(--primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'sessions' ? 700 : 500,
-              fontSize: 14,
+              background: activeTab === 'sessions' ? 'white' : 'transparent',
+              borderBottom: activeTab === 'sessions' ? '2px solid var(--primary)' : 'none',
+              fontWeight: activeTab === 'sessions' ? 600 : 400,
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              color: activeTab === 'sessions' ? 'var(--text)' : 'var(--text-muted)',
             }}
           >
-            Scan Sessions ({sessions.length})
+            Scan Sessions ({searchQuery ? filteredSessions.length : sessions.length})
           </button>
           <button
             onClick={() => setActiveTab('reports')}
             className={activeTab === 'reports' ? 'tab-active' : 'tab'}
             style={{
               flex: 1,
-              padding: '14px 24px',
+              padding: '12px 20px',
               border: 'none',
-              background: activeTab === 'reports' ? 'var(--card)' : 'transparent',
-              borderBottom: activeTab === 'reports' ? '3px solid var(--primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'reports' ? 700 : 500,
-              fontSize: 14,
+              background: activeTab === 'reports' ? 'white' : 'transparent',
+              borderBottom: activeTab === 'reports' ? '2px solid var(--primary)' : 'none',
+              fontWeight: activeTab === 'reports' ? 600 : 400,
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              color: activeTab === 'reports' ? 'var(--text)' : 'var(--text-muted)',
             }}
           >
-            Reports ({reports.length})
+            Reports ({searchQuery ? filteredReports.length : reports.length})
           </button>
           <button
             onClick={() => setActiveTab('documents')}
             className={activeTab === 'documents' ? 'tab-active' : 'tab'}
             style={{
               flex: 1,
-              padding: '14px 24px',
+              padding: '12px 20px',
               border: 'none',
-              background: activeTab === 'documents' ? 'var(--card)' : 'transparent',
-              borderBottom: activeTab === 'documents' ? '3px solid var(--primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'documents' ? 700 : 500,
-              fontSize: 14,
+              background: activeTab === 'documents' ? 'white' : 'transparent',
+              borderBottom: activeTab === 'documents' ? '2px solid var(--primary)' : 'none',
+              fontWeight: activeTab === 'documents' ? 600 : 400,
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              color: activeTab === 'documents' ? 'var(--text)' : 'var(--text-muted)',
             }}
           >
-            Documents ({documents.length})
+            Documents ({searchQuery ? filteredDocuments.length : documents.length})
           </button>
         </div>
 
-        <div style={{ padding: 28 }}>
+        <div style={{ padding: 20 }}>
           {loading ? (
-            <div style={{ textAlign: 'center', padding: 60 }}>
-              <div className="spinner" style={{ width: 32, height: 32, margin: '0 auto 16px' }} />
-              <p className="p" style={{ margin: 0 }}>Loading...</p>
+            <div style={{ textAlign: 'center', padding: 40 }}>
+              <LoadingSpinner size={32} label="Loading..." />
             </div>
           ) : (
             <>
               {activeTab === 'sessions' && (
                 <div>
-                  {sessions.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: 60 }}>
-                      <Shield size={56} style={{ margin: '0 auto 20px', opacity: 0.25, color: 'var(--text-muted)' }} />
-                      <h3 className="h3" style={{ marginBottom: 10 }}>No scan sessions yet</h3>
-                      <p className="small" style={{ marginTop: 0, marginBottom: 24, lineHeight: 1.7, opacity: 0.8 }}>
-                        Start a guided scan to analyze content with context-aware pattern detection.
-                      </p>
-                      <Link to="/scan" className="btn primary" style={{ padding: '12px 24px' }}>
-                        <Shield size={18} />
-                        Start Your First Scan
-                      </Link>
-                    </div>
+                  {filteredSessions.length === 0 ? (
+                    searchQuery ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No sessions found"
+                        description={`No scan sessions match "${searchQuery}". Try a different search term.`}
+                        action={{
+                          label: "Clear Search",
+                          onClick: () => setSearchQuery('')
+                        }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={Shield}
+                        title="No scan sessions yet"
+                        description="Start a new guided scan to analyze suspicious content. The guided workflow will help you through the analysis process."
+                        action={{
+                          label: "Start New Scan",
+                          onClick: () => navigate('/scan')
+                        }}
+                      />
+                    )
                   ) : (
-                    <div className="grid" style={{ gap: 14 }}>
-                      {sessions.slice().reverse().map((session) => (
+                    <div className="grid nested">
+                      {filteredSessions.slice().reverse().map((session) => (
                         <Link
                           key={session.id}
                           to="/scan"
@@ -238,14 +320,13 @@ export default function Dashboard() {
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            padding: 20,
-                            textDecoration: 'none',
-                            border: '1.5px solid var(--border)'
+                            padding: 16,
+                            textDecoration: 'none'
                           }}
                         >
                           <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                              <h3 className="h3" style={{ margin: 0, fontSize: 17 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <h3 className="h3" style={{ margin: 0 }}>
                                 {session.context.senderName || 'Unknown Sender'}
                               </h3>
                               <span
@@ -254,21 +335,20 @@ export default function Dashboard() {
                                   backgroundColor: getRiskColor(session.overallRiskLevel),
                                   color: 'white',
                                   textTransform: 'capitalize',
-                                  border: 'none'
                                 }}
                               >
                                 {session.overallRiskLevel} risk
                               </span>
                             </div>
-                            <div className="small" style={{ marginTop: 8, display: 'flex', gap: 16, flexWrap: 'wrap', fontSize: 13 }}>
-                              <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>
+                            <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
+                              <span style={{ textTransform: 'capitalize' }}>
                                 {session.context.origin.replace('_', ' ')}
                               </span>
-                              <span style={{ opacity: 0.65 }}>
+                              <span style={{ opacity: 0.6 }}>
                                 {session.evidence.length} evidence • {session.patternMatches.length} patterns
                               </span>
-                              <span style={{ opacity: 0.65, display: 'flex', gap: 6, alignItems: 'center' }}>
-                                <Clock size={14} /> {formatDate(new Date(session.updatedAt).toISOString())}
+                              <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                                <Clock size={12} /> {formatDate(new Date(session.updatedAt).toISOString())}
                               </span>
                             </div>
                           </div>
@@ -281,26 +361,31 @@ export default function Dashboard() {
 
               {activeTab === 'reports' && (
                 <div>
-                  {reports.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: 60 }}>
-                      <FileText size={56} style={{ margin: '0 auto 20px', opacity: 0.25, color: 'var(--text-muted)' }} />
-                      <h3 className="h3" style={{ marginBottom: 10 }}>No reports saved yet</h3>
-                      <p className="small" style={{ marginTop: 0, marginBottom: 28, lineHeight: 1.7, opacity: 0.8 }}>
-                        Use the analysis tools to create reports. They will appear here once saved.
-                      </p>
-                      <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <Link to="/messages" className="btn primary">
-                          <MessageSquare size={16} />
-                          Start with Messages
-                        </Link>
-                        <Link to="/profiles" className="btn">Check Profiles</Link>
-                        <Link to="/images" className="btn">Inspect Images</Link>
-                        <Link to="/email" className="btn">Analyze Email</Link>
-                      </div>
-                    </div>
+                  {filteredReports.length === 0 ? (
+                    searchQuery ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No reports found"
+                        description={`No reports match "${searchQuery}". Try a different search term.`}
+                        action={{
+                          label: "Clear Search",
+                          onClick: () => setSearchQuery('')
+                        }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={FileText}
+                        title="No reports yet"
+                        description="Reports from individual tool analyses will appear here. Try analyzing a message, email, image, or profile."
+                        action={{
+                          label: "Go to Tools",
+                          onClick: () => navigate('/tools')
+                        }}
+                      />
+                    )
                   ) : (
-                    <div className="grid" style={{ gap: 12 }}>
-                      {reports.map((report) => (
+                    <div className="grid nested">
+                      {filteredReports.map((report) => (
                         <div
                           key={report.id}
                           className="card"
@@ -334,14 +419,13 @@ export default function Dashboard() {
                           </div>
                           <button
                             onClick={() => deleteReport(report.id)}
-                            className="btn"
+                            className="btn icon-only"
                             style={{
-                              padding: 8,
-                              minWidth: 'auto',
-                              color: 'rgb(239 68 68)',
+                              color: 'var(--error)',
                             }}
+                            aria-label={`Delete report: ${report.title}`}
                           >
-                            <Trash2 size={16} />
+                            <Trash2 size={16} aria-hidden="true" />
                           </button>
                         </div>
                       ))}
@@ -352,25 +436,31 @@ export default function Dashboard() {
 
               {activeTab === 'documents' && (
                 <div>
-                  {documents.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: 60 }}>
-                      <FileText size={56} style={{ margin: '0 auto 20px', opacity: 0.25, color: 'var(--text-muted)' }} />
-                      <h3 className="h3" style={{ marginBottom: 10 }}>No documents saved yet</h3>
-                      <p className="small" style={{ marginTop: 0, marginBottom: 28, lineHeight: 1.7, opacity: 0.8 }}>
-                        Documents uploaded for analysis will appear here once saved.
-                      </p>
-                      <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <Link to="/images" className="btn primary">
-                          <ImageIcon size={16} />
-                          Inspect Images
-                        </Link>
-                        <Link to="/messages" className="btn">Analyze Messages</Link>
-                        <Link to="/email" className="btn">Check Email</Link>
-                      </div>
-                    </div>
+                  {filteredDocuments.length === 0 ? (
+                    searchQuery ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No documents found"
+                        description={`No documents match "${searchQuery}". Try a different search term.`}
+                        action={{
+                          label: "Clear Search",
+                          onClick: () => setSearchQuery('')
+                        }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={FileText}
+                        title="No documents saved yet"
+                        description="Documents uploaded for analysis will appear here once saved."
+                        action={{
+                          label: "Go to Tools",
+                          onClick: () => navigate('/tools')
+                        }}
+                      />
+                    )
                   ) : (
-                    <div className="grid" style={{ gap: 12 }}>
-                      {documents.map((doc) => (
+                    <div className="grid nested">
+                      {filteredDocuments.map((doc) => (
                         <div
                           key={doc.id}
                           className="card"
@@ -395,14 +485,13 @@ export default function Dashboard() {
                           </div>
                           <button
                             onClick={() => deleteDocument(doc.id)}
-                            className="btn"
+                            className="btn icon-only"
                             style={{
-                              padding: 8,
-                              minWidth: 'auto',
-                              color: 'rgb(239 68 68)',
+                              color: 'var(--error)',
                             }}
+                            aria-label={`Delete document: ${doc.title}`}
                           >
-                            <Trash2 size={16} />
+                            <Trash2 size={16} aria-hidden="true" />
                           </button>
                         </div>
                       ))}

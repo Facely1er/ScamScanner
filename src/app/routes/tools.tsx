@@ -68,7 +68,7 @@ export default function Tools() {
   };
 
   return (
-    <div className="grid" style={{ gap: 20 }}>
+    <div className="grid loose">
       <section className="card">
         <h1 className="h1">Analysis Tools</h1>
         <p className="p">

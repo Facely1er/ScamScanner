@@ -1,26 +1,26 @@
 /**
  * Usage limits enforcement
- *
- * Three tiers:
- *   1. Web build  → landing page only, tools always locked
- *   2. App build (free tier) → daily limit per tool, then paywall
- *   3. App build (unlocked)  → unlimited (user purchased one-time)
+ * Supports:
+ * - Web builds: Always locked (landing page only)
+ * - Demo mode: Limited scans per tool
+ * - Full access: Unlimited (verified purchase)
  */
 
 import { IS_APP_BUILD, IS_WEB_BUILD } from '../../config/env';
+import { appConfig } from '../../config/app';
+import { hasVerifiedPurchase } from '../../services/purchaseService';
 
 type UsageRecord = {
   used: number;
   resetAt: number; // epoch ms
   toolId: string;
+  trialStartedAt?: number; // epoch ms - when demo trial started
 };
 
 const STORAGE_PREFIX = 'cyberstition_usage_';
 const UNLOCK_KEY = 'cyberstition_unlocked';
+const TRIAL_START_KEY = 'cyberstition_trial_start';
 const USAGE_EVENT = 'cyberstition:usage';
-
-/** Free-tier daily limit per tool (app builds only). */
-const FREE_TIER_DAILY_LIMIT = 3;
 
 // Tool IDs mapping
 export const TOOL_IDS = {
@@ -31,27 +31,83 @@ export const TOOL_IDS = {
 } as const;
 
 /**
- * Check if user has unlocked premium (one-time purchase).
+ * Check if user has unlocked premium access (verified purchase)
  */
 export function isUnlocked(): boolean {
   if (typeof window === 'undefined') return false;
-
-  // Web builds are always locked — no tool access
-  if (IS_WEB_BUILD) return false;
-
-  // App builds: check purchase status
-  if (IS_APP_BUILD) {
-    const unlocked = window.localStorage.getItem(UNLOCK_KEY);
-    return unlocked === 'true';
+  
+  // Web builds are always locked - no tool access
+  if (IS_WEB_BUILD) {
+    return false;
   }
-
-  // Fallback (dev): check localStorage
+  
+  // Check for verified purchase
+  if (hasVerifiedPurchase()) {
+    return true;
+  }
+  
+  // Check localStorage override (for development/testing)
   const unlocked = window.localStorage.getItem(UNLOCK_KEY);
-  return unlocked === 'true';
+  if (unlocked === 'true') {
+    return true;
+  }
+  
+  return false;
 }
 
 /**
- * Set unlock status (called after successful purchase or restore).
+ * Check if demo mode is active (not purchased, but can use limited features)
+ */
+export function isDemoMode(): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  // Web builds are not demo mode - they're locked
+  if (IS_WEB_BUILD) {
+    return false;
+  }
+  
+  // If unlocked (purchased), not in demo mode
+  if (isUnlocked()) {
+    return false;
+  }
+  
+  // Demo mode enabled in config and app build
+  return appConfig.demoModeEnabled && IS_APP_BUILD;
+}
+
+/**
+ * Check if trial period has expired
+ */
+function isTrialExpired(): boolean {
+  if (!appConfig.demo.trialDays || appConfig.demo.trialDays === 0) {
+    return false; // No time limit
+  }
+  
+  if (typeof window === 'undefined') return true;
+  
+  const trialStartStr = window.localStorage.getItem(TRIAL_START_KEY);
+  if (!trialStartStr) {
+    // Start trial now
+    window.localStorage.setItem(TRIAL_START_KEY, Date.now().toString());
+    return false;
+  }
+  
+  const trialStart = parseInt(trialStartStr, 10);
+  const trialEnd = trialStart + (appConfig.demo.trialDays * 24 * 60 * 60 * 1000);
+  const now = Date.now();
+  
+  return now >= trialEnd;
+}
+
+/**
+ * Get demo scan limit for a tool
+ */
+function getDemoLimit(toolId: string): number {
+  return appConfig.demo.scansPerTool;
+}
+
+/**
+ * Set unlock status (called after successful purchase)
  */
 export function setUnlocked(unlocked: boolean): void {
   if (typeof window === 'undefined') return;
@@ -60,7 +116,7 @@ export function setUnlocked(unlocked: boolean): void {
 }
 
 /**
- * Get next midnight in local time.
+ * Get next midnight in local time (24h from last reset)
  */
 function getNextMidnightMs(now = new Date()): number {
   const tomorrow = new Date(now);
@@ -70,16 +126,16 @@ function getNextMidnightMs(now = new Date()): number {
 }
 
 /**
- * Load usage record for a tool.
+ * Load usage record for a tool
  */
 function loadRecord(toolId: string): UsageRecord {
   const key = STORAGE_PREFIX + toolId;
   const raw = typeof window !== 'undefined' ? window.localStorage.getItem(key) : null;
-
+  
   if (!raw) {
     return { used: 0, resetAt: getNextMidnightMs(), toolId };
   }
-
+  
   try {
     const parsed = JSON.parse(raw) as UsageRecord;
     if (typeof parsed.used !== 'number' || typeof parsed.resetAt !== 'number') {
@@ -92,7 +148,7 @@ function loadRecord(toolId: string): UsageRecord {
 }
 
 /**
- * Save usage record.
+ * Save usage record
  */
 function saveRecord(record: UsageRecord): void {
   const key = STORAGE_PREFIX + record.toolId;
@@ -101,7 +157,7 @@ function saveRecord(record: UsageRecord): void {
 }
 
 /**
- * Normalize record — reset counter if past midnight.
+ * Normalize record (reset if past reset time)
  */
 function normalizeRecord(record: UsageRecord): UsageRecord {
   const nowMs = Date.now();
@@ -112,101 +168,166 @@ function normalizeRecord(record: UsageRecord): UsageRecord {
 }
 
 /**
- * Get usage status for a tool.
- *
- * - Unlocked users: unlimited
- * - App free tier: daily limit
- * - Web builds: always locked
+ * Get usage status for a tool
+ * Returns usage information including demo limits if applicable
  */
 export function getUsageStatus(toolId: string): {
   toolId: string;
   used: number;
   remaining: number;
-  limit: number;
   limitReached: boolean;
   resetAt: number;
   isUnlocked: boolean;
+  isDemoMode: boolean;
+  trialExpired?: boolean;
 } {
-  // Unlocked → unlimited
-  if (isUnlocked()) {
+  const unlocked = isUnlocked();
+  
+  // Full access (purchased)
+  if (unlocked) {
     return {
       toolId,
       used: 0,
       remaining: Infinity,
-      limit: Infinity,
       limitReached: false,
       resetAt: getNextMidnightMs(),
       isUnlocked: true,
+      isDemoMode: false,
     };
   }
-
-  // Web builds → always locked
+  
+  // Web builds are always locked (no tool access)
   if (IS_WEB_BUILD) {
     return {
       toolId,
       used: 0,
       remaining: 0,
-      limit: 0,
       limitReached: true,
       resetAt: getNextMidnightMs(),
       isUnlocked: false,
+      isDemoMode: false,
     };
   }
-
-  // App free tier → daily limit
-  const record = normalizeRecord(loadRecord(toolId));
-  const remaining = Math.max(0, FREE_TIER_DAILY_LIMIT - record.used);
-
+  
+  // Demo mode - check limits
+  const demoMode = isDemoMode();
+  if (demoMode) {
+    // Check if trial period expired
+    const trialExpired = isTrialExpired();
+    if (trialExpired && appConfig.demo.trialDays > 0) {
+      return {
+        toolId,
+        used: 0,
+        remaining: 0,
+        limitReached: true,
+        resetAt: getNextMidnightMs(),
+        isUnlocked: false,
+        isDemoMode: true,
+        trialExpired: true,
+      };
+    }
+    
+    // Check scan limits
+    const record = normalizeRecord(loadRecord(toolId));
+    const limit = getDemoLimit(toolId);
+    const remaining = Math.max(0, limit - record.used);
+    const limitReached = record.used >= limit;
+    
+    return {
+      toolId,
+      used: record.used,
+      remaining,
+      limitReached,
+      resetAt: record.resetAt,
+      isUnlocked: false,
+      isDemoMode: true,
+      trialExpired: false,
+    };
+  }
+  
+  // Fallback: locked
   return {
     toolId,
-    used: record.used,
-    remaining,
-    limit: FREE_TIER_DAILY_LIMIT,
-    limitReached: remaining <= 0,
-    resetAt: record.resetAt,
+    used: 0,
+    remaining: 0,
+    limitReached: true,
+    resetAt: getNextMidnightMs(),
     isUnlocked: false,
+    isDemoMode: false,
   };
 }
 
 /**
- * Check if tool can be used right now.
+ * Check if tool can be used
+ * Returns true if user can use the tool (purchased or within demo limits)
  */
 export function canUseTool(toolId: string): boolean {
-  if (isUnlocked()) return true;
-  if (IS_WEB_BUILD) return false;
-
-  const record = normalizeRecord(loadRecord(toolId));
-  return record.used < FREE_TIER_DAILY_LIMIT;
+  if (isUnlocked()) {
+    return true; // Unlimited for purchased users
+  }
+  
+  if (IS_WEB_BUILD) {
+    return false; // Web builds locked
+  }
+  
+  // Check demo mode limits
+  const status = getUsageStatus(toolId);
+  return !status.limitReached;
 }
 
 /**
- * Consume one free use for a tool.
- * Returns true if allowed, false if limit reached.
+ * Consume one use for a tool
+ * Returns true if allowed, false if limit reached
  */
 export function consumeFreeUse(toolId: string): boolean {
-  if (isUnlocked()) return true;
-  if (IS_WEB_BUILD) return false;
+  if (isUnlocked()) {
+    return true; // Unlimited for unlocked users
+  }
+  
+  if (IS_WEB_BUILD) {
+    return false; // Web builds locked
+  }
+
+  const status = getUsageStatus(toolId);
+  if (status.limitReached) {
+    return false;
+  }
 
   const record = normalizeRecord(loadRecord(toolId));
-  if (record.used >= FREE_TIER_DAILY_LIMIT) return false;
-
   record.used += 1;
   saveRecord(record);
+  
   return true;
 }
 
 /**
- * Subscribe to usage changes (for reactive UI updates).
+ * Check if a feature is available (for demo mode restrictions)
+ */
+export function isFeatureAvailable(feature: keyof typeof appConfig.demo.features): boolean {
+  if (isUnlocked()) {
+    return true; // All features available for purchased users
+  }
+  
+  if (!isDemoMode()) {
+    return false; // No features if not in demo mode
+  }
+  
+  return appConfig.demo.features[feature];
+}
+
+/**
+ * Subscribe to usage changes (for reactive UI updates)
  */
 export function subscribeToUsageChanges(handler: () => void): () => void {
   if (typeof window === 'undefined') return () => {};
-
+  
   const listener = () => handler();
   window.addEventListener(USAGE_EVENT, listener as EventListener);
   window.addEventListener('storage', listener);
-
+  
   return () => {
     window.removeEventListener(USAGE_EVENT, listener as EventListener);
     window.removeEventListener('storage', listener);
   };
 }
+

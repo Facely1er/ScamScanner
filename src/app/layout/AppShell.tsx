@@ -48,18 +48,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <NavLink
               to="/dashboard"
               className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label="View Dashboard"
-              title="Analysis History"
+              aria-label="Dashboard - View analysis history"
+              title="View Analysis History"
             >
-              <FileText size={16} />
+              <FileText size={16} aria-hidden="true" />
             </NavLink>
             <NavLink
               to="/account"
               className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label="Account Settings"
-              title="Account Settings"
+              aria-label="Account - Preferences and settings"
+              title="Preferences and Settings"
             >
-              <Settings size={16} />
+              <Settings size={16} aria-hidden="true" />
             </NavLink>
           </div>
         </div>
@@ -67,12 +67,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       <main className="container app-main">{children}</main>
 
-      <nav className="bottomnav" aria-label="Mobile navigation" role="navigation">
+      <nav className="bottomnav" aria-label="Primary mobile navigation">
         <NavItem to="/" label="Home" icon={<HomeIcon size={20} />} end />
         <NavItem to="/scan" label="Scan" icon={<Shield size={20} />} />
         <NavItem to="/tools" label="Tools" icon={<Wrench size={20} />} />
         <NavItem to="/dashboard" label="History" icon={<FileText size={20} />} />
-        <NavItem to="/more" label="More" icon={<MoreHorizontal size={20} />} />
+        <NavItem to="/account" label="Settings" icon={<Settings size={20} />} />
       </nav>
 
       <footer className="footer" role="contentinfo">
@@ -110,9 +110,10 @@ function NavItem({ to, label, icon, end }: { to: string; label: string; icon: Re
       to={to} 
       end={end} 
       className={`navitem ${isActive ? 'active' : ''}`}
+      aria-label={label}
       aria-current={isActive ? 'page' : undefined}
     >
-      {icon}
+      {React.cloneElement(icon as React.ReactElement, { 'aria-hidden': true })}
       <span>{label}</span>
     </NavLink>
   );

@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { usePreferences } from '../../contexts/PreferencesContext';
-import { Settings, Shield, Download, Info } from 'lucide-react';
-import { brandName, tagline, publisher } from '../config/product';
+import { Settings, Shield, Download, Info, Check, RefreshCw } from 'lucide-react';
+import { brandName, tagline, publisher, priceLabel } from '../config/product';
+import { isUnlocked, isDemoMode } from '../core/usageLimits';
+import { hasVerifiedPurchase, restorePurchases } from '../../services/purchaseService';
+import DemoStatus from '../../components/common/DemoStatus';
 
 export default function Preferences() {
   const { preferences, updatePreferences } = usePreferences();
+  const [isRestoring, setIsRestoring] = useState(false);
+  const [restoreError, setRestoreError] = useState<string | null>(null);
+  const unlocked = isUnlocked();
+  const demoMode = isDemoMode();
+  const hasPurchase = hasVerifiedPurchase();
 
   const handlePreferenceChange = (key: keyof typeof preferences, value: boolean | number) => {
     updatePreferences({ [key]: value });
   };
 
+  const handleRestorePurchases = async () => {
+    setIsRestoring(true);
+    setRestoreError(null);
+    
+    try {
+      const result = await restorePurchases();
+      if (result.success && result.verified) {
+        window.location.reload();
+      } else {
+        setRestoreError(result.error || 'No purchases found to restore.');
+      }
+    } catch (err) {
+      setRestoreError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setIsRestoring(false);
+    }
+  };
+
   return (
-    <div className="grid" style={{ gap: 14 }}>
+    <div className="grid">
       <section className="card">
         <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Settings size={16} /> Preferences
@@ -20,6 +46,23 @@ export default function Preferences() {
         <h1 className="h1">Preferences</h1>
         <p className="p">Configure your analysis preferences and settings.</p>
       </section>
+
+      {/* Purchase Status */}
+      {unlocked ? (
+        <div className="card" style={{ padding: 16, backgroundColor: 'rgb(240 253 244)', border: '1px solid rgb(34 197 94)' }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+            <Check size={20} style={{ color: 'rgb(21 128 61)', marginTop: 2 }} />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, marginBottom: 4, color: 'rgb(21 128 61)' }}>Full Access Active</div>
+              <div className="small" style={{ color: 'rgb(21 128 61)' }}>
+                You have full access to all features. Thank you for your purchase!
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <DemoStatus />
+      )}
 
       <div className="card" style={{ padding: 16, backgroundColor: 'rgb(240 253 244)', border: '1px solid rgb(34 197 94)' }}>
         <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
@@ -157,24 +200,55 @@ export default function Preferences() {
         </div>
       </section>
 
-      <section className="card">
-        <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Download size={20} /> Get the App
-        </h2>
-        <div className="grid" style={{ gap: 12 }}>
-          <Link to="/pricing" className="card" style={{ padding: 16, display: 'block', textDecoration: 'none' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Download size={20} style={{ color: 'var(--primary)' }} />
-              <div>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Purchase the App</div>
-                <div className="small" style={{ opacity: 0.8 }}>
-                  Get full access with a one-time purchase
+      {!unlocked && (
+        <section className="card">
+          <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Download size={20} /> {demoMode ? 'Upgrade to Full Access' : 'Get the App'}
+          </h2>
+          <div className="grid" style={{ gap: 12 }}>
+            <Link to="/pricing" className="card" style={{ padding: 16, display: 'block', textDecoration: 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <Download size={20} style={{ color: 'var(--primary)' }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 600, marginBottom: 4 }}>Purchase Full Access</div>
+                  <div className="small" style={{ opacity: 0.8 }}>
+                    {demoMode 
+                      ? `Upgrade for unlimited scans and all features — ${priceLabel}`
+                      : `Get full access with a one-time purchase — ${priceLabel}`}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        </div>
-      </section>
+            </Link>
+            
+            {demoMode && (
+              <div className="card" style={{ padding: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <RefreshCw size={20} style={{ color: 'var(--primary)' }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, marginBottom: 4 }}>Restore Purchases</div>
+                    <div className="small" style={{ opacity: 0.8, marginBottom: 8 }}>
+                      Restore your purchase if you've already bought the app
+                    </div>
+                    {restoreError && (
+                      <div className="small" style={{ color: 'var(--error, #ff4444)', marginBottom: 8 }}>
+                        {restoreError}
+                      </div>
+                    )}
+                    <button
+                      onClick={handleRestorePurchases}
+                      disabled={isRestoring}
+                      className="btn"
+                      style={{ width: '100%' }}
+                    >
+                      {isRestoring ? 'Restoring...' : 'Restore Purchases'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       <section className="card">
         <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

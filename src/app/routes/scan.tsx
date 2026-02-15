@@ -41,7 +41,7 @@ export default function Scan() {
   };
 
   return (
-    <div className="grid" style={{ gap: 24 }}>
+    <div className="grid loose">
       <section className="card" style={{ border: '2px solid var(--border)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
           <div>

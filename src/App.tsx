@@ -23,25 +23,31 @@ export default function App() {
   return (
     <PreferencesProvider>
       {IS_APP_BUILD && showOnboarding && <Onboarding onComplete={finishOnboarding} />}
+      {/* Skip to main content link for accessibility */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
       <AppShell>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/scan" element={<Scan />} />
-          <Route path="/tools" element={<Tools />} />
-          <Route path="/how-it-works" element={<HowItWorks />} />
-          <Route path="/messages" element={<Navigate to="/tools" replace />} />
-          <Route path="/profiles" element={<Navigate to="/tools" replace />} />
-          <Route path="/images" element={<Navigate to="/tools" replace />} />
-          <Route path="/email" element={<Navigate to="/tools" replace />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/more" element={<More />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <div id="main-content" tabIndex={-1}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/scan" element={<Scan />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
+            <Route path="/messages" element={<Navigate to="/tools" replace />} />
+            <Route path="/profiles" element={<Navigate to="/tools" replace />} />
+            <Route path="/images" element={<Navigate to="/tools" replace />} />
+            <Route path="/email" element={<Navigate to="/tools" replace />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/more" element={<More />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
       </AppShell>
       <ToastContainer />
     </PreferencesProvider>
