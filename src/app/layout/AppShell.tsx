@@ -9,23 +9,24 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <>
-      <div className={`header ${scrolled ? 'scrolled' : ''}`}>
+      <header className={`header ${scrolled ? 'scrolled' : ''}`} role="banner">
         <div className="inner">
-          <NavLink to="/" className="brand-link">
+          <NavLink to="/" className="brand-link" aria-label="Cyberstition Home">
             <div className="brand">
               <img
                 src="/cyberstition_logo.png"
-                alt="Cyberstition"
+                alt="Cyberstition Logo"
                 className="brand-logo"
+                loading="eager"
               />
               <div className="brand-text">
                 <strong>Cyberstition™</strong>
@@ -35,7 +36,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </NavLink>
 
-          <nav className="topnav" aria-label="Primary">
+          <nav className="topnav" aria-label="Primary navigation">
             <NavItem to="/" label="Home" icon={<HomeIcon size={18} />} end />
             <NavItem to="/scan" label="Scan" icon={<Shield size={18} />} />
             <NavItem to="/tools" label="Tools" icon={<Wrench size={18} />} />
@@ -47,46 +48,48 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <NavLink
               to="/dashboard"
               className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label="Dashboard"
-              title="View Analysis History"
+              aria-label="View Dashboard"
+              title="Analysis History"
             >
               <FileText size={16} />
             </NavLink>
             <NavLink
               to="/account"
               className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label="Preferences"
-              title="Preferences"
+              aria-label="Account Settings"
+              title="Account Settings"
             >
               <Settings size={16} />
             </NavLink>
           </div>
         </div>
-      </div>
+      </header>
 
       <main className="container app-main">{children}</main>
 
-      <nav className="bottomnav" aria-label="Primary">
-        <NavItem to="/" label="Home" icon={<HomeIcon size={18} />} end />
-        <NavItem to="/scan" label="Scan" icon={<Shield size={18} />} />
-        <NavItem to="/tools" label="Tools" icon={<Wrench size={18} />} />
-        <NavItem to="/dashboard" label="History" icon={<FileText size={18} />} />
-        <NavItem to="/more" label="More" icon={<MoreHorizontal size={18} />} />
+      <nav className="bottomnav" aria-label="Mobile navigation" role="navigation">
+        <NavItem to="/" label="Home" icon={<HomeIcon size={20} />} end />
+        <NavItem to="/scan" label="Scan" icon={<Shield size={20} />} />
+        <NavItem to="/tools" label="Tools" icon={<Wrench size={20} />} />
+        <NavItem to="/dashboard" label="History" icon={<FileText size={20} />} />
+        <NavItem to="/more" label="More" icon={<MoreHorizontal size={20} />} />
       </nav>
 
-      <footer className="footer">
+      <footer className="footer" role="contentinfo">
         <div className="inner">
           <div className="brand">
             <img
               src="/cyberstition_logo.png"
-              alt="Cyberstition"
+              alt="Cyberstition Logo"
               className="brand-logo"
+              loading="lazy"
             />
             <strong>Cyberstition™</strong>
           </div>
           <p className="footer-tagline">Digital Safety Tools for Everyone</p>
           <div className="footer-links">
             <NavLink to="/about" className="footer-link">About</NavLink>
+            <NavLink to="/how-it-works" className="footer-link">How it Works</NavLink>
           </div>
         </div>
       </footer>
@@ -101,7 +104,12 @@ function NavItem({ to, label, icon, end }: { to: string; label: string; icon: Re
     : location.pathname.startsWith(to);
   
   return (
-    <NavLink to={to} end={end} className={`navitem ${isActive ? 'active' : ''}`}>
+    <NavLink 
+      to={to} 
+      end={end} 
+      className={`navitem ${isActive ? 'active' : ''}`}
+      aria-current={isActive ? 'page' : undefined}
+    >
       {icon}
       <span>{label}</span>
     </NavLink>
