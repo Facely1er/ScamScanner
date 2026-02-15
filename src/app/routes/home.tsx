@@ -66,7 +66,7 @@ export default function Home() {
 
   // App build: Full functionality
   return (
-    <div className="grid" style={{ gap: 24 }}>
+    <div className="grid loose">
       <section className="card" style={{
         background: 'linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 100%)',
         border: '2px solid var(--primary)',

@@ -38,7 +38,7 @@ export default function Preferences() {
   };
 
   return (
-    <div className="grid" style={{ gap: 14 }}>
+    <div className="grid">
       <section className="card">
         <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Settings size={16} /> Preferences
