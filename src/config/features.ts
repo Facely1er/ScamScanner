@@ -25,30 +25,22 @@ export const FEATURES = {
 } as const;
 
 /**
- * Check if a feature is available
+ * Check if a feature is available (async version for dynamic checks)
  */
 export async function isFeatureEnabled(feature: keyof typeof FEATURES): Promise<boolean> {
-  const config = FEATURES[feature];
-  
-  if (feature === 'DEEPFAKE_DETECTION') {
-    // Deepfake requires app build and explicit enable
-    return config.enabled && IS_APP_BUILD && !!config.apiKey;
-  }
-  
-  return config.enabled;
+  return isFeatureEnabledSync(feature);
 }
 
 /**
  * Synchronous check for feature availability (for UI rendering)
  */
 export function isFeatureEnabledSync(feature: keyof typeof FEATURES): boolean {
-  const config = FEATURES[feature];
-  
   if (feature === 'DEEPFAKE_DETECTION') {
+    const config = FEATURES.DEEPFAKE_DETECTION;
     return config.enabled && IS_APP_BUILD && !!config.apiKey;
   }
   
-  return config.enabled;
+  return FEATURES[feature].enabled;
 }
 
 /**
