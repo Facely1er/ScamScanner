@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { FileText, Trash2, Clock, Settings, Home, Download, Upload, Shield, Search, X } from 'lucide-react';
+import { FileText, Trash2, Clock, Settings, Home, Download, Upload, Shield, Search, X, FileDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { usePreferences } from '../../contexts/PreferencesContext';
 import { useSessionStore } from '../../state/sessionStore';
 import EmptyState from '../../components/common/EmptyState';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { exportReportToPDF, exportAllReportsToPDF, exportSessionToPDF } from '../../utils/pdfExporter';
 
 interface Report {
   id: string;
@@ -90,6 +91,22 @@ export default function Dashboard() {
     URL.revokeObjectURL(url);
   };
 
+  const exportToPDF = () => {
+    if (allReports.length === 0) {
+      alert('No reports to export. Please create some reports first.');
+      return;
+    }
+    exportAllReportsToPDF(allReports);
+  };
+
+  const exportReportPDF = (report: Report) => {
+    exportReportToPDF(report);
+  };
+
+  const exportSessionPDF = (session: any) => {
+    exportSessionToPDF(session);
+  };
+
   const importData = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -160,13 +177,25 @@ export default function Dashboard() {
             <Link to="/account" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <Settings size={16} aria-hidden="true" /> <span>Preferences</span>
             </Link>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <button
+                onClick={exportToPDF}
+                className="btn primary"
+                style={{ display: 'flex', gap: 8, alignItems: 'center' }}
+                aria-label="Export all reports to PDF"
+                title="Export all reports as PDF"
+              >
+                <FileDown size={16} aria-hidden="true" /> <span>Export PDF</span>
+              </button>
+            </div>
             <button
               onClick={exportData}
               className="btn"
               style={{ display: 'flex', gap: 8, alignItems: 'center' }}
-              aria-label="Export all data"
+              aria-label="Export all data as JSON"
+              title="Export all data as JSON backup"
             >
-              <Download size={16} aria-hidden="true" /> <span>Export</span>
+              <Download size={16} aria-hidden="true" /> <span>Export JSON</span>
             </button>
             <label className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center', cursor: 'pointer' }}>
               <Upload size={16} aria-hidden="true" /> <span>Import</span>
@@ -308,51 +337,73 @@ export default function Dashboard() {
                   ) : (
                     <div className="grid nested">
                       {filteredSessions.slice().reverse().map((session) => (
-                        <Link
+                        <div
                           key={session.id}
-                          to="/scan"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            window.location.href = `/scan?session=${session.id}`;
-                          }}
                           className="card"
                           style={{
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             padding: 16,
-                            textDecoration: 'none'
                           }}
                         >
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                              <h3 className="h3" style={{ margin: 0 }}>
-                                {session.context.senderName || 'Unknown Sender'}
-                              </h3>
-                              <span
-                                className="badge"
-                                style={{
-                                  backgroundColor: getRiskColor(session.overallRiskLevel),
-                                  color: 'white',
-                                  textTransform: 'capitalize',
-                                }}
-                              >
-                                {session.overallRiskLevel} risk
-                              </span>
+                          <Link
+                            to="/scan"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              window.location.href = `/scan?session=${session.id}`;
+                            }}
+                            style={{
+                              flex: 1,
+                              textDecoration: 'none',
+                              color: 'inherit'
+                            }}
+                          >
+                            <div style={{ flex: 1 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <h3 className="h3" style={{ margin: 0 }}>
+                                  {session.context.senderName || 'Unknown Sender'}
+                                </h3>
+                                <span
+                                  className="badge"
+                                  style={{
+                                    backgroundColor: getRiskColor(session.overallRiskLevel),
+                                    color: 'white',
+                                    textTransform: 'capitalize',
+                                  }}
+                                >
+                                  {session.overallRiskLevel} risk
+                                </span>
+                              </div>
+                              <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
+                                <span style={{ textTransform: 'capitalize' }}>
+                                  {session.context.origin.replace('_', ' ')}
+                                </span>
+                                <span style={{ opacity: 0.6 }}>
+                                  {session.evidence.length} evidence • {session.patternMatches.length} patterns
+                                </span>
+                                <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                                  <Clock size={12} /> {formatDate(new Date(session.updatedAt).toISOString())}
+                                </span>
+                              </div>
                             </div>
-                            <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
-                              <span style={{ textTransform: 'capitalize' }}>
-                                {session.context.origin.replace('_', ' ')}
-                              </span>
-                              <span style={{ opacity: 0.6 }}>
-                                {session.evidence.length} evidence • {session.patternMatches.length} patterns
-                              </span>
-                              <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
-                                <Clock size={12} /> {formatDate(new Date(session.updatedAt).toISOString())}
-                              </span>
-                            </div>
-                          </div>
-                        </Link>
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              exportSessionPDF(session);
+                            }}
+                            className="btn icon-only"
+                            style={{
+                              color: 'var(--primary)',
+                              marginLeft: 8
+                            }}
+                            aria-label={`Export session to PDF: ${session.context.senderName || 'Unknown'}`}
+                            title="Export to PDF"
+                          >
+                            <FileDown size={16} aria-hidden="true" />
+                          </button>
+                        </div>
                       ))}
                     </div>
                   )}
@@ -417,16 +468,29 @@ export default function Dashboard() {
                               </span>
                             </div>
                           </div>
-                          <button
-                            onClick={() => deleteReport(report.id)}
-                            className="btn icon-only"
-                            style={{
-                              color: 'var(--error)',
-                            }}
-                            aria-label={`Delete report: ${report.title}`}
-                          >
-                            <Trash2 size={16} aria-hidden="true" />
-                          </button>
+                          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                            <button
+                              onClick={() => exportReportPDF(report)}
+                              className="btn icon-only"
+                              style={{
+                                color: 'var(--primary)',
+                              }}
+                              aria-label={`Export report to PDF: ${report.title}`}
+                              title="Export to PDF"
+                            >
+                              <FileDown size={16} aria-hidden="true" />
+                            </button>
+                            <button
+                              onClick={() => deleteReport(report.id)}
+                              className="btn icon-only"
+                              style={{
+                                color: 'var(--error)',
+                              }}
+                              aria-label={`Delete report: ${report.title}`}
+                            >
+                              <Trash2 size={16} aria-hidden="true" />
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
