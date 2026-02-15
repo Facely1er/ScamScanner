@@ -1,11 +1,10 @@
 import React from 'react';
 import { Check, Download } from 'lucide-react';
-import { brandName, priceLabel } from '../config/product';
+import { brandName, priceLabel, playStoreUrl } from '../config/product';
 
 export default function Pricing() {
   const handleGetApp = () => {
-    // TODO: Replace with actual Play Store URL
-    window.open('https://play.google.com/store/apps', '_blank');
+    if (playStoreUrl) window.open(playStoreUrl, '_blank');
   };
 
   return (

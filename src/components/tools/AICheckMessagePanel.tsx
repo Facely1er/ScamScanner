@@ -6,6 +6,7 @@ import { Brain, AlertTriangle, ShieldCheck, XCircle, HelpCircle, Info, Download 
 import { analyzeMessageForPhishingRisk } from '../../utils/aiRiskDetector';
 import { mapAIRiskToAlert } from '../../mappers/aiToCautionAlert';
 import { useCautionStore } from '../../state/cautionStore';
+import { showToast } from '../common/Toast';
 
 const AICheckMessagePanel: React.FC = () => {
   const [text, setText] = useState('');
@@ -15,6 +16,7 @@ const AICheckMessagePanel: React.FC = () => {
     isPotentialThreat: boolean;
   } | null>(null);
   const [showHelp, setShowHelp] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const addAlert = useCautionStore((s) => s.addAlert);
@@ -22,15 +24,24 @@ const AICheckMessagePanel: React.FC = () => {
   const handleAnalyze = () => {
     if (!text.trim()) return;
 
-    const risk = analyzeMessageForPhishingRisk(text);
-    setResult(risk);
+    setIsAnalyzing(true);
+    // Brief delay for visual feedback
+    setTimeout(() => {
+      const risk = analyzeMessageForPhishingRisk(text);
+      setResult(risk);
+      setIsAnalyzing(false);
+      showToast(
+        risk.isPotentialThreat ? `Risk detected: ${risk.riskScore}% threat score` : 'Analysis complete — low risk',
+        risk.isPotentialThreat ? 'warning' : 'success'
+      );
 
-    // Create alert and add to store if threat detected
-    const id = `user-paste-${Date.now()}`;
-    const cautionAlert = mapAIRiskToAlert(risk, { id }, 'user_paste');
-    if (cautionAlert) {
-      addAlert(cautionAlert);
-    }
+      // Create alert and add to store if threat detected
+      const id = `user-paste-${Date.now()}`;
+      const cautionAlert = mapAIRiskToAlert(risk, { id }, 'user_paste');
+      if (cautionAlert) {
+        addAlert(cautionAlert);
+      }
+    }, 300);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -151,15 +162,15 @@ const AICheckMessagePanel: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleAnalyze}
-            disabled={disabled}
+            disabled={disabled || isAnalyzing}
             className={`inline-flex items-center px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-              disabled
+              disabled || isAnalyzing
                 ? 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-cyan-600 to-teal-600 text-white hover:from-cyan-500 hover:to-teal-500 shadow-lg hover:shadow-cyan-500/30 hover:scale-[1.02]'
             }`}
           >
-            <Brain className="h-4 w-4 mr-2" />
-            Analyze for Risks
+            {isAnalyzing ? <span className="spinner" style={{ marginRight: 8 }} /> : <Brain className="h-4 w-4 mr-2" />}
+            {isAnalyzing ? 'Analyzing...' : 'Analyze for Risks'}
           </button>
           
           <button
@@ -201,6 +212,7 @@ const AICheckMessagePanel: React.FC = () => {
       </div>
 
       {/* Results Display */}
+      <div aria-live="polite" aria-atomic="true">
       {result && (
         <div className="mt-6">
           <div
@@ -299,6 +311,7 @@ const AICheckMessagePanel: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
 
       {/* Educational Footer */}
       <div className="mt-8 p-6 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border border-cyan-200 dark:border-cyan-800 rounded-xl">

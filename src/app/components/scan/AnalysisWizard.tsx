@@ -78,7 +78,14 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
                 {completedSteps} of {totalSteps} completed
               </span>
             </div>
-            <div style={{ height: 8, backgroundColor: 'var(--border)', borderRadius: 4, overflow: 'hidden' }}>
+            <div
+              role="progressbar"
+              aria-valuenow={completedSteps}
+              aria-valuemin={0}
+              aria-valuemax={totalSteps}
+              aria-label={`Analysis progress: ${completedSteps} of ${totalSteps} steps completed`}
+              style={{ height: 8, backgroundColor: 'var(--border)', borderRadius: 4, overflow: 'hidden' }}
+            >
               <div style={{
                 height: '100%',
                 width: `${(completedSteps / totalSteps) * 100}%`,

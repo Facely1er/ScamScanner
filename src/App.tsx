@@ -6,19 +6,21 @@ import Home from './app/routes/home';
 import Scan from './app/routes/scan';
 import Tools from './app/routes/tools';
 import HowItWorks from './app/routes/how-it-works';
-import Messages from './app/routes/messages';
-import Profiles from './app/routes/profiles';
-import Images from './app/routes/images';
-import Email from './app/routes/email';
 import About from './app/routes/about';
 import More from './app/routes/more';
 import Dashboard from './app/routes/dashboard';
 import Account from './app/routes/account';
 import Pricing from './app/routes/pricing';
+import { ToastContainer } from './components/common/Toast';
+import Onboarding, { useOnboarding } from './components/common/Onboarding';
+import { IS_APP_BUILD } from './config/env';
 
 export default function App() {
+  const { showOnboarding, finishOnboarding } = useOnboarding();
+
   return (
     <PreferencesProvider>
+      {IS_APP_BUILD && showOnboarding && <Onboarding onComplete={finishOnboarding} />}
       <AppShell>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -37,6 +39,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AppShell>
+      <ToastContainer />
     </PreferencesProvider>
   );
 }

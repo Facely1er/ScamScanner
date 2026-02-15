@@ -4,12 +4,11 @@ import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shie
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
-import { priceLabel } from '../config/product';
+import { priceLabel, playStoreUrl } from '../config/product';
 
 export default function Home() {
   const handleGetApp = () => {
-    // TODO: Replace with actual Play Store URL
-    window.open('https://play.google.com/store/apps', '_blank');
+    if (playStoreUrl) window.open(playStoreUrl, '_blank');
   };
 
   // Web build: Landing page only

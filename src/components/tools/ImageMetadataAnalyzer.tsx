@@ -6,6 +6,7 @@ import { Image, Upload, AlertTriangle, ShieldCheck, XCircle, Info, Loader2, Down
 import { analyzeImageMetadata, getImageRiskLevel } from '../../utils/imageMetadataAnalyzer';
 import { mapImageAnalysisToAlert } from '../../mappers/imageToCautionAlert';
 import { useCautionStore } from '../../state/cautionStore';
+import { showToast } from '../common/Toast';
 
 const ImageMetadataAnalyzer: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -121,6 +122,10 @@ const ImageMetadataAnalyzer: React.FC = () => {
     try {
       const analysis = await analyzeImageMetadata(file);
       setResult(analysis);
+      showToast(
+        analysis.isSuspicious ? `Image flagged: ${analysis.riskScore}% risk` : 'Analysis complete — no issues detected',
+        analysis.isSuspicious ? 'warning' : 'success'
+      );
 
       // Create alert if suspicious
       if (analysis.isSuspicious) {
@@ -217,7 +222,7 @@ const ImageMetadataAnalyzer: React.FC = () => {
                 disabled={isAnalyzing}
                 className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-cyan-600 to-teal-600 text-white rounded-lg font-medium hover:from-cyan-500 hover:to-teal-500 shadow-lg hover:shadow-cyan-500/30 transition-all duration-200 hover:scale-[1.02] disabled:opacity-50"
               >
-                {isAnalyzing ? 'Analyzing...' : 'Analyze Image'}
+                {isAnalyzing ? <><span className="spinner" style={{ marginRight: 8 }} /> Analyzing...</> : 'Analyze Image'}
               </button>
             </div>
           </div>
@@ -231,6 +236,7 @@ const ImageMetadataAnalyzer: React.FC = () => {
       </div>
 
       {/* Results */}
+      <div aria-live="polite" aria-atomic="true">
       {result && (
         <div className={`border-2 rounded-xl p-6 ${
           result.isSuspicious
@@ -330,6 +336,7 @@ const ImageMetadataAnalyzer: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
 
       {/* Educational Footer */}
       <div className="mt-8 p-6 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border border-cyan-200 dark:border-cyan-800 rounded-xl">

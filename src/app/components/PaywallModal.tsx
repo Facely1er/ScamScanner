@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Download } from 'lucide-react';
-import { priceLabel } from '../config/product';
+import { priceLabel, playStoreUrl } from '../config/product';
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -16,8 +16,7 @@ export default function PaywallModal({ isOpen, onClose, toolName }: PaywallModal
 
   const handleUnlock = () => {
     onClose();
-    // TODO: Replace with actual Play Store URL
-    window.open('https://play.google.com/store/apps', '_blank');
+    if (playStoreUrl) window.open(playStoreUrl, '_blank');
   };
 
   return (
@@ -38,6 +37,9 @@ export default function PaywallModal({ isOpen, onClose, toolName }: PaywallModal
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={toolName ? `Get ${toolName}` : 'Get the App'}
         className="card"
         style={{
           maxWidth: 400,
