@@ -30,7 +30,7 @@ export default function Pricing() {
   };
 
   return (
-    <div className="grid" style={{ gap: 14, maxWidth: 600, margin: '0 auto' }}>
+    <div className="grid" style={{ maxWidth: 600, margin: '0 auto' }}>
       <section className="card">
         <h1 className="h1">Get {brandName}</h1>
         {unlocked ? (

@@ -12,7 +12,12 @@
     "build:app": "tsc -b && cross-env BUILD_TARGET=app vite build",
     "preview": "vite preview",
     "preview:web": "vite preview --outDir dist/web",
-    "preview:app": "vite preview --outDir dist/app"
+    "preview:app": "vite preview --outDir dist/app",
+    "android:init": "npx cap add android",
+    "android:sync": "npm run build:app && npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:run": "npm run android:sync && npx cap run android",
+    "android:build": "npm run build:app && npx cap sync android"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
@@ -20,6 +25,7 @@
     "@capacitor/core": "^6.0.0",
     "@capacitor/splash-screen": "^6.0.0",
     "@capacitor/status-bar": "^6.0.0",
+    "@capacitor-community/in-app-purchase": "^1.0.0",
     "@supabase/supabase-js": "^2.95.3",
     "lucide-react": "^0.542.0",
     "react": "^18.3.1",
