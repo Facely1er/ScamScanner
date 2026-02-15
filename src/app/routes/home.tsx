@@ -313,7 +313,7 @@ function ToolCard({ to, title, desc, icon }: { to?: string; title: string; desc:
           <span className="badge" style={{ fontSize: 10 }}>In App</span>
         </div>
         <p className="p" style={{ marginTop: 10, marginBottom: 10, fontSize: 14, lineHeight: 1.65 }}>{desc}</p>
-        <div style={{ marginTop: 12 }} className="small" style={{ opacity: 0.6 }}>Available after purchase</div>
+        <div className="small" style={{ marginTop: 12, opacity: 0.6 }}>Available after purchase</div>
       </div>
     );
   }
