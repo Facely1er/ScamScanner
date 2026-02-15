@@ -255,7 +255,7 @@ export default function Dashboard() {
       </section>
 
       <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div style={{ display: 'flex', borderBottom: '1px solid #e0e0e0' }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid var(--border)' }}>
           <button
             onClick={() => setActiveTab('sessions')}
             className={activeTab === 'sessions' ? 'tab-active' : 'tab'}
@@ -263,10 +263,24 @@ export default function Dashboard() {
               flex: 1,
               padding: '12px 20px',
               border: 'none',
-              background: activeTab === 'sessions' ? 'white' : 'transparent',
+              background: activeTab === 'sessions' ? 'var(--card)' : 'transparent',
               borderBottom: activeTab === 'sessions' ? '2px solid var(--primary)' : 'none',
+              color: activeTab === 'sessions' ? 'var(--text)' : 'var(--text-secondary)',
               fontWeight: activeTab === 'sessions' ? 600 : 400,
               cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (activeTab !== 'sessions') {
+                e.currentTarget.style.background = 'var(--bg-secondary)';
+                e.currentTarget.style.color = 'var(--text)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeTab !== 'sessions') {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'var(--text-secondary)';
+              }
             }}
           >
             Scan Sessions ({searchQuery ? filteredSessions.length : sessions.length})
@@ -278,10 +292,24 @@ export default function Dashboard() {
               flex: 1,
               padding: '12px 20px',
               border: 'none',
-              background: activeTab === 'reports' ? 'white' : 'transparent',
+              background: activeTab === 'reports' ? 'var(--card)' : 'transparent',
               borderBottom: activeTab === 'reports' ? '2px solid var(--primary)' : 'none',
+              color: activeTab === 'reports' ? 'var(--text)' : 'var(--text-secondary)',
               fontWeight: activeTab === 'reports' ? 600 : 400,
               cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (activeTab !== 'reports') {
+                e.currentTarget.style.background = 'var(--bg-secondary)';
+                e.currentTarget.style.color = 'var(--text)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeTab !== 'reports') {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'var(--text-secondary)';
+              }
             }}
           >
             Reports ({searchQuery ? filteredReports.length : reports.length})
@@ -293,10 +321,24 @@ export default function Dashboard() {
               flex: 1,
               padding: '12px 20px',
               border: 'none',
-              background: activeTab === 'documents' ? 'white' : 'transparent',
+              background: activeTab === 'documents' ? 'var(--card)' : 'transparent',
               borderBottom: activeTab === 'documents' ? '2px solid var(--primary)' : 'none',
+              color: activeTab === 'documents' ? 'var(--text)' : 'var(--text-secondary)',
               fontWeight: activeTab === 'documents' ? 600 : 400,
               cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (activeTab !== 'documents') {
+                e.currentTarget.style.background = 'var(--bg-secondary)';
+                e.currentTarget.style.color = 'var(--text)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeTab !== 'documents') {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'var(--text-secondary)';
+              }
             }}
           >
             Documents ({searchQuery ? filteredDocuments.length : documents.length})
@@ -379,12 +421,12 @@ export default function Dashboard() {
                                 <span style={{ textTransform: 'capitalize' }}>
                                   {session.context.origin.replace('_', ' ')}
                                 </span>
-                                <span style={{ opacity: 0.6 }}>
-                                  {session.evidence.length} evidence • {session.patternMatches.length} patterns
-                                </span>
-                                <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
-                                  <Clock size={12} /> {formatDate(new Date(session.updatedAt).toISOString())}
-                                </span>
+                              <span style={{ color: 'var(--text-muted)' }}>
+                                {session.evidence.length} evidence • {session.patternMatches.length} patterns
+                              </span>
+                              <span style={{ color: 'var(--text-muted)', display: 'flex', gap: 4, alignItems: 'center' }}>
+                                <Clock size={12} /> {formatDate(new Date(session.updatedAt).toISOString())}
+                              </span>
                               </div>
                             </div>
                           </Link>
@@ -462,8 +504,8 @@ export default function Dashboard() {
                               </span>
                             </div>
                             <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
-                              <span style={{ textTransform: 'capitalize' }}>{report.tool_type}</span>
-                              <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                              <span style={{ textTransform: 'capitalize', color: 'var(--text-secondary)' }}>{report.tool_type}</span>
+                              <span style={{ color: 'var(--text-muted)', display: 'flex', gap: 4, alignItems: 'center' }}>
                                 <Clock size={12} /> {formatDate(report.created_at)}
                               </span>
                             </div>
@@ -537,12 +579,12 @@ export default function Dashboard() {
                         >
                           <div style={{ flex: 1 }}>
                             <h3 className="h3" style={{ margin: 0 }}>{doc.title}</h3>
-                            <p className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+                            <p className="small" style={{ marginTop: 4, color: 'var(--text-secondary)' }}>
                               {doc.description || 'No description'}
                             </p>
                             <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
                               <span className="badge">{doc.file_type}</span>
-                              <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                              <span style={{ color: 'var(--text-muted)', display: 'flex', gap: 4, alignItems: 'center' }}>
                                 <Clock size={12} /> {formatDate(doc.created_at)}
                               </span>
                             </div>
