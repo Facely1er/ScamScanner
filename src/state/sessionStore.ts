@@ -28,7 +28,7 @@ function recalculateSession(session: ScanSession): ScanSession {
   const threatCategory = determineThreatCategory(patterns);
 
   const analyzedTypes = new Set(session.evidence.map(e => e.type));
-  const totalSteps = 4;
+  const totalSteps = 5; // Updated to include video
   const completionPercentage = (analyzedTypes.size / totalSteps) * 100;
 
   const nextSteps = generateNextSteps(session, patterns, riskCalc);
@@ -299,6 +299,15 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
         description: 'Inspect image metadata and properties',
         priority: 4,
         completed: analyzedTypes.has('image'),
+        required: false
+      },
+      {
+        id: 'video',
+        type: 'video',
+        label: 'Video Analysis',
+        description: 'Inspect video metadata and properties',
+        priority: 5,
+        completed: analyzedTypes.has('video'),
         required: false
       }
     ];

@@ -2,12 +2,16 @@ import { analyzeMessageForPhishingRisk } from '../utils/aiRiskDetector';
 import { analyzeEmailHeaders, getEmailRiskLevel } from '../utils/emailHeaderAnalyzer';
 import { analyzeImageMetadata, getImageRiskLevel } from '../utils/imageMetadataAnalyzer';
 import { analyzeSocialProfile, getProfileRiskLevel } from '../utils/socialProfileVerifier';
+import { analyzeVideoMetadata, getVideoRiskLevel } from '../utils/videoMetadataAnalyzer';
+import { deepfakeDetector } from './deepfakeDetector';
+import { isFeatureEnabledSync } from '../config/features';
 import { EvidenceItem, Signal, RiskLevel, EvidenceType } from '../types/scan';
 
 function mapSeverityToRiskLevel(score: number, type: EvidenceType): RiskLevel {
   if (type === 'email') return getEmailRiskLevel(score);
   if (type === 'image') return getImageRiskLevel(score);
   if (type === 'profile') return getProfileRiskLevel(score);
+  if (type === 'video') return getVideoRiskLevel(score);
   if (score >= 45) return 'high';
   if (score >= 25) return 'medium';
   return 'low';
@@ -210,5 +214,109 @@ export async function analyzeProfile(profileData: any): Promise<EvidenceItem> {
     riskScore: analysis.riskScore,
     riskLevel: analysis.isSuspicious ? 'high' : mapSeverityToRiskLevel(analysis.riskScore, 'profile'),
     analysis
+  };
+}
+
+export async function analyzeVideo(
+  file: File,
+  options?: { enableDeepfake?: boolean }
+): Promise<EvidenceItem> {
+  // Always do basic metadata analysis
+  const analysis = await analyzeVideoMetadata(file);
+  const signals: Signal[] = [];
+
+  // Add basic metadata signals
+  analysis.issues.forEach((issue, index) => {
+    let score = 0;
+    let type = 'generic';
+
+    if (issue.includes('Uncommon video format')) {
+      score = 10;
+      type = 'uncommon_format';
+    } else if (issue.includes('Large file size')) {
+      score = 10;
+      type = 'large_file';
+    } else if (issue.includes('generic')) {
+      score = 5;
+      type = 'generic_filename';
+    } else if (issue.includes('short video') || issue.includes('long video')) {
+      score = 5;
+      type = 'unusual_duration';
+    } else if (issue.includes('Deepfake detection')) {
+      // Don't score this - it's just informational
+      score = 0;
+      type = 'info';
+    } else {
+      score = 5;
+    }
+
+    if (score > 0) {
+      signals.push({
+        id: `video-signal-${index}`,
+        type,
+        severity: scoreToSeverity(score),
+        score,
+        description: issue,
+        source: 'video'
+      });
+    }
+  });
+
+  // Optional: Add deepfake detection if enabled
+  let deepfakeResult = null;
+  if (options?.enableDeepfake && isFeatureEnabledSync('DEEPFAKE_DETECTION')) {
+    try {
+      if (deepfakeDetector.isAvailable()) {
+        deepfakeResult = await deepfakeDetector.detect(file);
+        
+        if (deepfakeResult.probFake !== undefined && !deepfakeResult.error) {
+          const riskLevel = deepfakeResult.probFake >= 0.7 ? 'high' : 
+                           deepfakeResult.probFake >= 0.4 ? 'medium' : 'low';
+          
+          signals.push({
+            id: 'deepfake-detection',
+            type: 'deepfake',
+            severity: riskLevel,
+            score: deepfakeResult.probFake * 100,
+            description: `Deepfake probability: ${(deepfakeResult.probFake * 100).toFixed(1)}% (${deepfakeResult.label})`,
+            source: 'video'
+          });
+
+          // Adjust risk score based on deepfake
+          if (deepfakeResult.probFake > 0.5) {
+            analysis.riskScore += 30;
+          }
+        }
+      }
+    } catch (error) {
+      // Silently fail - don't break video analysis if deepfake fails
+      console.warn('Deepfake detection failed:', error);
+    }
+  }
+
+  return {
+    id: crypto.randomUUID(),
+    type: 'video',
+    analyzedAt: Date.now(),
+    data: {
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type,
+      duration: analysis.metadata.duration,
+      dimensions: analysis.metadata.dimensions,
+      deepfake: deepfakeResult ? {
+        probFake: deepfakeResult.probFake,
+        confidence: deepfakeResult.confidence,
+        label: deepfakeResult.label,
+        provider: deepfakeResult.provider
+      } : null
+    },
+    signals,
+    riskScore: Math.min(100, analysis.riskScore),
+    riskLevel: analysis.isSuspicious ? 'high' : mapSeverityToRiskLevel(analysis.riskScore, 'video'),
+    analysis: {
+      ...analysis,
+      deepfake: deepfakeResult
+    }
   };
 }

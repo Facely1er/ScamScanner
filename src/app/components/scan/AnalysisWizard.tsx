@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSessionStore } from '../../../state/sessionStore';
-import { analyzeMessage, analyzeEmail, analyzeImage, analyzeProfile } from '../../../services/unifiedAnalyzer';
+import { analyzeMessage, analyzeEmail, analyzeImage, analyzeProfile, analyzeVideo } from '../../../services/unifiedAnalyzer';
 import {
-  MessageSquare, Mail, Image as ImageIcon, User,
+  MessageSquare, Mail, Image as ImageIcon, User, Video,
   CheckCircle, Circle, ArrowRight, Info, TrendingUp, Sparkles
 } from 'lucide-react';
+import VideoAnalyzer from './VideoAnalyzer';
 
 interface AnalysisWizardProps {
   onComplete: () => void;
@@ -217,14 +218,16 @@ function AnalyzerCard({ step, isNext, isActive, onClick }: any) {
     message: <MessageSquare size={20} />,
     email: <Mail size={20} />,
     image: <ImageIcon size={20} />,
-    profile: <User size={20} />
+    profile: <User size={20} />,
+    video: <Video size={20} />
   };
 
   const colors: Record<string, string> = {
     message: '#3b82f6',
     email: '#8b5cf6',
     image: '#10b981',
-    profile: '#f59e0b'
+    profile: '#f59e0b',
+    video: '#ec4899'
   };
 
   const color = colors[step.type as string] || '#6b7280';
@@ -337,18 +340,24 @@ function AnalyzerPanel({ type, onAnalyze, onClose }: any) {
     setLoading(false);
   };
 
+  const handleVideoAnalyze = async (evidence: any) => {
+    onAnalyze(evidence);
+  };
+
   const titles: Record<string, string> = {
     message: 'Analyze Message Content',
     email: 'Analyze Email Headers',
     image: 'Analyze Image Metadata',
-    profile: 'Analyze Profile Information'
+    profile: 'Analyze Profile Information',
+    video: 'Analyze Video Metadata'
   };
 
   const icons: Record<string, React.ReactNode> = {
     message: <MessageSquare size={18} />,
     email: <Mail size={18} />,
     image: <ImageIcon size={18} />,
-    profile: <User size={18} />
+    profile: <User size={18} />,
+    video: <Video size={18} />
   };
 
   return (
@@ -370,6 +379,7 @@ function AnalyzerPanel({ type, onAnalyze, onClose }: any) {
       {type === 'email' && <EmailAnalyzer onAnalyze={handleEmailAnalyze} loading={loading} />}
       {type === 'image' && <ImageAnalyzer onAnalyze={handleImageAnalyze} loading={loading} />}
       {type === 'profile' && <ProfileAnalyzer onAnalyze={handleProfileAnalyze} loading={loading} />}
+      {type === 'video' && <VideoAnalyzer onAnalyze={handleVideoAnalyze} loading={loading} />}
     </section>
   );
 }
