@@ -90,6 +90,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div className="footer-links">
             <NavLink to="/about" className="footer-link">About</NavLink>
             <NavLink to="/how-it-works" className="footer-link">How it Works</NavLink>
+            <NavLink to="/privacy" className="footer-link">Privacy</NavLink>
+            <NavLink to="/terms" className="footer-link">Terms</NavLink>
           </div>
         </div>
       </footer>
