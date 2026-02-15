@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff } from 'lucide-react';
+import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff, Target, Search, Link2, BarChart3 } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
@@ -79,9 +79,19 @@ export default function Home() {
             backgroundColor: 'var(--primary)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            width: 52,
+            height: 52
           }}>
-            <Shield size={28} color="white" />
+            <img 
+              src="/cyberstition_logo.png" 
+              alt="Cyberstition" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'contain' 
+              }} 
+            />
           </div>
           <div>
             <div className="kicker" style={{ margin: 0, color: 'var(--primary)' }}>Recommended</div>
@@ -103,7 +113,7 @@ export default function Home() {
         }}>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 20 }}>🎯</span> Context-Aware
+              <Target size={18} style={{ color: 'var(--primary)' }} /> Context-Aware
             </div>
             <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Analyzes based on how you received it
@@ -111,7 +121,7 @@ export default function Home() {
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 20 }}>🔍</span> Pattern Detection
+              <Search size={18} style={{ color: 'var(--primary)' }} /> Pattern Detection
             </div>
             <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Identifies common scam tactics
@@ -119,7 +129,7 @@ export default function Home() {
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 20 }}>🔗</span> Cross-Signals
+              <Link2 size={18} style={{ color: 'var(--primary)' }} /> Cross-Signals
             </div>
             <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Finds inconsistencies across evidence
@@ -127,7 +137,7 @@ export default function Home() {
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 20 }}>📊</span> Confidence Score
+              <BarChart3 size={18} style={{ color: 'var(--primary)' }} /> Confidence Score
             </div>
             <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Shows reliability of assessment
