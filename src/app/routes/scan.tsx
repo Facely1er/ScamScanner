@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSessionStore } from '../../state/sessionStore';
-import { Shield, ArrowRight, Home, CheckCircle2, Info } from 'lucide-react';
+import { Shield, ArrowRight, Home, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ContextSelector from '../components/scan/ContextSelector';
 import AnalysisWizard from '../components/scan/AnalysisWizard';

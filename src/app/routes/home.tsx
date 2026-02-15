@@ -2,9 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff, Settings } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
-import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
-import { priceLabel } from '../config/product';
 
 export default function Home() {
   const handleGetApp = () => {

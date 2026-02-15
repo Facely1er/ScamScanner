@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
+import { FileText, AlertTriangle, CheckCircle } from 'lucide-react';
 
 export default function Terms() {
   return (

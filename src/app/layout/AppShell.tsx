@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home as HomeIcon, Shield, Wrench, HelpCircle, Settings, FileText, MoreHorizontal } from 'lucide-react';
+import { Home as HomeIcon, Shield, Wrench, HelpCircle, Settings, FileText } from 'lucide-react';
 import ThemeToggle from '../../components/common/ThemeToggle';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
