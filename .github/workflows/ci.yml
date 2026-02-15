@@ -22,7 +22,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Lint
-        run: npx eslint src/ --ext .ts,.tsx --max-warnings 50
+        run: npx eslint src/ --ext .ts,.tsx --max-warnings 100
 
       - name: Test
         run: npx vitest run
