@@ -140,8 +140,11 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
                 border: selectedOrigin === origin.id ? `2px solid ${origin.color}` : '1px solid var(--border)',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                textAlign: 'left',
-                backgroundColor: 'var(--bg)'
+                textAlign: 'center',
+                backgroundColor: 'var(--bg)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
               }}
             >
               <div style={{

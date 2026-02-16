@@ -31,7 +31,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 loading="eager"
               />
               <div className="brand-text">
-                <strong className="brand-name">{t('product.brandName')}™</strong>
+                <strong className="brand-name">{t('product.brandName')}</strong>
                 <span className="brand-subtitle">{t('product.tagline')}</span>
                 <span className="brand-subtext">{t('product.publisher')}</span>
               </div>
@@ -64,7 +64,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               className="brand-logo"
               loading="lazy"
             />
-            <strong>{t('product.brandName')}™</strong>
+            <strong>{t('product.brandName')}</strong>
           </div>
           <p className="footer-tagline">{t('nav.footerTagline')}</p>
           <div className="footer-links">

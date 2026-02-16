@@ -20,7 +20,7 @@ export default function Terms() {
       <section className="card" style={{ border: '1.5px solid var(--border)' }}>
         <h2 className="h2">Agreement to Terms</h2>
         <p className="p">
-          By accessing or using Cyberstition – Trust Signals (ScamScanner), you agree to be bound by these 
+          By accessing or using Cyberstition™ – Trust Signals (ScamScanner), you agree to be bound by these 
           Terms of Service. If you disagree with any part of these terms, you may not use the app.
         </p>
       </section>

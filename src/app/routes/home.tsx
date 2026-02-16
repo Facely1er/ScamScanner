@@ -108,7 +108,7 @@ export default function Home() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
           <div style={{
-            padding: 12,
+            padding: 8,
             borderRadius: 12,
             backgroundColor: 'var(--primary)',
             display: 'flex',
@@ -124,8 +124,7 @@ export default function Home() {
             />
           </div>
           <div>
-            <div className="kicker" style={{ margin: 0, color: 'var(--primary)' }}>{t('home.recommendedKicker')}</div>
-            <h2 className="h2" style={{ margin: 0, marginTop: 4 }}>{t('home.guidedScanTitle')}</h2>
+            <h2 className="h2" style={{ margin: 0 }}>{t('home.guidedScanTitle')}</h2>
           </div>
         </div>
         <p className="p">{t('home.guidedScanIntro')}</p>
@@ -174,7 +173,7 @@ export default function Home() {
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)' }}>
         <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <Shield size={24} style={{ color: 'var(--primary)' }} />
+          <img src="/cyberstition_logo.png" alt="Cyberstition™" style={{ width: 40, height: 40, objectFit: 'contain' }} />
           {t('home.whyCyberstition')}
         </h2>
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
@@ -205,82 +204,6 @@ export default function Home() {
               <h3 className="h3" style={{ margin: 0 }}>{t('home.worksOfflineTitle')}</h3>
             </div>
             <p className="small">{t('home.worksOfflineDesc')}</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Shield size={16} /> {t('home.howGuidedScansKicker')}
-        </div>
-        <div style={{ marginTop: 16 }}>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
-            <div style={{
-              minWidth: 32,
-              height: 32,
-              borderRadius: '50%',
-              backgroundColor: 'var(--primary)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 600
-            }}>1</div>
-            <div>
-              <div className="small" style={{ fontWeight: 600 }}>{t('home.step1Title')}</div>
-              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.step1Desc')}</div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
-            <div style={{
-              minWidth: 32,
-              height: 32,
-              borderRadius: '50%',
-              backgroundColor: 'var(--primary)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 600
-            }}>2</div>
-            <div>
-              <div className="small" style={{ fontWeight: 600 }}>{t('home.step2Title')}</div>
-              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.step2Desc')}</div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
-            <div style={{
-              minWidth: 32,
-              height: 32,
-              borderRadius: '50%',
-              backgroundColor: 'var(--primary)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 600
-            }}>3</div>
-            <div>
-              <div className="small" style={{ fontWeight: 600 }}>{t('home.step3Title')}</div>
-              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.step3Desc')}</div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'start' }}>
-            <div style={{
-              minWidth: 32,
-              height: 32,
-              borderRadius: '50%',
-              backgroundColor: 'var(--primary)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 600
-            }}>4</div>
-            <div>
-              <div className="small" style={{ fontWeight: 600 }}>{t('home.step4Title')}</div>
-              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.step4Desc')}</div>
-            </div>
           </div>
         </div>
       </section>

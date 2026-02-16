@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSessionStore } from '../../state/sessionStore';
-import { Shield, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Shield, ArrowRight, CheckCircle2, MessageSquare, FileSearch, BarChart3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLocale } from '../../contexts/LocaleContext';
 import ContextSelector from '../components/scan/ContextSelector';
@@ -73,9 +73,9 @@ export default function Scan() {
 function StepIndicator({ currentStep }: { currentStep: ScanStep }) {
   const { t } = useLocale();
   const steps = [
-    { id: 'context', label: t('scan.stepContext'), number: 1 },
-    { id: 'analysis', label: t('scan.stepEvidence'), number: 2 },
-    { id: 'results', label: t('scan.stepResults'), number: 3 }
+    { id: 'context', label: t('scan.stepContext'), number: 1, icon: <MessageSquare size={18} /> },
+    { id: 'analysis', label: t('scan.stepEvidence'), number: 2, icon: <FileSearch size={18} /> },
+    { id: 'results', label: t('scan.stepResults'), number: 3, icon: <BarChart3 size={18} /> }
   ];
 
   const getCurrentIndex = () => {
@@ -91,7 +91,7 @@ function StepIndicator({ currentStep }: { currentStep: ScanStep }) {
           <React.Fragment key={step.id}>
             <div className={styles.stepItem}>
               <div className={`${styles.stepCircle} ${index <= currentIndex ? styles.stepCircleActive : styles.stepCircleInactive}`}>
-                {index < currentIndex ? <CheckCircle2 size={20} strokeWidth={2.5} /> : step.number}
+                {index < currentIndex ? <CheckCircle2 size={20} strokeWidth={2.5} /> : step.icon}
               </div>
               <div className={styles.stepContent}>
                 <span className={`small scan-step-label ${styles.stepLabel} ${

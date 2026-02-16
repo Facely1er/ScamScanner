@@ -19,7 +19,6 @@ export default defineConfig({
           navigateFallback: '/index.html',
           navigateFallbackDenylist: [/^\/api\//],
         },
-        dev: false, // disable SW in dev for easier debugging
       }),
   ].filter(Boolean),
   define: {

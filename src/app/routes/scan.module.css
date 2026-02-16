@@ -17,6 +17,18 @@
 
 .stepIndicatorContainer {
   margin-top: 28px;
+  width: 100%;
+}
+
+.stepIndicatorContainer :global(.scan-step-indicator) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 100%);
+  border-radius: 12px;
+  border: 1px solid var(--border);
 }
 
 .stepItem {
@@ -29,29 +41,46 @@
 
 .stepCircle {
   flex-shrink: 0;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 15px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.stepCircle::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #8b5cf6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.stepCircleActive::before {
+  opacity: 0.15;
 }
 
 .stepCircleInactive {
   background-color: var(--bg-secondary);
   border: 2px solid var(--border);
   color: var(--text-muted);
-  box-shadow: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .stepCircleActive {
-  background-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary), #8b5cf6);
   border: 2px solid var(--primary);
   color: white;
-  box-shadow: 0 2px 8px rgba(155, 125, 212, 0.25);
+  box-shadow: 0 4px 12px rgba(155, 125, 212, 0.4);
+  transform: scale(1.05);
 }
 
 .stepContent {
@@ -59,39 +88,131 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .stepLabel {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  line-height: 1.4;
 }
 
 .stepLabelInactive {
   font-weight: 500;
   font-size: 13px;
   color: var(--text-muted);
+  opacity: 0.7;
 }
 
 .stepLabelCompleted {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text);
+  text-decoration: none;
 }
 
 .stepLabelCurrent {
   font-weight: 700;
-  font-size: 14px;
-  color: var(--text);
+  font-size: 15px;
+  color: var(--primary);
+  position: relative;
+}
+
+.stepLabelCurrent::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), #8b5cf6);
+  border-radius: 2px;
 }
 
 .stepArrow {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
+  margin: 0 4px;
 }
 
 .stepArrowInactive {
   color: var(--border);
+  opacity: 0.5;
 }
 
 .stepArrowActive {
   color: var(--primary);
+  opacity: 1;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 640px) {
+  .stepIndicatorContainer :global(.scan-step-indicator) {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .stepItem {
+    gap: 8px;
+  }
+
+  .stepCircle {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .stepLabel {
+    font-size: 12px !important;
+  }
+
+  .stepLabelCurrent {
+    font-size: 13px !important;
+  }
+
+  .stepArrow {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* For very small screens, stack vertically */
+@media (max-width: 480px) {
+  .stepIndicatorContainer :global(.scan-step-indicator) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px 12px;
+  }
+
+  .stepItem {
+    width: 100%;
+    padding: 8px;
+    background: var(--bg);
+    border-radius: 8px;
+    transition: background 0.2s ease;
+  }
+
+  .stepItem:has(.stepCircleActive) {
+    background: linear-gradient(135deg, rgba(155, 125, 212, 0.1), rgba(139, 92, 246, 0.05));
+    border: 1px solid var(--primary);
+  }
+
+  .stepCircle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .stepArrow {
+    display: none;
+  }
 }

@@ -38,7 +38,7 @@ interface OnboardingProps {
 const slides = [
   {
     title: 'Detect Scams Before They Strike',
-    body: 'Cyberstition analyzes messages, profiles, emails, and images for common scam patterns, phishing tactics, and manipulation techniques.',
+    body: 'Cyberstition™ analyzes messages, profiles, emails, and images for common scam patterns, phishing tactics, and manipulation techniques.',
   },
   {
     title: 'Guided Multi-Signal Analysis',

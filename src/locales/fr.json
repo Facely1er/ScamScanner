@@ -1,7 +1,7 @@
 {
   "product": {
-    "appName": "Cyberstition – Signaux de confiance",
-    "brandName": "Cyberstition",
+    "appName": "Cyberstition™ – Signaux de confiance",
+    "brandName": "Cyberstition™",
     "tagline": "Signaux de confiance",
     "publisher": "par ERMITS",
     "priceLabel": "5,99 $ paiement unique",
@@ -408,7 +408,7 @@
   "howItWorks": {
     "kicker": "Comprendre Cyberstition",
     "title": "Comment ça marche",
-    "intro": "Cyberstition vous aide à détecter les arnaques en ligne et les tentatives de manipulation grâce à une analyse multicouche et une reconnaissance de schémas.",
+    "intro": "Détectez les arnaques en ligne et les tentatives de manipulation grâce à une analyse multicouche et une reconnaissance de schémas.",
     "processTitle": "Processus d'analyse en trois étapes",
     "step1Title": "Donner le contexte",
     "step1Desc": "Décrivez le contenu suspect. Où l'avez-vous reçu ? Qui l'a envoyé ? Que vous demande-t-on ? Ce contexte aide à mieux comprendre la situation.",

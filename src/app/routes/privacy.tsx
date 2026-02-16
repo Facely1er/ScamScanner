@@ -23,7 +23,7 @@ export default function Privacy() {
           <div>
             <h2 className="h2" style={{ marginBottom: 8 }}>Privacy-First Design</h2>
             <p className="p">
-              Cyberstition – Trust Signals (ScamScanner) is built with privacy as a core principle. 
+              Cyberstition™ – Trust Signals (ScamScanner) is built with privacy as a core principle. 
               All analysis happens locally on your device. We do not collect, store, or transmit your data.
             </p>
           </div>
