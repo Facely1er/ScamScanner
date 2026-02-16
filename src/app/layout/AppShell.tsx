@@ -38,14 +38,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </NavLink>
 
-          <nav className="topnav" aria-label="Primary navigation">
-            <NavItem to="/" label={t('nav.home')} icon={<HomeIcon size={18} />} end />
-            <NavItem to="/scan" label={t('nav.scan')} icon={<Shield size={18} />} />
-            <NavItem to="/tools" label={t('nav.tools')} icon={<Wrench size={18} />} />
-            <NavItem to="/dashboard" label={t('nav.dashboard')} icon={<FileText size={18} />} />
-            <NavItem to="/account" label={t('nav.account')} icon={<Settings size={18} />} />
-          </nav>
-
           <div className="header-actions">
             <LanguageToggle />
             <ThemeToggle />
@@ -55,12 +47,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       <main className="container app-main">{children}</main>
 
-      <nav className="bottomnav" aria-label="Primary navigation">
-        <NavItem to="/" label={t('nav.home')} icon={<HomeIcon size={20} />} end />
+      <nav className="bottomnav" aria-label="Primary mobile navigation">
+        <NavItem to="/" label={t('nav.homeDashboard')} icon={<HomeIcon size={20} />} end ariaLabel={t('nav.ariaHomeDashboard')} />
         <NavItem to="/scan" label={t('nav.scan')} icon={<Shield size={20} />} />
         <NavItem to="/tools" label={t('nav.tools')} icon={<Wrench size={20} />} />
-        <NavItem to="/dashboard" label={t('nav.dashboard')} icon={<FileText size={20} />} />
-        <NavItem to="/account" label={t('nav.account')} icon={<Settings size={20} />} />
+        <NavItem to="/dashboard" label={t('nav.dashboard')} icon={<FileText size={20} />} ariaLabel={t('nav.ariaDashboard')} />
+        <NavItem to="/account" label={t('nav.settings')} icon={<Settings size={20} />} ariaLabel={t('nav.ariaAccount')} />
       </nav>
 
       <footer className="footer" role="contentinfo">
@@ -87,7 +79,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function NavItem({ to, label, icon, end }: { to: string; label: string; icon: React.ReactNode; end?: boolean }) {
+function NavItem({ to, label, icon, end, ariaLabel }: { to: string; label: string; icon: React.ReactNode; end?: boolean; ariaLabel?: string }) {
   const location = useLocation();
   const isActive = end
     ? location.pathname === to
@@ -98,7 +90,7 @@ function NavItem({ to, label, icon, end }: { to: string; label: string; icon: Re
       to={to}
       end={end}
       className={`navitem ${isActive ? 'active' : ''}`}
-      aria-label={label}
+      aria-label={ariaLabel ?? label}
       aria-current={isActive ? 'page' : undefined}
     >
       {React.cloneElement(icon as React.ReactElement, { 'aria-hidden': true })}

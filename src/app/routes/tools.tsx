@@ -15,7 +15,7 @@ export default function Tools() {
   const { t } = useLocale();
   const [searchParams, setSearchParams] = useSearchParams();
   const toolParam = searchParams.get('tool') as ToolType;
-  const initialTool = toolParam && VALID_TOOLS.includes(toolParam) ? toolParam : 'message';
+  const initialTool = toolParam && VALID_TOOLS.includes(toolParam) ? toolParam : null;
   const [activeTool, setActiveTool] = useState<ToolType>(initialTool);
 
   useEffect(() => {
@@ -44,6 +44,7 @@ export default function Tools() {
     {
       id: 'message' as ToolType,
       icon: <MessageSquare size={28} />,
+      shortTitle: t('toolsPage.messageShort'),
       title: t('toolsPage.messageTitle'),
       description: t('toolsPage.messageDesc'),
       color: '#3b82f6'
@@ -51,6 +52,7 @@ export default function Tools() {
     {
       id: 'email' as ToolType,
       icon: <Mail size={28} />,
+      shortTitle: t('toolsPage.emailShort'),
       title: t('toolsPage.emailTitle'),
       description: t('toolsPage.emailDesc'),
       color: '#8b5cf6'
@@ -58,6 +60,7 @@ export default function Tools() {
     {
       id: 'image' as ToolType,
       icon: <ImageIcon size={28} />,
+      shortTitle: t('toolsPage.imageShort'),
       title: t('toolsPage.imageTitle'),
       description: t('toolsPage.imageDesc'),
       color: '#10b981'
@@ -65,6 +68,7 @@ export default function Tools() {
     {
       id: 'profile' as ToolType,
       icon: <User size={28} />,
+      shortTitle: t('toolsPage.profileShort'),
       title: t('toolsPage.profileTitle'),
       description: t('toolsPage.profileDesc'),
       color: '#f59e0b'
@@ -93,8 +97,46 @@ export default function Tools() {
       <section className="card">
         <h1 className="h1">{t('toolsPage.title')}</h1>
         <p className="p">{t('toolsPage.intro')}</p>
+
+        <div className="kicker" style={{ marginTop: 16, marginBottom: 10 }}>{t('toolsPage.quickAccess')}</div>
         <div style={{
-          marginTop: 12,
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 12,
+          alignItems: 'center'
+        }}>
+          {tools.map((tool) => (
+            <button
+              key={tool.id}
+              type="button"
+              onClick={() => toggleTool(tool.id)}
+              aria-label={tool.title}
+              title={tool.title}
+              style={{
+                display: 'inline-flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 6,
+                padding: '12px 14px',
+                minWidth: 72,
+                borderRadius: 12,
+                border: activeTool === tool.id ? `2px solid ${tool.color}` : '1px solid var(--border)',
+                background: activeTool === tool.id ? `${tool.color}12` : 'var(--bg-secondary)',
+                color: activeTool === tool.id ? tool.color : 'var(--text)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                fontSize: 12,
+                fontWeight: 600
+              }}
+            >
+              {React.cloneElement(tool.icon as React.ReactElement, { size: 24 })}
+              <span>{tool.shortTitle}</span>
+            </button>
+          ))}
+        </div>
+
+        <div style={{
+          marginTop: 16,
           padding: 12,
           backgroundColor: 'var(--bg-secondary)',
           borderRadius: 6,
