@@ -1,0 +1,97 @@
+.scanPageHeader {
+  border: 2px solid var(--border);
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.title {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border: none;
+}
+
+.stepIndicatorContainer {
+  margin-top: 28px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.stepCircle {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepCircleInactive {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border);
+  color: var(--text-muted);
+  box-shadow: none;
+}
+
+.stepCircleActive {
+  background-color: var(--primary);
+  border: 2px solid var(--primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(155, 125, 212, 0.25);
+}
+
+.stepContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.stepLabel {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepLabelInactive {
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.stepLabelCompleted {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.stepLabelCurrent {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.stepArrow {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.stepArrowInactive {
+  color: var(--border);
+}
+
+.stepArrowActive {
+  color: var(--primary);
+}

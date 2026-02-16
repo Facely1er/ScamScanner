@@ -6,6 +6,7 @@ import { useLocale } from '../../contexts/LocaleContext';
 import ContextSelector from '../components/scan/ContextSelector';
 import AnalysisWizard from '../components/scan/AnalysisWizard';
 import ScanResults from '../components/scan/ScanResults';
+import styles from './scan.module.css';
 
 type ScanStep = 'context' | 'analysis' | 'results';
 
@@ -45,12 +46,12 @@ export default function Scan() {
 
   return (
     <div className="grid loose scan-page">
-      <section className="card scan-page-header" style={{ border: '2px solid var(--border)' }}>
+      <section className={`card scan-page-header ${styles.scanPageHeader}`}>
         <div>
-          <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div className={`kicker ${styles.kicker}`}>
             <Shield size={16} /> {t('scan.kicker')}
           </div>
-          <h1 className="h1" style={{ marginBottom: 0, paddingBottom: 0, border: 'none' }}>{t('scan.title')}</h1>
+          <h1 className={`h1 ${styles.title}`}>{t('scan.title')}</h1>
         </div>
 
         <StepIndicator currentStep={currentStep} />
@@ -84,52 +85,31 @@ function StepIndicator({ currentStep }: { currentStep: ScanStep }) {
   const currentIndex = getCurrentIndex();
 
   return (
-    <div style={{ marginTop: 28 }}>
+    <div className={styles.stepIndicatorContainer}>
       <div className="scan-step-indicator">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              flex: '1 1 0',
-              minWidth: 0
-            }}>
-              <div style={{
-                flexShrink: 0,
-                width: 38,
-                height: 38,
-                borderRadius: '50%',
-                backgroundColor: index <= currentIndex ? 'var(--primary)' : 'var(--bg-secondary)',
-                border: index <= currentIndex ? '2px solid var(--primary)' : '2px solid var(--border)',
-                color: index <= currentIndex ? 'white' : 'var(--text-muted)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 700,
-                fontSize: 15,
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: index <= currentIndex ? '0 2px 8px rgba(155,125,212,.25)' : 'none'
-              }}>
+            <div className={styles.stepItem}>
+              <div className={`${styles.stepCircle} ${index <= currentIndex ? styles.stepCircleActive : styles.stepCircleInactive}`}>
                 {index < currentIndex ? <CheckCircle2 size={20} strokeWidth={2.5} /> : step.number}
               </div>
-              <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-                <span className="small scan-step-label" style={{
-                  fontWeight: index === currentIndex ? 700 : index < currentIndex ? 600 : 500,
-                  fontSize: index === currentIndex ? 14 : 13,
-                  color: index <= currentIndex ? 'var(--text)' : 'var(--text-muted)',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}>
+              <div className={styles.stepContent}>
+                <span className={`small scan-step-label ${styles.stepLabel} ${
+                  index === currentIndex 
+                    ? styles.stepLabelCurrent 
+                    : index < currentIndex 
+                      ? styles.stepLabelCompleted 
+                      : styles.stepLabelInactive
+                }`}>
                   {step.label}
                 </span>
               </div>
             </div>
             {index < steps.length - 1 && (
-              <ArrowRight size={18} className="scan-step-arrow" style={{
-                color: index < currentIndex ? 'var(--primary)' : 'var(--border)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                flexShrink: 0
-              }} />
+              <ArrowRight 
+                size={18} 
+                className={`scan-step-arrow ${styles.stepArrow} ${index < currentIndex ? styles.stepArrowActive : styles.stepArrowInactive}`}
+              />
             )}
           </React.Fragment>
         ))}
