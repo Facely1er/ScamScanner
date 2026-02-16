@@ -26,7 +26,8 @@
     "ios:sync": "npm run build:app && npx cap sync ios",
     "ios:open": "npx cap open ios",
     "ios:run": "npm run ios:sync && npx cap run ios",
-    "ios:build": "npm run build:app && npx cap sync ios"
+    "ios:build": "npm run build:app && npx cap sync ios",
+    "icons:generate": "npx @capacitor/assets generate --iconBackgroundColor '#0a0f1a' --iconBackgroundColorDark '#0a0f1a' --splashBackgroundColor '#0a0f1a' --splashBackgroundColorDark '#0a0f1a'"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
@@ -43,6 +44,7 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.1.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

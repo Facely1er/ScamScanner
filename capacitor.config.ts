@@ -17,6 +17,9 @@ const config: CapacitorConfig = {
       releaseType: 'AAB', // Use AAB for Play Store, APK for direct distribution
     },
   },
+  ios: {
+    contentInset: 'automatic',
+  },
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,
