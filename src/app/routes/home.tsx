@@ -4,13 +4,13 @@ import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shie
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
+import { getStoreUrlByDevice } from '../../config/app';
 import { useLocale } from '../../contexts/LocaleContext';
 
 export default function Home() {
   const { t } = useLocale();
   const handleGetApp = () => {
-    // TODO: Replace with actual Play Store URL
-    window.open('https://play.google.com/store/apps', '_blank');
+    window.open(getStoreUrlByDevice(), '_blank');
   };
 
   // Web build: Landing page only
