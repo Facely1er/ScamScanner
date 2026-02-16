@@ -1,0 +1,94 @@
+# iOS Quick Start
+
+Get the Cyberstition app running in Xcode and the iOS Simulator.
+
+## Prerequisites
+
+- **macOS** with Xcode (from the Mac App Store or [developer.apple.com](https://developer.apple.com/xcode/))
+- **Node.js** 18+
+- **CocoaPods**: `brew install cocoapods` (if not already installed)
+
+### CocoaPods UTF-8 requirement
+
+If `pod install` fails with an encoding error, set UTF-8 in your shell (e.g. add to `~/.zshrc`):
+
+```bash
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+```
+
+Then run `pod install` again from `ios/App`, or use:
+
+```bash
+LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 npm run ios:sync
+```
+
+## Step 1: Install dependencies
+
+```bash
+npm install
+```
+
+## Step 2: Initialize iOS (first time only)
+
+If the `ios/` folder does not exist:
+
+```bash
+npm run ios:init
+```
+
+This creates the native Xcode project in `ios/`.
+
+## Step 3: Build and sync
+
+```bash
+npm run ios:sync
+```
+
+This builds the web app (`build:app`) and copies it into the iOS project. If CocoaPods fails, ensure `LANG`/`LC_ALL` are set as above and run from `ios/App`:
+
+```bash
+cd ios/App && pod install && cd ../..
+```
+
+## Step 4: Open in Xcode
+
+```bash
+npm run ios:open
+```
+
+Or open `ios/App/App.xcworkspace` in Xcode (use the `.xcworkspace` file, not `.xcodeproj`).
+
+## Step 5: Run on simulator or device
+
+- In Xcode: pick a simulator or a connected device, then press **Run** (▶).
+- From the project root:
+
+```bash
+npm run ios:run
+```
+
+This syncs, then opens Xcode and runs the app.
+
+## NPM scripts
+
+| Script        | Description                                      |
+|---------------|--------------------------------------------------|
+| `npm run ios:init`  | Add iOS platform (creates `ios/`)           |
+| `npm run ios:sync`  | Build web app and sync to iOS               |
+| `npm run ios:open`  | Open the iOS project in Xcode               |
+| `npm run ios:run`   | Sync, open Xcode, and run the app            |
+| `npm run ios:build` | Build web app and sync (no open/run)        |
+
+## Code signing
+
+For running on a real device or submitting to the App Store:
+
+1. Open `ios/App` in Xcode.
+2. Select the **App** target → **Signing & Capabilities**.
+3. Choose your Team and let Xcode manage signing, or configure a provisioning profile.
+
+## Notes
+
+- The `ios/` directory is in `.gitignore` (like `android/`). To recreate it on another machine, run `npm run ios:init` after `npm install`.
+- Minimum supported iOS version is set in the Xcode project (e.g. iOS 13+); adjust in **App** target → **General** → **Minimum Deployments** if needed.
