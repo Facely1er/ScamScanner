@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { PreferencesProvider } from './contexts/PreferencesContext';
 import AppShell from './app/layout/AppShell';
@@ -16,9 +16,20 @@ import Terms from './app/routes/terms';
 import { ToastContainer } from './components/common/Toast';
 import Onboarding, { useOnboarding } from './components/common/Onboarding';
 import { IS_APP_BUILD } from './config/env';
+import { Capacitor } from '@capacitor/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 export default function App() {
   const { showOnboarding, finishOnboarding } = useOnboarding();
+
+  // Hide native splash as soon as the app UI is mounted (prevents simulator freeze)
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    const t = setTimeout(() => {
+      SplashScreen.hide().catch(() => {});
+    }, 100);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <PreferencesProvider>

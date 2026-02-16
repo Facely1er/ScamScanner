@@ -11,6 +11,11 @@ if (!rootElement) {
   throw new Error('Root element not found');
 }
 
+// Fallback: hide native splash after 3s so we never stay stuck if React fails to mount
+import('@capacitor/splash-screen').then(({ SplashScreen }) => {
+  setTimeout(() => SplashScreen.hide().catch(() => {}), 3000);
+}).catch(() => {});
+
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <ErrorBoundary>
