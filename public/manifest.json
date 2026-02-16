@@ -3,65 +3,33 @@
   "short_name": "ScamScanner",
   "description": "Privacy-first scam detection guide that helps users identify phishing, fraud, and deception through context-aware, guided analysis.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0a0f1a",
   "theme_color": "#9b7dd4",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "../icons/icon-48.webp",
-      "type": "image/png",
-      "sizes": "48x48",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "../icons/icon-72.webp",
-      "type": "image/png",
-      "sizes": "72x72",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "../icons/icon-96.webp",
-      "type": "image/png",
-      "sizes": "96x96",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "../icons/icon-128.webp",
-      "type": "image/png",
-      "sizes": "128x128",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "../icons/icon-192.webp",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "../icons/icon-256.webp",
-      "type": "image/png",
-      "sizes": "256x256",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "../icons/icon-512.webp",
+      "src": "/cyberstition_logo.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/cyberstition_logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
-  "categories": [
-    "security",
-    "utilities",
-    "productivity"
-  ],
+  "categories": ["security", "utilities", "productivity"],
   "screenshots": [
     {
       "src": "/cyberstition_logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "narrow"
+      "form_factor": "narrow",
+      "label": "ScamScanner dashboard"
     }
   ],
   "shortcuts": [
@@ -70,36 +38,21 @@
       "short_name": "Scan",
       "description": "Start a new guided scam scan",
       "url": "/scan",
-      "icons": [
-        {
-          "src": "/cyberstition_logo.png",
-          "sizes": "96x96"
-        }
-      ]
+      "icons": [{ "src": "/cyberstition_logo.png", "sizes": "96x96" }]
     },
     {
       "name": "Analysis Tools",
       "short_name": "Tools",
       "description": "Access individual analysis tools",
       "url": "/tools",
-      "icons": [
-        {
-          "src": "/cyberstition_logo.png",
-          "sizes": "96x96"
-        }
-      ]
+      "icons": [{ "src": "/cyberstition_logo.png", "sizes": "96x96" }]
     },
     {
       "name": "Dashboard",
       "short_name": "History",
       "description": "View analysis history",
       "url": "/dashboard",
-      "icons": [
-        {
-          "src": "/cyberstition_logo.png",
-          "sizes": "96x96"
-        }
-      ]
+      "icons": [{ "src": "/cyberstition_logo.png", "sizes": "96x96" }]
     }
   ],
   "related_applications": [],

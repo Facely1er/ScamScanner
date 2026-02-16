@@ -1,11 +1,27 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
 
 // Get build target from environment variable, default to 'web'
 const buildTarget = process.env.BUILD_TARGET || 'web';
+const isWeb = buildTarget === 'web';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    isWeb &&
+      VitePWA({
+        registerType: 'autoUpdate',
+        includeAssets: ['robots.txt', 'manifest.json'],
+        manifest: false, // we use our own public/manifest.json
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+          navigateFallback: '/index.html',
+          navigateFallbackDenylist: [/^\/api\//],
+        },
+        dev: false, // disable SW in dev for easier debugging
+      }),
+  ].filter(Boolean),
   define: {
     'import.meta.env.VITE_BUILD_TARGET': JSON.stringify(buildTarget),
   },

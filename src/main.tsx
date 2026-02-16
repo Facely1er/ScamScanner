@@ -6,6 +6,13 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import './styles.css';
 
+// Register PWA service worker (web build only; Capacitor uses native)
+if (import.meta.env.VITE_BUILD_TARGET === 'web') {
+  import('virtual:pwa-register').then(({ registerSW }) => {
+    registerSW({ onOfflineReady: () => {} });
+  });
+}
+
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error('Root element not found');
