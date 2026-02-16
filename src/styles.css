@@ -154,6 +154,13 @@ a:hover{
 .app-main{
   padding-bottom: 24px;
   overflow-y: visible;
+  width: 100%;
+  min-width: 0;
+}
+
+#main-content{
+  width: 100%;
+  min-width: 0;
 }
 
 @media(min-width:640px){
@@ -361,15 +368,33 @@ a.card{
   background: var(--accent-primary);
   border: none;
   border-color: transparent;
-  color: #fff;
+  color: #ffffff;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(155,125,212,.25);
+}
+
+.btn.primary *,
+.btn.primary svg{
+  color: inherit;
 }
 
 .btn.primary:hover:not(:disabled){
   filter: brightness(1.08);
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(155,125,212,.35);
+}
+
+.btn.primary:focus-visible{
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+[data-theme="light"] .btn.primary{
+  box-shadow: 0 2px 8px rgba(124,58,237,.25);
+}
+
+[data-theme="light"] .btn.primary:hover:not(:disabled){
+  box-shadow: 0 4px 16px rgba(124,58,237,.35);
 }
 
 .btn:disabled{
@@ -1539,9 +1564,43 @@ select.input {
   }
 }
 
-/* Scan page: single-column origin cards on small screens so content is fully visible and scrollable */
+/* Scan page: single-column layout and containment so content displays correctly at all resolutions */
+.scan-page {
+  grid-template-columns: 1fr;
+  min-width: 0;
+}
+
+.scan-page .card {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.scan-step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.scan-step-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @media (max-width: 600px) {
   .scan-context-origins {
     grid-template-columns: 1fr;
+    min-width: 0;
+  }
+}
+
+.scan-context-origins button {
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .scan-step-indicator .scan-step-arrow {
+    display: none;
   }
 }

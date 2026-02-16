@@ -44,8 +44,8 @@ export default function Scan() {
   };
 
   return (
-    <div className="grid loose">
-      <section className="card" style={{ border: '2px solid var(--border)' }}>
+    <div className="grid loose scan-page">
+      <section className="card scan-page-header" style={{ border: '2px solid var(--border)' }}>
         <div>
           <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
             <Shield size={16} /> {t('scan.kicker')}
@@ -85,17 +85,19 @@ function StepIndicator({ currentStep }: { currentStep: ScanStep }) {
 
   return (
     <div style={{ marginTop: 28 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div className="scan-step-indicator">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: 10,
-              flex: 1
+              flex: '1 1 0',
+              minWidth: 0
             }}>
               <div style={{
-                minWidth: 38,
+                flexShrink: 0,
+                width: 38,
                 height: 38,
                 borderRadius: '50%',
                 backgroundColor: index <= currentIndex ? 'var(--primary)' : 'var(--bg-secondary)',
@@ -111,8 +113,8 @@ function StepIndicator({ currentStep }: { currentStep: ScanStep }) {
               }}>
                 {index < currentIndex ? <CheckCircle2 size={20} strokeWidth={2.5} /> : step.number}
               </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <span className="small" style={{
+              <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+                <span className="small scan-step-label" style={{
                   fontWeight: index === currentIndex ? 700 : index < currentIndex ? 600 : 500,
                   fontSize: index === currentIndex ? 14 : 13,
                   color: index <= currentIndex ? 'var(--text)' : 'var(--text-muted)',
@@ -123,7 +125,7 @@ function StepIndicator({ currentStep }: { currentStep: ScanStep }) {
               </div>
             </div>
             {index < steps.length - 1 && (
-              <ArrowRight size={18} style={{
+              <ArrowRight size={18} className="scan-step-arrow" style={{
                 color: index < currentIndex ? 'var(--primary)' : 'var(--border)',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 flexShrink: 0
