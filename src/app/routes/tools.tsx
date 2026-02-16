@@ -116,20 +116,31 @@ export default function Tools() {
                 display: 'inline-flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 6,
+                gap: 8,
                 padding: '12px 14px',
                 minWidth: 72,
                 borderRadius: 12,
                 border: activeTool === tool.id ? `2px solid ${tool.color}` : '1px solid var(--border)',
                 background: activeTool === tool.id ? `${tool.color}12` : 'var(--bg-secondary)',
-                color: activeTool === tool.id ? tool.color : 'var(--text)',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 fontSize: 12,
-                fontWeight: 600
+                fontWeight: 600,
+                color: 'var(--text)'
               }}
             >
-              {React.cloneElement(tool.icon as React.ReactElement, { size: 24 })}
+              <div style={{
+                width: 40,
+                height: 40,
+                borderRadius: 10,
+                backgroundColor: `${tool.color}15`,
+                color: tool.color,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                {React.cloneElement(tool.icon as React.ReactElement, { size: 20, color: tool.color })}
+              </div>
               <span>{tool.shortTitle}</span>
             </button>
           ))}
