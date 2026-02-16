@@ -9,6 +9,9 @@ build/
 
 # Android
 android/
+
+# iOS
+ios/
 *.keystore
 *.jks
 android/app/release/
