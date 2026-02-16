@@ -104,7 +104,7 @@ export default function PricingCards() {
               </div>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 18 }}>{plan.name}</div>
-                {plan.savings && (
+                {'savings' in plan && plan.savings && (
                   <span
                     className="small"
                     style={{
@@ -126,20 +126,20 @@ export default function PricingCards() {
                 className="small"
                 style={{ marginLeft: 4, color: 'var(--text-muted)' }}
               >
-                /{plan.billingPeriod === 'one-time' ? 'forever' : plan.billingPeriod}
+                /{'billingPeriod' in plan && plan.billingPeriod === 'one-time' ? 'forever' : plan.interval}
               </span>
               {'monthlyEquivalent' in plan && plan.monthlyEquivalent && (
                 <div
                   className="small"
                   style={{ marginTop: 4, color: 'var(--text-muted)' }}
                 >
-                  {plan.monthlyEquivalent}
+                  {plan.monthlyEquivalent as React.ReactNode}
                 </div>
               )}
             </div>
 
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', flex: 1 }}>
-              {plan.features.map((feature) => (
+              {plan.features.map((feature: string) => (
                 <li
                   key={feature}
                   style={{

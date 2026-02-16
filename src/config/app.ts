@@ -36,3 +36,14 @@ export const appConfig = {
     },
   },
 } as const;
+
+// Helper function for getting Play Store URL
+export function getPlayStoreUrl(): string {
+  return appConfig.playStoreUrl;
+}
+
+// Platform detection helpers
+export const isAndroidApp = typeof (window as any).Capacitor !== 'undefined' && 
+  (window as any).Capacitor?.getPlatform?.() === 'android';
+
+export const isNativeApp = typeof (window as any).Capacitor !== 'undefined';
