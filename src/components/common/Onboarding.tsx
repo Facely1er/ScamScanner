@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
-import { Shield, Lock, Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const ONBOARDING_KEY = 'cyberstition_onboarding_complete';
 
+const LOGO_SRC = '/cyberstition_logo.png';
+
 export function useOnboarding() {
-  const [complete, setComplete] = useState(() => {
-    return typeof window !== 'undefined' && window.localStorage.getItem(ONBOARDING_KEY) === 'true';
-  });
+  const [complete, setComplete] = useState(false);
+  const [checked, setChecked] = useState(false);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const stored = window.localStorage.getItem(ONBOARDING_KEY);
+      setComplete(stored === 'true');
+    } catch {
+      setComplete(false);
+    } finally {
+      setChecked(true);
+    }
+  }, []);
 
   const finish = () => {
-    window.localStorage.setItem(ONBOARDING_KEY, 'true');
+    try {
+      if (typeof window !== 'undefined') window.localStorage.setItem(ONBOARDING_KEY, 'true');
+    } catch {}
     setComplete(true);
   };
 
-  return { showOnboarding: !complete, finishOnboarding: finish };
+  return { showOnboarding: checked && !complete, finishOnboarding: finish, ready: checked };
 }
 
 interface OnboardingProps {
@@ -22,17 +37,14 @@ interface OnboardingProps {
 
 const slides = [
   {
-    icon: <Shield size={52} strokeWidth={2} />,
     title: 'Detect Scams Before They Strike',
     body: 'Cyberstition analyzes messages, profiles, emails, and images for common scam patterns, phishing tactics, and manipulation techniques.',
   },
   {
-    icon: <Sparkles size={52} strokeWidth={2} />,
     title: 'Guided Multi-Signal Analysis',
     body: 'Our guided scanner combines evidence from multiple sources to detect cross-signal patterns and provide a confidence-rated risk assessment.',
   },
   {
-    icon: <Lock size={52} strokeWidth={2} />,
     title: 'Privacy First — Always',
     body: 'All analysis runs locally on your device. Nothing is uploaded, tracked, or shared. Your data stays yours.',
   },
@@ -81,11 +93,11 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white',
+          overflow: 'hidden',
           animation: 'scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
           boxShadow: '0 8px 24px rgba(155,125,212,.35)',
         }}>
-          {slide.icon}
+          <img src={LOGO_SRC} alt="" width={64} height={64} style={{ display: 'block', objectFit: 'contain' }} />
         </div>
 
         <h1 className="h2" style={{ margin: 0, fontSize: 28 }}>{slide.title}</h1>
