@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSessionStore } from '../../state/sessionStore';
-import { Shield, ArrowRight, Home, CheckCircle2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Shield, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useLocale } from '../../contexts/LocaleContext';
 import ContextSelector from '../components/scan/ContextSelector';
 import AnalysisWizard from '../components/scan/AnalysisWizard';
 import ScanResults from '../components/scan/ScanResults';
@@ -11,6 +12,8 @@ type ScanStep = 'context' | 'analysis' | 'results';
 export default function Scan() {
   const { currentSession, completeSession, clearCurrentSession } = useSessionStore();
   const [currentStep, setCurrentStep] = useState<ScanStep>('context');
+  const navigate = useNavigate();
+  const { t } = useLocale();
 
   useEffect(() => {
     if (!currentSession) {
@@ -32,7 +35,7 @@ export default function Scan() {
 
   const handleComplete = () => {
     completeSession();
-    window.location.href = '/dashboard';
+    navigate('/dashboard');
   };
 
   const handleStartNew = () => {
@@ -43,16 +46,11 @@ export default function Scan() {
   return (
     <div className="grid loose">
       <section className="card" style={{ border: '2px solid var(--border)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-          <div>
-            <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <Shield size={16} /> Guided Scam Scanner
-            </div>
-            <h1 className="h1" style={{ marginBottom: 0, paddingBottom: 0, border: 'none' }}>Smart Analysis Workflow</h1>
+        <div>
+          <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+            <Shield size={16} /> {t('scan.kicker')}
           </div>
-          <Link to="/" className="btn" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Home size={18} /> Home
-          </Link>
+          <h1 className="h1" style={{ marginBottom: 0, paddingBottom: 0, border: 'none' }}>{t('scan.title')}</h1>
         </div>
 
         <StepIndicator currentStep={currentStep} />
@@ -72,10 +70,11 @@ export default function Scan() {
 }
 
 function StepIndicator({ currentStep }: { currentStep: ScanStep }) {
+  const { t } = useLocale();
   const steps = [
-    { id: 'context', label: 'Provide Context', number: 1 },
-    { id: 'analysis', label: 'Add Evidence', number: 2 },
-    { id: 'results', label: 'View Results', number: 3 }
+    { id: 'context', label: t('scan.stepContext'), number: 1 },
+    { id: 'analysis', label: t('scan.stepEvidence'), number: 2 },
+    { id: 'results', label: t('scan.stepResults'), number: 3 }
   ];
 
   const getCurrentIndex = () => {

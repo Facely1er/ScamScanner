@@ -2,60 +2,33 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Home, BookOpen, LayoutGrid, Settings, ChevronRight, Wrench, HelpCircle } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
+import { useLocale } from '../../contexts/LocaleContext';
 
 export default function More() {
+  const { t } = useLocale();
+
   return (
     <div className="grid">
       <section className="card">
-        <h1 className="h1">More</h1>
-        <p className="p">Quick access to information and settings.</p>
+        <h1 className="h1">{t('more.title')}</h1>
+        <p className="p">{t('more.subtitle')}</p>
       </section>
 
       <section className="card">
-        <div className="kicker" style={{ color: 'var(--text)' }}>Explore</div>
+        <div className="kicker" style={{ color: 'var(--text)' }}>{t('more.explore')}</div>
         <div className="link-list" style={{ marginTop: 12 }}>
-          <MoreLink
-            to="/"
-            icon={<Home size={16} />}
-            title="Home"
-            description="Return to the overview and access all tools."
-          />
-          <MoreLink
-            to="/tools"
-            icon={<Wrench size={16} />}
-            title="Analysis Tools"
-            description="Quick access to all 4 specialized analyzers in one place."
-          />
-          <MoreLink
-            to="/how-it-works"
-            icon={<HelpCircle size={16} />}
-            title="How It Works"
-            description="Learn how Cyberstition analyzes content and detects scams."
-          />
-          <MoreLink
-            to="/about"
-            icon={<BookOpen size={16} />}
-            title="About"
-            description="Learn about Cyberstition and our mission."
-          />
+          <MoreLink to="/" icon={<Home size={16} />} title={t('more.homeTitle')} description={t('more.homeDesc')} />
+          <MoreLink to="/tools" icon={<Wrench size={16} />} title={t('more.toolsTitle')} description={t('more.toolsDesc')} />
+          <MoreLink to="/how-it-works" icon={<HelpCircle size={16} />} title={t('more.howItWorksTitle')} description={t('more.howItWorksDesc')} />
+          <MoreLink to="/about" icon={<BookOpen size={16} />} title={t('more.aboutTitle')} description={t('more.aboutDesc')} />
         </div>
       </section>
 
       <section className="card">
-        <div className="kicker" style={{ color: 'var(--text)' }}>Manage</div>
+        <div className="kicker" style={{ color: 'var(--text)' }}>{t('more.manage')}</div>
         <div className="link-list" style={{ marginTop: 12 }}>
-          <MoreLink
-            to="/dashboard"
-            icon={<LayoutGrid size={16} />}
-            title="Dashboard"
-            description="View and manage your saved reports and documents."
-          />
-          <MoreLink
-            to="/account"
-            icon={<Settings size={16} />}
-            title="Preferences"
-            description="Configure analysis settings and preferences."
-          />
+          <MoreLink to="/dashboard" icon={<LayoutGrid size={16} />} title={t('more.dashboardTitle')} description={t('more.dashboardDesc')} />
+          <MoreLink to="/account" icon={<Settings size={16} />} title={t('more.preferencesTitle')} description={t('more.preferencesDesc')} />
         </div>
       </section>
 

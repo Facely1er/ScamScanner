@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home as HomeIcon, Shield, Wrench, HelpCircle, Settings, FileText } from 'lucide-react';
+import { Home as HomeIcon, Shield, Wrench, FileText, Settings } from 'lucide-react';
 import ThemeToggle from '../../components/common/ThemeToggle';
 import LanguageToggle from '../../components/common/LanguageToggle';
 import { useLocale } from '../../contexts/LocaleContext';
@@ -42,40 +42,25 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <NavItem to="/" label={t('nav.home')} icon={<HomeIcon size={18} />} end />
             <NavItem to="/scan" label={t('nav.scan')} icon={<Shield size={18} />} />
             <NavItem to="/tools" label={t('nav.tools')} icon={<Wrench size={18} />} />
-            <NavItem to="/how-it-works" label={t('nav.howItWorks')} icon={<HelpCircle size={18} />} />
+            <NavItem to="/dashboard" label={t('nav.dashboard')} icon={<FileText size={18} />} />
+            <NavItem to="/account" label={t('nav.account')} icon={<Settings size={18} />} />
           </nav>
 
           <div className="header-actions">
             <LanguageToggle />
             <ThemeToggle />
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label={t('nav.ariaDashboard')}
-              title={t('dashboard.title')}
-            >
-              <FileText size={16} aria-hidden="true" />
-            </NavLink>
-            <NavLink
-              to="/account"
-              className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label={t('nav.ariaAccount')}
-              title={t('nav.settings')}
-            >
-              <Settings size={16} aria-hidden="true" />
-            </NavLink>
           </div>
         </div>
       </header>
 
       <main className="container app-main">{children}</main>
 
-      <nav className="bottomnav" aria-label="Primary mobile navigation">
+      <nav className="bottomnav" aria-label="Primary navigation">
         <NavItem to="/" label={t('nav.home')} icon={<HomeIcon size={20} />} end />
         <NavItem to="/scan" label={t('nav.scan')} icon={<Shield size={20} />} />
         <NavItem to="/tools" label={t('nav.tools')} icon={<Wrench size={20} />} />
-        <NavItem to="/dashboard" label={t('nav.history')} icon={<FileText size={20} />} />
-        <NavItem to="/account" label={t('nav.settings')} icon={<Settings size={20} />} />
+        <NavItem to="/dashboard" label={t('nav.dashboard')} icon={<FileText size={20} />} />
+        <NavItem to="/account" label={t('nav.account')} icon={<Settings size={20} />} />
       </nav>
 
       <footer className="footer" role="contentinfo">
@@ -104,14 +89,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
 function NavItem({ to, label, icon, end }: { to: string; label: string; icon: React.ReactNode; end?: boolean }) {
   const location = useLocation();
-  const isActive = end 
+  const isActive = end
     ? location.pathname === to
     : location.pathname.startsWith(to);
-  
+
   return (
-    <NavLink 
-      to={to} 
-      end={end} 
+    <NavLink
+      to={to}
+      end={end}
       className={`navitem ${isActive ? 'active' : ''}`}
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}

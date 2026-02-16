@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { MessageSquare, Mail, Image as ImageIcon, User, ChevronDown, ChevronUp } from 'lucide-react';
 import AICheckMessagePanel from '../../components/tools/AICheckMessagePanel';
 import EmailHeaderAnalyzer from '../../components/tools/EmailHeaderAnalyzer';
 import ImageMetadataAnalyzer from '../../components/tools/ImageMetadataAnalyzer';
 import SocialProfileVerifier from '../../components/tools/SocialProfileVerifier';
+import { useLocale } from '../../contexts/LocaleContext';
 
 type ToolType = 'message' | 'email' | 'image' | 'profile' | null;
 
+const VALID_TOOLS: ToolType[] = ['message', 'email', 'image', 'profile'];
+
 export default function Tools() {
-  const [activeTool, setActiveTool] = useState<ToolType>('message');
+  const { t } = useLocale();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const toolParam = searchParams.get('tool') as ToolType;
+  const initialTool = toolParam && VALID_TOOLS.includes(toolParam) ? toolParam : 'message';
+  const [activeTool, setActiveTool] = useState<ToolType>(initialTool);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -36,44 +44,55 @@ export default function Tools() {
     {
       id: 'message' as ToolType,
       icon: <MessageSquare size={28} />,
-      title: 'Message Analysis',
-      description: 'Analyze message text for scam patterns, urgency tactics, and manipulation techniques',
+      title: t('toolsPage.messageTitle'),
+      description: t('toolsPage.messageDesc'),
       color: '#3b82f6'
     },
     {
       id: 'email' as ToolType,
       icon: <Mail size={28} />,
-      title: 'Email Header Analysis',
-      description: 'Check email authenticity, routing paths, and spoofing indicators',
+      title: t('toolsPage.emailTitle'),
+      description: t('toolsPage.emailDesc'),
       color: '#8b5cf6'
     },
     {
       id: 'image' as ToolType,
       icon: <ImageIcon size={28} />,
-      title: 'Image Metadata Analysis',
-      description: 'Inspect image metadata, editing history, and manipulation indicators',
+      title: t('toolsPage.imageTitle'),
+      description: t('toolsPage.imageDesc'),
       color: '#10b981'
     },
     {
       id: 'profile' as ToolType,
       icon: <User size={28} />,
-      title: 'Profile Verification',
-      description: 'Verify social media profiles for fake account indicators and suspicious patterns',
+      title: t('toolsPage.profileTitle'),
+      description: t('toolsPage.profileDesc'),
       color: '#f59e0b'
     }
   ];
 
+  // Sync active tool when URL param changes (e.g., navigating from Home tool cards)
+  useEffect(() => {
+    if (toolParam && VALID_TOOLS.includes(toolParam)) {
+      setActiveTool(toolParam);
+    }
+  }, [toolParam]);
+
   const toggleTool = (toolId: ToolType) => {
-    setActiveTool(activeTool === toolId ? null : toolId);
+    const next = activeTool === toolId ? null : toolId;
+    setActiveTool(next);
+    // Keep URL clean after initial navigation
+    if (searchParams.has('tool')) {
+      searchParams.delete('tool');
+      setSearchParams(searchParams, { replace: true });
+    }
   };
 
   return (
     <div className="grid loose">
       <section className="card">
-        <h1 className="h1">Analysis Tools</h1>
-        <p className="p">
-          Use these specialized tools to analyze different types of suspicious content. Each tool focuses on specific indicators and patterns.
-        </p>
+        <h1 className="h1">{t('toolsPage.title')}</h1>
+        <p className="p">{t('toolsPage.intro')}</p>
         <div style={{
           marginTop: 12,
           padding: 12,
@@ -84,8 +103,8 @@ export default function Tools() {
           gap: 8,
           flexWrap: 'wrap'
         }}>
-          <span className="small" style={{ fontWeight: 600, opacity: 0.7 }}>Keyboard shortcuts:</span>
-          <span className="small" style={{ opacity: 0.6 }}>1-4 to toggle tools • Esc to close</span>
+          <span className="small" style={{ fontWeight: 600, opacity: 0.7 }}>{t('toolsPage.keyboardLabel')}</span>
+          <span className="small" style={{ opacity: 0.6 }}>{t('toolsPage.keyboardHint')} &bull; {t('toolsPage.keyboardEsc')}</span>
         </div>
       </section>
 
@@ -153,11 +172,8 @@ export default function Tools() {
       </div>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-        <div className="kicker" style={{ marginBottom: 8 }}>Pro Tip</div>
-        <p className="p" style={{ margin: 0 }}>
-          For the most comprehensive analysis, use the <strong>Guided Scan</strong> workflow. It automatically
-          recommends which tools to use based on your situation and combines results for better accuracy.
-        </p>
+        <div className="kicker" style={{ marginBottom: 8 }}>{t('toolsPage.proTip')}</div>
+        <p className="p" style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: t('toolsPage.proTipDesc') }} />
       </section>
     </div>
   );

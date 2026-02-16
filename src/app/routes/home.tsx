@@ -21,7 +21,7 @@ export default function Home() {
           <h1 className="h1">{t('home.heroTitle')}</h1>
           <p className="p">{t('home.heroSubtitle')}</p>
           <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-            <Link className="btn" to="/about">{t('home.howItWorksLink')}</Link>
+            <Link className="btn" to="/how-it-works">{t('home.howItWorksLink')}</Link>
           </div>
         </section>
 
@@ -132,7 +132,7 @@ export default function Home() {
           <Link className="btn primary" to="/scan" style={{ fontSize: '1.05em', padding: '12px 24px' }}>
             {t('home.startGuidedScan')}
           </Link>
-          <Link className="btn" to="/about">{t('home.howItWorksLink')}</Link>
+          <Link className="btn" to="/how-it-works">{t('home.howItWorksLink')}</Link>
         </div>
       </section>
 
@@ -257,36 +257,36 @@ export default function Home() {
       <div style={{ marginTop: 8 }}>
         <h2 className="h2" style={{ marginBottom: 16 }}>{t('home.orUseIndividualTools')}</h2>
         <div className="grid cols-2">
-          <ToolCard 
-            to="/messages" 
-            title={t('home.toolMessageDetective')} 
-            desc={t('home.messageDetectiveExample')} 
+          <ToolCard
+            to="/tools?tool=message"
+            title={t('home.toolMessageDetective')}
+            desc={t('home.messageDetectiveExample')}
             example='Example: "Urgent! Your account will be suspended in 24 hours. Click here now!"'
-            icon={<MessageSquare size={18} />} 
+            icon={<MessageSquare size={18} />}
             color="#3b82f6"
           />
-          <ToolCard 
-            to="/profiles" 
-            title={t('home.toolProfileChecker')} 
-            desc={t('home.profileCheckerExample')} 
+          <ToolCard
+            to="/tools?tool=profile"
+            title={t('home.toolProfileChecker')}
+            desc={t('home.profileCheckerExample')}
             example={t('home.profileCheckerExample')}
-            icon={<User size={18} />} 
+            icon={<User size={18} />}
             color="#10b981"
           />
-          <ToolCard 
-            to="/images" 
-            title={t('home.toolImageInspector')} 
-            desc={t('home.imageInspectorExample')} 
+          <ToolCard
+            to="/tools?tool=image"
+            title={t('home.toolImageInspector')}
+            desc={t('home.imageInspectorExample')}
             example={t('home.imageInspectorExample')}
-            icon={<ImageIcon size={18} />} 
+            icon={<ImageIcon size={18} />}
             color="#f59e0b"
           />
-          <ToolCard 
-            to="/email" 
-            title={t('home.toolEmailAnalyzer')} 
-            desc={t('home.emailAnalyzerExample')} 
+          <ToolCard
+            to="/tools?tool=email"
+            title={t('home.toolEmailAnalyzer')}
+            desc={t('home.emailAnalyzerExample')}
             example={t('home.emailAnalyzerExample')}
-            icon={<Mail size={18} />} 
+            icon={<Mail size={18} />}
             color="#ef4444"
           />
         </div>
