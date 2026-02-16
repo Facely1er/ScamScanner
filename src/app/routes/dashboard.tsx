@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { FileText, Trash2, Clock, Settings, Home, Download, Upload, Shield, Search, X, FileDown } from 'lucide-react';
+import { FileText, Trash2, Clock, Download, Upload, Shield, Search, X, FileDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { usePreferences } from '../../contexts/PreferencesContext';
 import { useSessionStore } from '../../state/sessionStore';
@@ -178,12 +178,6 @@ export default function Dashboard() {
             <p className="p">{t('dashboard.subtitle')}</p>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link to="/" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <Home size={16} aria-hidden="true" /> <span>{t('dashboard.home')}</span>
-            </Link>
-            <Link to="/account" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <Settings size={16} aria-hidden="true" /> <span>{t('dashboard.preferences')}</span>
-            </Link>
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <button
                 onClick={exportToPDF}
@@ -397,11 +391,7 @@ export default function Dashboard() {
                           }}
                         >
                           <Link
-                            to="/scan"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              window.location.href = `/scan?session=${session.id}`;
-                            }}
+                            to={`/scan?session=${session.id}`}
                             style={{
                               flex: 1,
                               textDecoration: 'none',

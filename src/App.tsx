@@ -51,10 +51,10 @@ export default function App() {
                 <Route path="/scan" element={<Scan />} />
                 <Route path="/tools" element={<Tools />} />
                 <Route path="/how-it-works" element={<HowItWorks />} />
-                <Route path="/messages" element={<Navigate to="/tools" replace />} />
-                <Route path="/profiles" element={<Navigate to="/tools" replace />} />
-                <Route path="/images" element={<Navigate to="/tools" replace />} />
-                <Route path="/email" element={<Navigate to="/tools" replace />} />
+                <Route path="/messages" element={<Navigate to="/tools?tool=message" replace />} />
+                <Route path="/profiles" element={<Navigate to="/tools?tool=profile" replace />} />
+                <Route path="/images" element={<Navigate to="/tools?tool=image" replace />} />
+                <Route path="/email" element={<Navigate to="/tools?tool=email" replace />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/more" element={<More />} />
                 <Route path="/dashboard" element={<Dashboard />} />

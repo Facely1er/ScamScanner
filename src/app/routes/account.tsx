@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePreferences } from '../../contexts/PreferencesContext';
 import { Settings, Shield, Download, Info, Check, RefreshCw } from 'lucide-react';
 import { brandName, tagline, publisher, priceLabel } from '../config/product';
 import { isUnlocked, isDemoMode } from '../core/usageLimits';
-import { hasVerifiedPurchase, restorePurchases } from '../../services/purchaseService';
+import { restorePurchases } from '../../services/purchaseService';
 import DemoStatus from '../../components/common/DemoStatus';
+import { useLocale } from '../../contexts/LocaleContext';
 
 export default function Preferences() {
   const { preferences, updatePreferences } = usePreferences();
@@ -13,7 +14,7 @@ export default function Preferences() {
   const [restoreError, setRestoreError] = useState<string | null>(null);
   const unlocked = isUnlocked();
   const demoMode = isDemoMode();
-  const hasPurchase = hasVerifiedPurchase();
+  const { t } = useLocale();
 
   const handlePreferenceChange = (key: keyof typeof preferences, value: boolean | number) => {
     updatePreferences({ [key]: value });
@@ -41,10 +42,10 @@ export default function Preferences() {
     <div className="grid">
       <section className="card">
         <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Settings size={16} /> Preferences
+          <Settings size={16} /> {t('account.kicker')}
         </div>
-        <h1 className="h1">Preferences</h1>
-        <p className="p">Configure your analysis preferences and settings.</p>
+        <h1 className="h1">{t('account.title')}</h1>
+        <p className="p">{t('account.subtitle')}</p>
       </section>
 
       {/* Purchase Status */}
@@ -53,10 +54,8 @@ export default function Preferences() {
           <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
             <Check size={20} style={{ color: 'rgb(21 128 61)', marginTop: 2 }} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 600, marginBottom: 4, color: 'rgb(21 128 61)' }}>Full Access Active</div>
-              <div className="small" style={{ color: 'rgb(21 128 61)' }}>
-                You have full access to all features. Thank you for your purchase!
-              </div>
+              <div style={{ fontWeight: 600, marginBottom: 4, color: 'rgb(21 128 61)' }}>{t('account.fullAccess')}</div>
+              <div className="small" style={{ color: 'rgb(21 128 61)' }}>{t('account.fullAccessDesc')}</div>
             </div>
           </div>
         </div>
@@ -68,31 +67,26 @@ export default function Preferences() {
         <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
           <Shield size={20} style={{ color: 'rgb(21 128 61)', marginTop: 2 }} />
           <div>
-            <div style={{ fontWeight: 600, marginBottom: 4, color: 'rgb(21 128 61)' }}>Privacy First</div>
-            <div className="small" style={{ color: 'rgb(21 128 61)' }}>
-              All data is stored locally on your device. No information is collected or transmitted to external servers. 
-              Your privacy and security remain under your control.
-            </div>
+            <div style={{ fontWeight: 600, marginBottom: 4, color: 'rgb(21 128 61)' }}>{t('account.privacyFirst')}</div>
+            <div className="small" style={{ color: 'rgb(21 128 61)' }}>{t('account.privacyFirstDesc')}</div>
           </div>
         </div>
       </div>
 
       <section className="card">
         <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Settings size={20} /> Analysis Preferences
+          <Settings size={20} /> {t('account.preferencesTitle')}
         </h2>
         <div className="small" style={{ marginBottom: 16, opacity: 0.8 }}>
-          All settings are stored locally on your device.
+          {t('account.preferencesSubtitle')}
         </div>
 
         <div className="grid" style={{ gap: 16 }}>
           <div className="card" style={{ padding: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Auto-save Reports</div>
-                <div className="small" style={{ opacity: 0.8 }}>
-                  Automatically save analysis reports to your dashboard.
-                </div>
+                <div style={{ fontWeight: 600, marginBottom: 4 }}>{t('account.autoSave')}</div>
+                <div className="small" style={{ opacity: 0.8 }}>{t('account.autoSaveDesc')}</div>
               </div>
               <label style={{ position: 'relative', display: 'inline-block', width: 48, height: 24 }}>
                 <input
@@ -135,10 +129,8 @@ export default function Preferences() {
           <div className="card" style={{ padding: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Show Risk Warnings</div>
-                <div className="small" style={{ opacity: 0.8 }}>
-                  Display detailed warnings for high-risk content.
-                </div>
+                <div style={{ fontWeight: 600, marginBottom: 4 }}>{t('account.riskWarnings')}</div>
+                <div className="small" style={{ opacity: 0.8 }}>{t('account.riskWarningsDesc')}</div>
               </div>
               <label style={{ position: 'relative', display: 'inline-block', width: 48, height: 24 }}>
                 <input
@@ -180,20 +172,18 @@ export default function Preferences() {
 
           <div className="card" style={{ padding: 16 }}>
             <div>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Analysis History (Days)</div>
-              <div className="small" style={{ opacity: 0.8, marginBottom: 12 }}>
-                Retain analysis history for the selected number of days.
-              </div>
+              <div style={{ fontWeight: 600, marginBottom: 8 }}>{t('account.historyDays')}</div>
+              <div className="small" style={{ opacity: 0.8, marginBottom: 12 }}>{t('account.historyDaysDesc')}</div>
               <select
                 value={preferences.analysisHistory}
                 onChange={(e) => handlePreferenceChange('analysisHistory', Number(e.target.value))}
                 className="input"
               >
-                <option value={7}>7 days</option>
-                <option value={14}>14 days</option>
-                <option value={30}>30 days</option>
-                <option value={60}>60 days</option>
-                <option value={90}>90 days</option>
+                <option value={7}>7 {t('account.days')}</option>
+                <option value={14}>14 {t('account.days')}</option>
+                <option value={30}>30 {t('account.days')}</option>
+                <option value={60}>60 {t('account.days')}</option>
+                <option value={90}>90 {t('account.days')}</option>
               </select>
             </div>
           </div>
@@ -203,18 +193,18 @@ export default function Preferences() {
       {!unlocked && (
         <section className="card">
           <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Download size={20} /> {demoMode ? 'Upgrade to Full Access' : 'Get the App'}
+            <Download size={20} /> {demoMode ? t('account.upgradeTitle') : t('account.getAppTitle')}
           </h2>
           <div className="grid" style={{ gap: 12 }}>
             <Link to="/pricing" className="card" style={{ padding: 16, display: 'block', textDecoration: 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <Download size={20} style={{ color: 'var(--primary)' }} />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, marginBottom: 4 }}>Purchase Full Access</div>
+                  <div style={{ fontWeight: 600, marginBottom: 4 }}>{t('account.purchaseFullAccess')}</div>
                   <div className="small" style={{ opacity: 0.8 }}>
-                    {demoMode 
-                      ? `Upgrade for unlimited scans and all features — ${priceLabel}`
-                      : `Get full access with a one-time purchase — ${priceLabel}`}
+                    {demoMode
+                      ? `${t('account.purchaseUpgradeDesc')} — ${priceLabel}`
+                      : `${t('account.purchaseNewDesc')} — ${priceLabel}`}
                   </div>
                 </div>
               </div>
@@ -225,10 +215,8 @@ export default function Preferences() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <RefreshCw size={20} style={{ color: 'var(--primary)' }} />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 600, marginBottom: 4 }}>Restore Purchases</div>
-                    <div className="small" style={{ opacity: 0.8, marginBottom: 8 }}>
-                      Restore your purchase if you've already bought the app
-                    </div>
+                    <div style={{ fontWeight: 600, marginBottom: 4 }}>{t('account.restorePurchases')}</div>
+                    <div className="small" style={{ opacity: 0.8, marginBottom: 8 }}>{t('account.restorePurchasesDesc')}</div>
                     {restoreError && (
                       <div className="small" style={{ color: 'var(--error, #ff4444)', marginBottom: 8 }}>
                         {restoreError}
@@ -240,7 +228,7 @@ export default function Preferences() {
                       className="btn"
                       style={{ width: '100%' }}
                     >
-                      {isRestoring ? 'Restoring...' : 'Restore Purchases'}
+                      {isRestoring ? t('account.restoring') : t('account.restorePurchases')}
                     </button>
                   </div>
                 </div>
@@ -252,7 +240,7 @@ export default function Preferences() {
 
       <section className="card">
         <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Info size={20} /> About
+          <Info size={20} /> {t('account.aboutTitle')}
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div>
@@ -265,25 +253,22 @@ export default function Preferences() {
 
       <section className="card">
         <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Shield size={20} /> Security & Privacy
+          <Shield size={20} /> {t('account.securityTitle')}
         </h2>
 
         <div className="grid" style={{ gap: 12 }}>
           <div>
-            <div className="small" style={{ marginBottom: 8, fontWeight: 600 }}>Local Storage Only</div>
-            <p className="small" style={{ opacity: 0.8 }}>
-              Reports, documents, and preferences are stored only in your browser's local storage. 
-              No data is transmitted to any server. Clearing your browser data will remove all saved information.
-            </p>
+            <div className="small" style={{ marginBottom: 8, fontWeight: 600 }}>{t('account.localStorageTitle')}</div>
+            <p className="small" style={{ opacity: 0.8 }}>{t('account.localStorageDesc')}</p>
           </div>
 
           <div>
-            <div className="small" style={{ marginBottom: 8, fontWeight: 600 }}>Security Tips</div>
+            <div className="small" style={{ marginBottom: 8, fontWeight: 600 }}>{t('account.securityTipsTitle')}</div>
             <ul className="small" style={{ paddingLeft: 20, opacity: 0.8 }}>
-              <li>Be cautious of phishing attempts</li>
-              <li>Regularly review your saved reports</li>
-              <li>Clear data when using shared devices</li>
-              <li>Back up important reports if needed</li>
+              <li>{t('account.securityTip1')}</li>
+              <li>{t('account.securityTip2')}</li>
+              <li>{t('account.securityTip3')}</li>
+              <li>{t('account.securityTip4')}</li>
             </ul>
           </div>
         </div>
