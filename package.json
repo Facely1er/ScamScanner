@@ -28,7 +28,7 @@
     "ios:open": "npx cap open ios",
     "ios:run": "npm run ios:sync && npx cap run ios",
     "ios:build": "npm run build:app && npx cap sync ios",
-    "icons:generate": "npx @capacitor/assets generate --iconBackgroundColor '#0a0f1a' --iconBackgroundColorDark '#0a0f1a' --splashBackgroundColor '#0a0f1a' --splashBackgroundColorDark '#0a0f1a'"
+    "icons:generate": "npx @capacitor/assets generate --iconBackgroundColor '#0a0f1a' --iconBackgroundColorDark '#0a0f1a' --splashBackgroundColor '#0a0f1a' --splashBackgroundColorDark '#0a0f1a' --logoSplashScale 0.35"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
