@@ -6,19 +6,23 @@ import Home from './app/routes/home';
 import Scan from './app/routes/scan';
 import Tools from './app/routes/tools';
 import HowItWorks from './app/routes/how-it-works';
-import Messages from './app/routes/messages';
-import Profiles from './app/routes/profiles';
-import Images from './app/routes/images';
-import Email from './app/routes/email';
 import About from './app/routes/about';
 import More from './app/routes/more';
 import Dashboard from './app/routes/dashboard';
 import Account from './app/routes/account';
 import Pricing from './app/routes/pricing';
+import Privacy from './app/routes/privacy';
+import Terms from './app/routes/terms';
+import { ToastContainer } from './components/common/Toast';
+import Onboarding, { useOnboarding } from './components/common/Onboarding';
+import { IS_APP_BUILD } from './config/env';
 
 export default function App() {
+  const { showOnboarding, finishOnboarding } = useOnboarding();
+
   return (
     <PreferencesProvider>
+      {IS_APP_BUILD && showOnboarding && <Onboarding onComplete={finishOnboarding} />}
       {/* Skip to main content link for accessibility */}
       <a href="#main-content" className="skip-link">
         Skip to main content
@@ -39,10 +43,13 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/account" element={<Account />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </AppShell>
+      <ToastContainer />
     </PreferencesProvider>
   );
 }

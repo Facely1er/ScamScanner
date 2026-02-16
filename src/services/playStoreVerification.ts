@@ -5,8 +5,7 @@
  * In production, this should integrate with Google Play Billing Library.
  */
 
-import { APP_CONFIG } from '../config/app';
-import { isAndroidApp, isNativeApp } from '../config/app';
+import { appConfig, isAndroidApp, isNativeApp } from '../config/app';
 
 export interface PurchaseVerificationResult {
   isValid: boolean;
@@ -27,15 +26,15 @@ export interface PurchaseVerificationResult {
  */
 export async function verifyPurchase(): Promise<PurchaseVerificationResult> {
   // In app builds, users paid to download, so they're considered verified
-  if (APP_CONFIG.buildTarget === 'app') {
+  if (isNativeApp) {
     return {
       isValid: true,
-      productId: APP_CONFIG.playStorePackage,
+      productId: appConfig.playStorePackageName,
     };
   }
 
   // For web builds, check if running in native app context
-  if (isNativeApp()) {
+  if (isNativeApp) {
     // TODO: Implement actual Play Store purchase verification
     // This should use Capacitor's Google Play Billing plugin or similar
     try {
@@ -46,7 +45,7 @@ export async function verifyPurchase(): Promise<PurchaseVerificationResult> {
       // For now, assume valid if running in app context
       return {
         isValid: true,
-        productId: APP_CONFIG.playStorePackage,
+        productId: appConfig.playStorePackageName,
       };
     } catch (error) {
       return {
@@ -100,7 +99,7 @@ export function clearVerificationCache(): void {
  * Should be called on app startup
  */
 export async function initializePurchaseVerification(): Promise<void> {
-  if (!isNativeApp()) {
+  if (!isNativeApp) {
     return;
   }
 

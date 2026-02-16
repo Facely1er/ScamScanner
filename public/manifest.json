@@ -1,11 +1,11 @@
 {
   "name": "Cyberstition – Trust Signals",
-  "short_name": "Cyberstition",
+  "short_name": "ScamScanner",
   "description": "Privacy-first scam detection guide that helps users identify phishing, fraud, and deception through context-aware, guided analysis.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#06b6d4",
+  "background_color": "#0a0f1a",
+  "theme_color": "#9b7dd4",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -22,7 +22,52 @@
     }
   ],
   "categories": ["security", "utilities", "productivity"],
-  "screenshots": [],
-  "shortcuts": []
+  "screenshots": [
+    {
+      "src": "/cyberstition_logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Guided Scan",
+      "short_name": "Scan",
+      "description": "Start a new guided scam scan",
+      "url": "/scan",
+      "icons": [
+        {
+          "src": "/cyberstition_logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Analysis Tools",
+      "short_name": "Tools",
+      "description": "Access individual analysis tools",
+      "url": "/tools",
+      "icons": [
+        {
+          "src": "/cyberstition_logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "History",
+      "description": "View analysis history",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/cyberstition_logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }
-

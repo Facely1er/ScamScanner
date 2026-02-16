@@ -5,27 +5,27 @@ import ThemeToggle from '../../components/common/ThemeToggle';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <>
-      <div className={`header ${scrolled ? 'scrolled' : ''}`}>
+      <header className={`header ${scrolled ? 'scrolled' : ''}`} role="banner">
         <div className="inner">
-          <NavLink to="/" className="brand-link">
+          <NavLink to="/" className="brand-link" aria-label="Cyberstition Home">
             <div className="brand">
               <img
                 src="/cyberstition_logo.png"
-                alt="Cyberstition"
+                alt="Cyberstition Logo"
                 className="brand-logo"
+                loading="eager"
               />
               <div className="brand-text">
                 <strong>Cyberstition™</strong>
@@ -35,7 +35,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </NavLink>
 
-          <nav className="topnav" aria-label="Primary">
+          <nav className="topnav" aria-label="Primary navigation">
             <NavItem to="/" label="Home" icon={<HomeIcon size={18} />} end />
             <NavItem to="/scan" label="Scan" icon={<Shield size={18} />} />
             <NavItem to="/tools" label="Tools" icon={<Wrench size={18} />} />
@@ -62,7 +62,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </NavLink>
           </div>
         </div>
-      </div>
+      </header>
 
       <main className="container app-main">{children}</main>
 
@@ -74,19 +74,23 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <NavItem to="/account" label="Settings" icon={<Settings size={20} />} />
       </nav>
 
-      <footer className="footer">
+      <footer className="footer" role="contentinfo">
         <div className="inner">
           <div className="brand">
             <img
               src="/cyberstition_logo.png"
-              alt="Cyberstition"
+              alt="Cyberstition Logo"
               className="brand-logo"
+              loading="lazy"
             />
             <strong>Cyberstition™</strong>
           </div>
           <p className="footer-tagline">Digital Safety Tools for Everyone</p>
           <div className="footer-links">
             <NavLink to="/about" className="footer-link">About</NavLink>
+            <NavLink to="/how-it-works" className="footer-link">How it Works</NavLink>
+            <NavLink to="/privacy" className="footer-link">Privacy</NavLink>
+            <NavLink to="/terms" className="footer-link">Terms</NavLink>
           </div>
         </div>
       </footer>

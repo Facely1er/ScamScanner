@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSessionStore } from '../../state/sessionStore';
-import { Shield, ArrowRight, Home, CheckCircle2, Info } from 'lucide-react';
+import { Shield, ArrowRight, Home, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ContextSelector from '../components/scan/ContextSelector';
 import AnalysisWizard from '../components/scan/AnalysisWizard';
@@ -42,16 +42,16 @@ export default function Scan() {
 
   return (
     <div className="grid loose">
-      <section className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+      <section className="card" style={{ border: '2px solid var(--border)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <Shield size={16} /> Guided Scam Scanner
             </div>
-            <h1 className="h1">Smart Analysis Workflow</h1>
+            <h1 className="h1" style={{ marginBottom: 0, paddingBottom: 0, border: 'none' }}>Smart Analysis Workflow</h1>
           </div>
           <Link to="/" className="btn" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Home size={16} /> Home
+            <Home size={18} /> Home
           </Link>
         </div>
 
@@ -85,45 +85,49 @@ function StepIndicator({ currentStep }: { currentStep: ScanStep }) {
   const currentIndex = getCurrentIndex();
 
   return (
-    <div style={{ marginTop: 20 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <div style={{ marginTop: 28 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
+              gap: 10,
               flex: 1
             }}>
               <div style={{
-                minWidth: 32,
-                height: 32,
+                minWidth: 38,
+                height: 38,
                 borderRadius: '50%',
-                backgroundColor: index <= currentIndex ? 'var(--primary)' : 'var(--border)',
-                color: index <= currentIndex ? 'white' : 'var(--text-secondary)',
+                backgroundColor: index <= currentIndex ? 'var(--primary)' : 'var(--bg-secondary)',
+                border: index <= currentIndex ? '2px solid var(--primary)' : '2px solid var(--border)',
+                color: index <= currentIndex ? 'white' : 'var(--text-muted)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontWeight: 600,
-                fontSize: '0.9rem',
-                transition: 'all 0.3s ease'
+                fontWeight: 700,
+                fontSize: 15,
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: index <= currentIndex ? '0 2px 8px rgba(155,125,212,.25)' : 'none'
               }}>
-                {index < currentIndex ? <CheckCircle2 size={18} /> : step.number}
+                {index < currentIndex ? <CheckCircle2 size={20} strokeWidth={2.5} /> : step.number}
               </div>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <span className="small" style={{
-                  fontWeight: index === currentIndex ? 600 : 400,
-                  color: index <= currentIndex ? 'var(--text)' : 'var(--text-secondary)',
-                  transition: 'all 0.3s ease'
+                  fontWeight: index === currentIndex ? 700 : index < currentIndex ? 600 : 500,
+                  fontSize: index === currentIndex ? 14 : 13,
+                  color: index <= currentIndex ? 'var(--text)' : 'var(--text-muted)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}>
                   {step.label}
                 </span>
               </div>
             </div>
             {index < steps.length - 1 && (
-              <ArrowRight size={16} style={{
+              <ArrowRight size={18} style={{
                 color: index < currentIndex ? 'var(--primary)' : 'var(--border)',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                flexShrink: 0
               }} />
             )}
           </React.Fragment>

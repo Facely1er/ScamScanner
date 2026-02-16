@@ -1,0 +1,127 @@
+import React, { useState } from 'react';
+import { Shield, Lock, Sparkles, ArrowRight } from 'lucide-react';
+
+const ONBOARDING_KEY = 'cyberstition_onboarding_complete';
+
+export function useOnboarding() {
+  const [complete, setComplete] = useState(() => {
+    return typeof window !== 'undefined' && window.localStorage.getItem(ONBOARDING_KEY) === 'true';
+  });
+
+  const finish = () => {
+    window.localStorage.setItem(ONBOARDING_KEY, 'true');
+    setComplete(true);
+  };
+
+  return { showOnboarding: !complete, finishOnboarding: finish };
+}
+
+interface OnboardingProps {
+  onComplete: () => void;
+}
+
+const slides = [
+  {
+    icon: <Shield size={52} strokeWidth={2} />,
+    title: 'Detect Scams Before They Strike',
+    body: 'Cyberstition analyzes messages, profiles, emails, and images for common scam patterns, phishing tactics, and manipulation techniques.',
+  },
+  {
+    icon: <Sparkles size={52} strokeWidth={2} />,
+    title: 'Guided Multi-Signal Analysis',
+    body: 'Our guided scanner combines evidence from multiple sources to detect cross-signal patterns and provide a confidence-rated risk assessment.',
+  },
+  {
+    icon: <Lock size={52} strokeWidth={2} />,
+    title: 'Privacy First — Always',
+    body: 'All analysis runs locally on your device. Nothing is uploaded, tracked, or shared. Your data stays yours.',
+  },
+];
+
+export default function Onboarding({ onComplete }: OnboardingProps) {
+  const [step, setStep] = useState(0);
+  const isLast = step === slides.length - 1;
+  const slide = slides[step];
+
+  const handleNext = () => {
+    if (isLast) {
+      onComplete();
+    } else {
+      setStep(s => s + 1);
+    }
+  };
+
+  return (
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      zIndex: 10000,
+      backgroundColor: 'var(--bg)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 28,
+      animation: 'fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+    }}>
+      <div style={{
+        maxWidth: 480,
+        width: '100%',
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 28,
+      }}>
+        <div style={{
+          width: 104,
+          height: 104,
+          borderRadius: 26,
+          backgroundColor: 'var(--primary)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          animation: 'scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: '0 8px 24px rgba(155,125,212,.35)',
+        }}>
+          {slide.icon}
+        </div>
+
+        <h1 className="h2" style={{ margin: 0, fontSize: 28 }}>{slide.title}</h1>
+        <p className="p" style={{ margin: 0, maxWidth: 380, fontSize: 16, lineHeight: 1.75 }}>{slide.body}</p>
+
+        {/* Step indicators */}
+        <div style={{ display: 'flex', gap: 10, marginTop: 12 }} role="tablist" aria-label="Onboarding steps">
+          {slides.map((_, i) => (
+            <div
+              key={i}
+              role="tab"
+              aria-selected={i === step}
+              aria-label={`Step ${i + 1} of ${slides.length}`}
+              style={{
+                width: i === step ? 32 : 10,
+                height: 10,
+                borderRadius: 5,
+                backgroundColor: i === step ? 'var(--primary)' : 'var(--border)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: i === step ? '0 2px 8px rgba(155,125,212,.3)' : 'none',
+              }}
+            />
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', gap: 14, marginTop: 24, width: '100%' }}>
+          {!isLast && (
+            <button onClick={onComplete} className="btn" style={{ flex: 1, padding: '14px 24px' }}>
+              Skip
+            </button>
+          )}
+          <button onClick={handleNext} className="btn primary" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '14px 28px', fontSize: 15 }}>
+            {isLast ? 'Get Started' : 'Next'} <ArrowRight size={18} strokeWidth={2.5} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
