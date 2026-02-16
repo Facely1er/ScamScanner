@@ -1,0 +1,746 @@
+{
+  "version": "1.0",
+  "exportDate": "2024-01-15T10:30:00.000Z",
+  "reports": [
+    {
+      "id": "report_1705312200000_phish1",
+      "title": "Suspicious Email from 'Amazon Support'",
+      "tool_type": "email",
+      "risk_level": "high",
+      "created_at": "2024-01-15T08:30:00.000Z",
+      "content": {
+        "evidence": {
+          "id": "evt_email_001",
+          "type": "email",
+          "analyzedAt": 1705312200000,
+          "data": {
+            "from": "amazon-support@amazon-security.com",
+            "subject": "URGENT: Your Account Will Be Suspended",
+            "headers": "Received: from mail.amazon-security.com (192.168.1.100)\nFrom: Amazon Support <amazon-support@amazon-security.com>\nReply-To: support@amazon-verify.net\nSPF: fail\nDKIM: fail\nDMARC: fail"
+          },
+          "signals": [
+            {
+              "id": "signal_spf_001",
+              "type": "spf_fail",
+              "severity": "high",
+              "score": 25,
+              "description": "SPF authentication failed - email may be spoofed",
+              "source": "email"
+            },
+            {
+              "id": "signal_dkim_001",
+              "type": "dkim_fail",
+              "severity": "high",
+              "score": 20,
+              "description": "DKIM signature verification failed",
+              "source": "email"
+            },
+            {
+              "id": "signal_dmarc_001",
+              "type": "dmarc_fail",
+              "severity": "high",
+              "score": 25,
+              "description": "DMARC policy check failed - high risk of spoofing",
+              "source": "email"
+            },
+            {
+              "id": "signal_replyto_001",
+              "type": "reply_to",
+              "severity": "medium",
+              "score": 10,
+              "description": "Reply-To address differs from From address (amazon-verify.net vs amazon-security.com)",
+              "source": "email"
+            }
+          ],
+          "riskScore": 80,
+          "riskLevel": "high",
+          "analysis": {
+            "riskScore": 80,
+            "isSuspicious": true,
+            "issues": [
+              "SPF authentication failed - email may be spoofed",
+              "DKIM signature verification failed",
+              "DMARC policy check failed - high risk of spoofing",
+              "Reply-To address differs from From address"
+            ],
+            "recommendations": [
+              "Do not click any links in this email",
+              "Do not provide any personal information",
+              "Verify account status by logging in directly to Amazon (not via email link)",
+              "Report this email as phishing to Amazon"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "report_1705315800000_msg1",
+      "title": "Romance Scam Message Pattern Detected",
+      "tool_type": "messages",
+      "risk_level": "high",
+      "created_at": "2024-01-15T09:30:00.000Z",
+      "content": {
+        "evidence": {
+          "id": "evt_msg_001",
+          "type": "message",
+          "analyzedAt": 1705315800000,
+          "data": {
+            "text": "Hello beautiful, I saw your profile and I think we have a connection. I'm currently working overseas as a military contractor. I need someone I can trust to help me with a financial matter. I can't access my bank account from here, but I have $250,000 that needs to be transferred. If you help me, I'll give you 20% as a thank you. This is urgent - please reply quickly with your bank details."
+          },
+          "signals": [
+            {
+              "id": "signal_urgency_001",
+              "type": "urgency",
+              "severity": "high",
+              "score": 20,
+              "description": "Message creates artificial urgency and pressure to act quickly",
+              "source": "message"
+            },
+            {
+              "id": "signal_reward_001",
+              "type": "reward",
+              "severity": "high",
+              "score": 15,
+              "description": "Offers large financial reward for minimal effort (classic scam pattern)",
+              "source": "message"
+            },
+            {
+              "id": "signal_credentials_001",
+              "type": "credentials",
+              "severity": "high",
+              "score": 25,
+              "description": "Requests sensitive financial information (bank details)",
+              "source": "message"
+            },
+            {
+              "id": "signal_generic_001",
+              "type": "generic",
+              "severity": "medium",
+              "score": 10,
+              "description": "Generic opening line suggests mass-generated message",
+              "source": "message"
+            }
+          ],
+          "riskScore": 70,
+          "riskLevel": "high",
+          "analysis": {
+            "riskScore": 70,
+            "isSuspicious": true,
+            "reasons": [
+              "Message creates artificial urgency and pressure to act quickly",
+              "Offers large financial reward for minimal effort (classic scam pattern)",
+              "Requests sensitive financial information (bank details)",
+              "Generic opening line suggests mass-generated message",
+              "Mentions working overseas (common romance scam detail)",
+              "Asks for trust before establishing relationship"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "report_1705319400000_img1",
+      "title": "Image Metadata Analysis - Suspicious Profile Photo",
+      "tool_type": "images",
+      "risk_level": "medium",
+      "created_at": "2024-01-15T10:30:00.000Z",
+      "content": {
+        "evidence": {
+          "id": "evt_img_001",
+          "type": "image",
+          "analyzedAt": 1705319400000,
+          "data": {
+            "fileName": "profile_photo.jpg",
+            "fileSize": 245678,
+            "fileType": "image/jpeg",
+            "dimensions": {
+              "width": 800,
+              "height": 800
+            }
+          },
+          "signals": [
+            {
+              "id": "signal_metadata_001",
+              "type": "missing_metadata",
+              "severity": "medium",
+              "score": 15,
+              "description": "Missing EXIF metadata (camera, location, timestamp)",
+              "source": "image"
+            },
+            {
+              "id": "signal_dimensions_001",
+              "type": "unusual_dimensions",
+              "severity": "low",
+              "score": 5,
+              "description": "Perfect square dimensions (800x800) - common for profile photos",
+              "source": "image"
+            },
+            {
+              "id": "signal_filename_001",
+              "type": "generic_filename",
+              "severity": "low",
+              "score": 5,
+              "description": "Generic filename suggests downloaded or reused image",
+              "source": "image"
+            }
+          ],
+          "riskScore": 25,
+          "riskLevel": "medium",
+          "analysis": {
+            "riskScore": 25,
+            "isSuspicious": false,
+            "issues": [
+              "Missing EXIF metadata (camera, location, timestamp)",
+              "Perfect square dimensions (800x800) - common for profile photos",
+              "Generic filename suggests downloaded or reused image"
+            ],
+            "recommendations": [
+              "Request original photo with metadata",
+              "Use reverse image search to check if photo appears elsewhere",
+              "Verify photo matches person's other social media profiles"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "report_1705323000000_profile1",
+      "title": "Social Profile Verification - Inconsistent Information",
+      "tool_type": "profiles",
+      "risk_level": "medium",
+      "created_at": "2024-01-15T11:30:00.000Z",
+      "content": {
+        "evidence": {
+          "id": "evt_profile_001",
+          "type": "profile",
+          "analyzedAt": 1705323000000,
+          "data": {
+            "platform": "Facebook",
+            "username": "john_smith_official",
+            "displayName": "John Smith",
+            "accountAge": "30 days",
+            "friendCount": 15,
+            "postCount": 3,
+            "profilePicture": "generic_photo.jpg",
+            "bio": "Love traveling and meeting new people"
+          },
+          "signals": [
+            {
+              "id": "signal_accountage_001",
+              "type": "new_account",
+              "severity": "medium",
+              "score": 15,
+              "description": "Account is very new (30 days old)",
+              "source": "profile"
+            },
+            {
+              "id": "signal_activity_001",
+              "type": "low_activity",
+              "severity": "medium",
+              "score": 10,
+              "description": "Very low activity (3 posts, 15 friends) for account age",
+              "source": "profile"
+            },
+            {
+              "id": "signal_bio_001",
+              "type": "generic_bio",
+              "severity": "low",
+              "score": 5,
+              "description": "Generic bio with no specific details",
+              "source": "profile"
+            }
+          ],
+          "riskScore": 30,
+          "riskLevel": "medium",
+          "analysis": {
+            "riskScore": 30,
+            "isSuspicious": false,
+            "issues": [
+              "Account is very new (30 days old)",
+              "Very low activity (3 posts, 15 friends) for account age",
+              "Generic bio with no specific details",
+              "Profile picture appears generic"
+            ],
+            "recommendations": [
+              "Verify account through mutual connections",
+              "Check if profile matches information provided in messages",
+              "Look for other social media accounts with same name",
+              "Be cautious with new accounts requesting money or personal information"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "report_1705326600000_email2",
+      "title": "Legitimate Email from Bank - Low Risk",
+      "tool_type": "email",
+      "risk_level": "low",
+      "created_at": "2024-01-15T12:30:00.000Z",
+      "content": {
+        "evidence": {
+          "id": "evt_email_002",
+          "type": "email",
+          "analyzedAt": 1705326600000,
+          "data": {
+            "from": "noreply@chase.com",
+            "subject": "Monthly Statement Available",
+            "headers": "Received: from mail.chase.com (209.85.220.41)\nFrom: Chase Bank <noreply@chase.com>\nReply-To: noreply@chase.com\nSPF: pass\nDKIM: pass\nDMARC: pass"
+          },
+          "signals": [],
+          "riskScore": 5,
+          "riskLevel": "low",
+          "analysis": {
+            "riskScore": 5,
+            "isSuspicious": false,
+            "issues": [
+              "No suspicious indicators found"
+            ],
+            "recommendations": [
+              "Email appears legitimate",
+              "All authentication checks passed (SPF, DKIM, DMARC)",
+              "Still verify by logging in directly to bank website if needed"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "sessions": [
+    {
+      "id": "session_1705312200000_scam1",
+      "createdAt": 1705312200000,
+      "updatedAt": 1705315800000,
+      "status": "completed",
+      "context": {
+        "origin": "email",
+        "senderName": "Amazon Support",
+        "relationship": "Unknown",
+        "receivedDate": "2024-01-15T08:00:00.000Z",
+        "requestedAction": "Click link to verify account",
+        "additionalNotes": "Received unsolicited email claiming account suspension"
+      },
+      "evidence": [
+        {
+          "id": "evt_email_001",
+          "type": "email",
+          "analyzedAt": 1705312200000,
+          "data": {
+            "from": "amazon-support@amazon-security.com",
+            "subject": "URGENT: Your Account Will Be Suspended",
+            "headers": "Received: from mail.amazon-security.com\nSPF: fail\nDKIM: fail\nDMARC: fail"
+          },
+          "signals": [
+            {
+              "id": "signal_spf_001",
+              "type": "spf_fail",
+              "severity": "high",
+              "score": 25,
+              "description": "SPF authentication failed - email may be spoofed",
+              "source": "email"
+            },
+            {
+              "id": "signal_dkim_001",
+              "type": "dkim_fail",
+              "severity": "high",
+              "score": 20,
+              "description": "DKIM signature verification failed",
+              "source": "email"
+            },
+            {
+              "id": "signal_dmarc_001",
+              "type": "dmarc_fail",
+              "severity": "high",
+              "score": 25,
+              "description": "DMARC policy check failed - high risk of spoofing",
+              "source": "email"
+            }
+          ],
+          "riskScore": 80,
+          "riskLevel": "high",
+          "analysis": {
+            "riskScore": 80,
+            "isSuspicious": true,
+            "issues": [
+              "SPF authentication failed",
+              "DKIM signature verification failed",
+              "DMARC policy check failed"
+            ]
+          }
+        },
+        {
+          "id": "evt_msg_001",
+          "type": "message",
+          "analyzedAt": 1705314000000,
+          "data": {
+            "text": "URGENT: Your Amazon account will be suspended in 24 hours. Click here to verify: https://amazon-verify.net/account"
+          },
+          "signals": [
+            {
+              "id": "signal_urgency_001",
+              "type": "urgency",
+              "severity": "high",
+              "score": 20,
+              "description": "Message creates artificial urgency and pressure",
+              "source": "message"
+            },
+            {
+              "id": "signal_link_001",
+              "type": "link",
+              "severity": "high",
+              "score": 25,
+              "description": "Suspicious link to non-Amazon domain (amazon-verify.net)",
+              "source": "message"
+            }
+          ],
+          "riskScore": 65,
+          "riskLevel": "high",
+          "analysis": {
+            "riskScore": 65,
+            "isSuspicious": true,
+            "reasons": [
+              "Message creates artificial urgency and pressure",
+              "Suspicious link to non-Amazon domain"
+            ]
+          }
+        }
+      ],
+      "signals": [
+        {
+          "id": "signal_spf_001",
+          "type": "spf_fail",
+          "severity": "high",
+          "score": 25,
+          "description": "SPF authentication failed - email may be spoofed",
+          "source": "email"
+        },
+        {
+          "id": "signal_dkim_001",
+          "type": "dkim_fail",
+          "severity": "high",
+          "score": 20,
+          "description": "DKIM signature verification failed",
+          "source": "email"
+        },
+        {
+          "id": "signal_dmarc_001",
+          "type": "dmarc_fail",
+          "severity": "high",
+          "score": 25,
+          "description": "DMARC policy check failed - high risk of spoofing",
+          "source": "email"
+        },
+        {
+          "id": "signal_urgency_001",
+          "type": "urgency",
+          "severity": "high",
+          "score": 20,
+          "description": "Message creates artificial urgency and pressure",
+          "source": "message"
+        },
+        {
+          "id": "signal_link_001",
+          "type": "link",
+          "severity": "high",
+          "score": 25,
+          "description": "Suspicious link to non-Amazon domain (amazon-verify.net)",
+          "source": "message"
+        }
+      ],
+      "patternMatches": [
+        {
+          "patternId": "pattern_phishing_001",
+          "patternName": "Phishing Email with Urgency",
+          "category": "phishing",
+          "confidence": 0.92,
+          "matchedSignals": ["signal_urgency_001", "signal_link_001", "signal_spf_001"],
+          "description": "Classic phishing pattern: urgent email with suspicious link and failed authentication"
+        },
+        {
+          "patternId": "pattern_impersonation_001",
+          "patternName": "Brand Impersonation",
+          "category": "impersonation",
+          "confidence": 0.88,
+          "matchedSignals": ["signal_dmarc_001", "signal_dkim_001"],
+          "description": "Email appears to be from Amazon but authentication fails, indicating impersonation"
+        }
+      ],
+      "crossReferences": [
+        {
+          "type": "confirmation",
+          "evidenceIds": ["evt_email_001", "evt_msg_001"],
+          "description": "Both email headers and message content show high-risk indicators, confirming phishing attempt",
+          "impactOnConfidence": 0.15
+        }
+      ],
+      "overallRiskScore": 85,
+      "overallRiskLevel": "high",
+      "threatCategory": "phishing",
+      "confidence": 0.95,
+      "nextSteps": [
+        "Do not click any links in the email",
+        "Do not provide any personal information",
+        "Verify account status by logging in directly to Amazon website",
+        "Report this email as phishing to Amazon and your email provider",
+        "Delete the email and block the sender"
+      ],
+      "completionPercentage": 100
+    },
+    {
+      "id": "session_1705323000000_romance",
+      "createdAt": 1705323000000,
+      "updatedAt": 1705326600000,
+      "status": "completed",
+      "context": {
+        "origin": "social_media",
+        "senderName": "John Smith",
+        "relationship": "New contact",
+        "receivedDate": "2024-01-15T11:00:00.000Z",
+        "requestedAction": "Provide bank details for money transfer",
+        "additionalNotes": "Met on dating app, quickly moved to private messaging, asking for financial help"
+      },
+      "evidence": [
+        {
+          "id": "evt_msg_002",
+          "type": "message",
+          "analyzedAt": 1705323000000,
+          "data": {
+            "text": "Hello beautiful, I saw your profile and I think we have a connection. I'm currently working overseas as a military contractor. I need someone I can trust to help me with a financial matter. I can't access my bank account from here, but I have $250,000 that needs to be transferred. If you help me, I'll give you 20% as a thank you. This is urgent - please reply quickly with your bank details."
+          },
+          "signals": [
+            {
+              "id": "signal_urgency_002",
+              "type": "urgency",
+              "severity": "high",
+              "score": 20,
+              "description": "Message creates artificial urgency and pressure to act quickly",
+              "source": "message"
+            },
+            {
+              "id": "signal_reward_002",
+              "type": "reward",
+              "severity": "high",
+              "score": 15,
+              "description": "Offers large financial reward for minimal effort",
+              "source": "message"
+            },
+            {
+              "id": "signal_credentials_002",
+              "type": "credentials",
+              "severity": "high",
+              "score": 25,
+              "description": "Requests sensitive financial information (bank details)",
+              "source": "message"
+            }
+          ],
+          "riskScore": 70,
+          "riskLevel": "high",
+          "analysis": {
+            "riskScore": 70,
+            "isSuspicious": true,
+            "reasons": [
+              "Message creates artificial urgency and pressure",
+              "Offers large financial reward for minimal effort",
+              "Requests sensitive financial information",
+              "Generic opening line",
+              "Mentions working overseas (common romance scam detail)"
+            ]
+          }
+        },
+        {
+          "id": "evt_profile_001",
+          "type": "profile",
+          "analyzedAt": 1705324500000,
+          "data": {
+            "platform": "Facebook",
+            "username": "john_smith_official",
+            "displayName": "John Smith",
+            "accountAge": "30 days",
+            "friendCount": 15,
+            "postCount": 3
+          },
+          "signals": [
+            {
+              "id": "signal_accountage_002",
+              "type": "new_account",
+              "severity": "medium",
+              "score": 15,
+              "description": "Account is very new (30 days old)",
+              "source": "profile"
+            },
+            {
+              "id": "signal_activity_002",
+              "type": "low_activity",
+              "severity": "medium",
+              "score": 10,
+              "description": "Very low activity for account age",
+              "source": "profile"
+            }
+          ],
+          "riskScore": 30,
+          "riskLevel": "medium",
+          "analysis": {
+            "riskScore": 30,
+            "isSuspicious": false,
+            "issues": [
+              "Account is very new",
+              "Very low activity",
+              "Generic profile information"
+            ]
+          }
+        }
+      ],
+      "signals": [
+        {
+          "id": "signal_urgency_002",
+          "type": "urgency",
+          "severity": "high",
+          "score": 20,
+          "description": "Message creates artificial urgency and pressure to act quickly",
+          "source": "message"
+        },
+        {
+          "id": "signal_reward_002",
+          "type": "reward",
+          "severity": "high",
+          "score": 15,
+          "description": "Offers large financial reward for minimal effort",
+          "source": "message"
+        },
+        {
+          "id": "signal_credentials_002",
+          "type": "credentials",
+          "severity": "high",
+          "score": 25,
+          "description": "Requests sensitive financial information (bank details)",
+          "source": "message"
+        },
+        {
+          "id": "signal_accountage_002",
+          "type": "new_account",
+          "severity": "medium",
+          "score": 15,
+          "description": "Account is very new (30 days old)",
+          "source": "profile"
+        },
+        {
+          "id": "signal_activity_002",
+          "type": "low_activity",
+          "severity": "medium",
+          "score": 10,
+          "description": "Very low activity for account age",
+          "source": "profile"
+        }
+      ],
+      "patternMatches": [
+        {
+          "patternId": "pattern_romance_001",
+          "patternName": "Romance Scam Pattern",
+          "category": "romance_scam",
+          "confidence": 0.95,
+          "matchedSignals": ["signal_urgency_002", "signal_reward_002", "signal_credentials_002"],
+          "description": "Classic romance scam: new relationship, overseas work, urgent money request, large reward offer"
+        }
+      ],
+      "crossReferences": [
+        {
+          "type": "confirmation",
+          "evidenceIds": ["evt_msg_002", "evt_profile_001"],
+          "description": "New profile with low activity combined with urgent financial request confirms romance scam pattern",
+          "impactOnConfidence": 0.20
+        }
+      ],
+      "overallRiskScore": 75,
+      "overallRiskLevel": "high",
+      "threatCategory": "romance_scam",
+      "confidence": 0.92,
+      "nextSteps": [
+        "Do not provide any bank details or personal information",
+        "Stop all communication with this person",
+        "Report the profile to the social media platform",
+        "Block the user on all platforms",
+        "If you've already sent money, contact your bank and local authorities immediately"
+      ],
+      "completionPercentage": 100
+    },
+    {
+      "id": "session_1705329000000_legit",
+      "createdAt": 1705329000000,
+      "updatedAt": 1705332000000,
+      "status": "completed",
+      "context": {
+        "origin": "email",
+        "senderName": "Chase Bank",
+        "relationship": "Financial institution",
+        "receivedDate": "2024-01-15T12:00:00.000Z",
+        "requestedAction": "View monthly statement",
+        "additionalNotes": "Regular monthly statement notification"
+      },
+      "evidence": [
+        {
+          "id": "evt_email_002",
+          "type": "email",
+          "analyzedAt": 1705329000000,
+          "data": {
+            "from": "noreply@chase.com",
+            "subject": "Monthly Statement Available",
+            "headers": "Received: from mail.chase.com\nSPF: pass\nDKIM: pass\nDMARC: pass"
+          },
+          "signals": [],
+          "riskScore": 5,
+          "riskLevel": "low",
+          "analysis": {
+            "riskScore": 5,
+            "isSuspicious": false,
+            "issues": [],
+            "recommendations": [
+              "Email appears legitimate",
+              "All authentication checks passed"
+            ]
+          }
+        }
+      ],
+      "signals": [],
+      "patternMatches": [],
+      "crossReferences": [],
+      "overallRiskScore": 5,
+      "overallRiskLevel": "low",
+      "threatCategory": "unknown",
+      "confidence": 0.98,
+      "nextSteps": [
+        "Email appears legitimate - all security checks passed",
+        "You can safely view your statement by logging into your Chase account directly"
+      ],
+      "completionPercentage": 100
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc_1705312200000_email1",
+      "title": "Suspicious Amazon Email",
+      "description": "Email headers from suspicious Amazon support email",
+      "file_type": "email",
+      "created_at": "2024-01-15T08:30:00.000Z"
+    },
+    {
+      "id": "doc_1705315800000_msg1",
+      "title": "Romance Scam Message",
+      "description": "Screenshot of suspicious message requesting bank details",
+      "file_type": "message",
+      "created_at": "2024-01-15T09:30:00.000Z"
+    },
+    {
+      "id": "doc_1705319400000_img1",
+      "title": "Profile Photo Analysis",
+      "description": "Profile photo from suspicious social media account",
+      "file_type": "image",
+      "created_at": "2024-01-15T10:30:00.000Z"
+    }
+  ],
+  "preferences": {
+    "saveReportsAutomatically": true,
+    "theme": "dark",
+    "notifications": true
+  }
+}
+

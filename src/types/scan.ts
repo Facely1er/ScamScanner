@@ -1,4 +1,4 @@
-export type EvidenceType = 'message' | 'email' | 'image' | 'profile';
+export type EvidenceType = 'message' | 'email' | 'image' | 'profile' | 'video';
 export type RiskLevel = 'low' | 'medium' | 'high';
 export type ThreatCategory =
   | 'phishing'

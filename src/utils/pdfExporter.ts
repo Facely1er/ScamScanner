@@ -1,0 +1,494 @@
+import jsPDF from 'jspdf';
+import { ScanSession } from '../types/scan';
+
+interface Report {
+  id: string;
+  title: string;
+  tool_type: string;
+  risk_level: string;
+  created_at: string;
+  content: any;
+}
+
+/**
+ * Export a single report to PDF
+ */
+export function exportReportToPDF(report: Report): void {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  let yPos = margin;
+
+  // Header
+  doc.setFillColor(59, 130, 246); // Primary blue
+  doc.rect(0, 0, pageWidth, 40, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Cyberstition Security Report', margin, 25);
+  
+  // Reset text color
+  doc.setTextColor(0, 0, 0);
+  yPos = 50;
+
+  // Report Title
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text(report.title, margin, yPos);
+  yPos += 10;
+
+  // Report Metadata
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  const riskColor = getRiskColorRGB(report.risk_level);
+  doc.setTextColor(riskColor.r, riskColor.g, riskColor.b);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`Risk Level: ${report.risk_level.toUpperCase()}`, margin, yPos);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  yPos += 6;
+  doc.text(`Tool Type: ${report.tool_type}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Date: ${formatDate(report.created_at)}`, margin, yPos);
+  yPos += 15;
+
+  // Evidence Analysis
+  if (report.content?.evidence) {
+    const evidence = report.content.evidence;
+    
+    // Risk Score
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Risk Assessment', margin, yPos);
+    yPos += 8;
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Risk Score: ${evidence.riskScore}/100`, margin, yPos);
+    yPos += 6;
+    doc.text(`Risk Level: ${evidence.riskLevel.toUpperCase()}`, margin, yPos);
+    yPos += 15;
+
+    // Signals Detected
+    if (evidence.signals && evidence.signals.length > 0) {
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Signals Detected (${evidence.signals.length})`, margin, yPos);
+      yPos += 8;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+
+      evidence.signals.forEach((signal: any, index: number) => {
+        if (yPos > pageHeight - 30) {
+          doc.addPage();
+          yPos = margin;
+        }
+
+        const signalColor = getRiskColorRGB(signal.severity);
+        doc.setTextColor(signalColor.r, signalColor.g, signalColor.b);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${index + 1}. ${signal.type.toUpperCase()} (Score: ${signal.score})`, margin, yPos);
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'normal');
+        yPos += 5;
+        
+        const lines = doc.splitTextToSize(signal.description, pageWidth - 2 * margin);
+        doc.text(lines, margin + 5, yPos);
+        yPos += lines.length * 5 + 3;
+      });
+      yPos += 10;
+    }
+
+    // Analysis Details
+    if (evidence.analysis) {
+      if (yPos > pageHeight - 50) {
+        doc.addPage();
+        yPos = margin;
+      }
+
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Analysis Details', margin, yPos);
+      yPos += 8;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+
+      if (evidence.analysis.issues && evidence.analysis.issues.length > 0) {
+        doc.setFont('helvetica', 'bold');
+        doc.text('Issues Found:', margin, yPos);
+        yPos += 6;
+        doc.setFont('helvetica', 'normal');
+        evidence.analysis.issues.forEach((issue: string) => {
+          if (yPos > pageHeight - 20) {
+            doc.addPage();
+            yPos = margin;
+          }
+          const lines = doc.splitTextToSize(`• ${issue}`, pageWidth - 2 * margin);
+          doc.text(lines, margin, yPos);
+          yPos += lines.length * 5 + 2;
+        });
+        yPos += 5;
+      }
+
+      if (evidence.analysis.recommendations && evidence.analysis.recommendations.length > 0) {
+        if (yPos > pageHeight - 40) {
+          doc.addPage();
+          yPos = margin;
+        }
+        doc.setFont('helvetica', 'bold');
+        doc.text('Recommendations:', margin, yPos);
+        yPos += 6;
+        doc.setFont('helvetica', 'normal');
+        evidence.analysis.recommendations.forEach((rec: string) => {
+          if (yPos > pageHeight - 20) {
+            doc.addPage();
+            yPos = margin;
+          }
+          const lines = doc.splitTextToSize(`• ${rec}`, pageWidth - 2 * margin);
+          doc.text(lines, margin, yPos);
+          yPos += lines.length * 5 + 2;
+        });
+      }
+    }
+  }
+
+  // Footer
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(128, 128, 128);
+    doc.text(
+      `Page ${i} of ${totalPages} | Generated by Cyberstition on ${new Date().toLocaleDateString()}`,
+      pageWidth / 2,
+      pageHeight - 10,
+      { align: 'center' }
+    );
+  }
+
+  // Download
+  doc.save(`cyberstition-report-${report.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+/**
+ * Export a scan session to PDF
+ */
+export function exportSessionToPDF(session: ScanSession): void {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  let yPos = margin;
+
+  // Header
+  doc.setFillColor(59, 130, 246);
+  doc.rect(0, 0, pageWidth, 40, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Cyberstition Scan Session Report', margin, 25);
+  doc.setTextColor(0, 0, 0);
+  yPos = 50;
+
+  // Session Overview
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Session Overview', margin, yPos);
+  yPos += 10;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  const riskColor = getRiskColorRGB(session.overallRiskLevel);
+  doc.setTextColor(riskColor.r, riskColor.g, riskColor.b);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`Overall Risk: ${session.overallRiskLevel.toUpperCase()} (${session.overallRiskScore}/100)`, margin, yPos);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  yPos += 6;
+  doc.text(`Confidence: ${Math.round(session.confidence * 100)}%`, margin, yPos);
+  yPos += 6;
+  doc.text(`Threat Category: ${session.threatCategory.replace(/_/g, ' ').toUpperCase()}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Date: ${formatDate(new Date(session.createdAt).toISOString())}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Status: ${session.status.toUpperCase()}`, margin, yPos);
+  yPos += 15;
+
+  // Context
+  if (session.context) {
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Context', margin, yPos);
+    yPos += 8;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    if (session.context.senderName) {
+      doc.text(`Sender: ${session.context.senderName}`, margin, yPos);
+      yPos += 6;
+    }
+    if (session.context.origin) {
+      doc.text(`Origin: ${session.context.origin.replace(/_/g, ' ')}`, margin, yPos);
+      yPos += 6;
+    }
+    if (session.context.requestedAction) {
+      doc.text(`Requested Action: ${session.context.requestedAction}`, margin, yPos);
+      yPos += 6;
+    }
+    yPos += 10;
+  }
+
+  // Evidence Items
+  if (session.evidence && session.evidence.length > 0) {
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Evidence Analyzed (${session.evidence.length})`, margin, yPos);
+    yPos += 8;
+
+    session.evidence.forEach((evidence, index) => {
+      if (yPos > pageHeight - 40) {
+        doc.addPage();
+        yPos = margin;
+      }
+
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${index + 1}. ${evidence.type.toUpperCase()} Analysis`, margin, yPos);
+      yPos += 6;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      const evRiskColor = getRiskColorRGB(evidence.riskLevel);
+      doc.setTextColor(evRiskColor.r, evRiskColor.g, evRiskColor.b);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Risk: ${evidence.riskLevel.toUpperCase()} (${evidence.riskScore}/100)`, margin, yPos);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont('helvetica', 'normal');
+      yPos += 6;
+      doc.text(`Signals: ${evidence.signals.length}`, margin, yPos);
+      yPos += 10;
+    });
+  }
+
+  // Pattern Matches
+  if (session.patternMatches && session.patternMatches.length > 0) {
+    if (yPos > pageHeight - 50) {
+      doc.addPage();
+      yPos = margin;
+    }
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Pattern Matches (${session.patternMatches.length})`, margin, yPos);
+    yPos += 8;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+
+    session.patternMatches.forEach((pattern) => {
+      if (yPos > pageHeight - 30) {
+        doc.addPage();
+        yPos = margin;
+      }
+
+      doc.setFont('helvetica', 'bold');
+      doc.text(pattern.patternName, margin, yPos);
+      yPos += 5;
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Category: ${pattern.category.replace(/_/g, ' ')}`, margin, yPos);
+      yPos += 5;
+      doc.text(`Confidence: ${Math.round(pattern.confidence * 100)}%`, margin, yPos);
+      yPos += 5;
+      const descLines = doc.splitTextToSize(pattern.description, pageWidth - 2 * margin);
+      doc.text(descLines, margin, yPos);
+      yPos += descLines.length * 5 + 5;
+    });
+  }
+
+  // Recommendations
+  if (session.nextSteps && session.nextSteps.length > 0) {
+    if (yPos > pageHeight - 50) {
+      doc.addPage();
+      yPos = margin;
+    }
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(riskColor.r, riskColor.g, riskColor.b);
+    doc.text('Recommended Actions', margin, yPos);
+    doc.setTextColor(0, 0, 0);
+    yPos += 8;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+
+    session.nextSteps.forEach((step) => {
+      if (yPos > pageHeight - 20) {
+        doc.addPage();
+        yPos = margin;
+      }
+      const lines = doc.splitTextToSize(`• ${step}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPos);
+      yPos += lines.length * 5 + 3;
+    });
+  }
+
+  // Footer
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(128, 128, 128);
+    doc.text(
+      `Page ${i} of ${totalPages} | Generated by Cyberstition on ${new Date().toLocaleDateString()}`,
+      pageWidth / 2,
+      pageHeight - 10,
+      { align: 'center' }
+    );
+  }
+
+  // Download
+  const sessionName = session.context.senderName || 'session';
+  doc.save(`cyberstition-session-${sessionName.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+/**
+ * Export all reports to a single PDF
+ */
+export function exportAllReportsToPDF(reports: Report[]): void {
+  if (reports.length === 0) {
+    alert('No reports to export');
+    return;
+  }
+
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  let yPos = margin;
+
+  // Cover Page
+  doc.setFillColor(59, 130, 246);
+  doc.rect(0, 0, pageWidth, pageHeight, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Cyberstition', pageWidth / 2, pageHeight / 2 - 20, { align: 'center' });
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Security Reports Summary', pageWidth / 2, pageHeight / 2, { align: 'center' });
+  doc.setFontSize(12);
+  doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth / 2, pageHeight / 2 + 20, { align: 'center' });
+  doc.text(`Total Reports: ${reports.length}`, pageWidth / 2, pageHeight / 2 + 30, { align: 'center' });
+  doc.addPage();
+
+  // Summary
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Reports Summary', margin, yPos);
+  yPos += 10;
+
+  const riskCounts = reports.reduce((acc, r) => {
+    acc[r.risk_level] = (acc[r.risk_level] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`High Risk: ${riskCounts.high || 0}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Medium Risk: ${riskCounts.medium || 0}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Low Risk: ${riskCounts.low || 0}`, margin, yPos);
+  yPos += 15;
+
+  // Export each report
+  reports.forEach((report, index) => {
+    if (index > 0) {
+      doc.addPage();
+      yPos = margin;
+    }
+
+    // Report Header
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Report ${index + 1}: ${report.title}`, margin, yPos);
+    yPos += 8;
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    const riskColor = getRiskColorRGB(report.risk_level);
+    doc.setTextColor(riskColor.r, riskColor.g, riskColor.b);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Risk Level: ${report.risk_level.toUpperCase()}`, margin, yPos);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    yPos += 6;
+    doc.text(`Tool: ${report.tool_type}`, margin, yPos);
+    yPos += 6;
+    doc.text(`Date: ${formatDate(report.created_at)}`, margin, yPos);
+    yPos += 10;
+
+    // Evidence Summary
+    if (report.content?.evidence) {
+      const evidence = report.content.evidence;
+      doc.text(`Risk Score: ${evidence.riskScore}/100`, margin, yPos);
+      yPos += 6;
+      doc.text(`Signals Detected: ${evidence.signals?.length || 0}`, margin, yPos);
+      yPos += 10;
+
+      // Key Signals
+      if (evidence.signals && evidence.signals.length > 0) {
+        doc.setFont('helvetica', 'bold');
+        doc.text('Key Signals:', margin, yPos);
+        yPos += 6;
+        doc.setFont('helvetica', 'normal');
+        evidence.signals.slice(0, 5).forEach((signal: any) => {
+          if (yPos > pageHeight - 20) {
+            doc.addPage();
+            yPos = margin;
+          }
+          const lines = doc.splitTextToSize(`• ${signal.description}`, pageWidth - 2 * margin);
+          doc.text(lines, margin, yPos);
+          yPos += lines.length * 5 + 2;
+        });
+      }
+    }
+  });
+
+  // Footer
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(128, 128, 128);
+    doc.text(
+      `Page ${i} of ${totalPages} | Generated by Cyberstition on ${new Date().toLocaleDateString()}`,
+      pageWidth / 2,
+      pageHeight - 10,
+      { align: 'center' }
+    );
+  }
+
+  doc.save(`cyberstition-all-reports-${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+// Helper functions
+function getRiskColorRGB(level: string): { r: number; g: number; b: number } {
+  switch (level.toLowerCase()) {
+    case 'high':
+      return { r: 239, g: 68, b: 68 };
+    case 'medium':
+      return { r: 251, g: 146, b: 60 };
+    default:
+      return { r: 34, g: 197, b: 94 };
+  }
+}
+
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+

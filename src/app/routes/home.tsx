@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff, Settings } from 'lucide-react';
+import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff, Target, Search, Link2, BarChart3 } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
+import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
+import { priceLabel } from '../config/product';
 
 export default function Home() {
   const handleGetApp = () => {
@@ -66,107 +68,93 @@ export default function Home() {
   return (
     <div className="grid loose">
       <section className="card" style={{
-        background: 'linear-gradient(135deg, var(--bg-secondary) 0%, var(--card) 100%)',
+        background: 'linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 100%)',
         border: '2px solid var(--primary)',
-        boxShadow: '0 8px 24px rgba(155,125,212,.15), 0 2px 8px rgba(0,0,0,.05)',
-        position: 'relative',
-        overflow: 'hidden'
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
       }}>
-        <div style={{
-          position: 'absolute',
-          top: -50,
-          right: -50,
-          width: 200,
-          height: 200,
-          background: 'radial-gradient(circle, rgba(155,125,212,.15) 0%, transparent 70%)',
-          pointerEvents: 'none'
-        }} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16, position: 'relative' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
           <div style={{
-            padding: 14,
-            borderRadius: 14,
+            padding: 12,
+            borderRadius: 12,
             backgroundColor: 'var(--primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(155,125,212,.3)'
+            width: 52,
+            height: 52
           }}>
-            <Shield size={32} color="white" strokeWidth={2.5} />
+            <img 
+              src="/cyberstition_logo.png" 
+              alt="Cyberstition" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'contain' 
+              }} 
+            />
           </div>
           <div>
-            <div className="kicker" style={{ margin: 0, color: 'var(--primary)', fontSize: 12 }}>Recommended</div>
-            <h2 className="h2" style={{ margin: 0, marginTop: 6 }}>Guided Scam Scanner</h2>
+            <div className="kicker" style={{ margin: 0, color: 'var(--primary)' }}>Recommended</div>
+            <h2 className="h2" style={{ margin: 0, marginTop: 4 }}>Guided Scam Scanner</h2>
           </div>
         </div>
-        <p className="p" style={{ position: 'relative' }}>
+        <p className="p">
           Our intelligent analysis system guides you through comprehensive scam detection. Add evidence piece by piece while the system detects patterns, finds inconsistencies, and builds a confidence-rated risk assessment.
         </p>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 14,
-          marginTop: 20,
-          marginBottom: 20,
-          padding: 18,
+          gap: 12,
+          marginTop: 16,
+          marginBottom: 16,
+          padding: 16,
           backgroundColor: 'var(--bg)',
-          borderRadius: 10,
-          border: '1px solid var(--border)',
-          position: 'relative'
+          borderRadius: 8
         }}>
           <div>
-            <div className="small" style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 7, color: 'var(--text)' }}>
-              <span style={{ fontSize: 22 }}>🎯</span> Context-Aware
+            <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Target size={18} style={{ color: 'var(--primary)' }} /> Context-Aware
             </div>
-            <div className="small" style={{ marginTop: 6, opacity: 0.75, lineHeight: 1.5 }}>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Analyzes based on how you received it
             </div>
           </div>
           <div>
-            <div className="small" style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 7, color: 'var(--text)' }}>
-              <span style={{ fontSize: 22 }}>🔍</span> Pattern Detection
+            <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Search size={18} style={{ color: 'var(--primary)' }} /> Pattern Detection
             </div>
-            <div className="small" style={{ marginTop: 6, opacity: 0.75, lineHeight: 1.5 }}>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Identifies common scam tactics
             </div>
           </div>
           <div>
-            <div className="small" style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 7, color: 'var(--text)' }}>
-              <span style={{ fontSize: 22 }}>🔗</span> Cross-Signals
+            <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Link2 size={18} style={{ color: 'var(--primary)' }} /> Cross-Signals
             </div>
-            <div className="small" style={{ marginTop: 6, opacity: 0.75, lineHeight: 1.5 }}>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Finds inconsistencies across evidence
             </div>
           </div>
           <div>
-            <div className="small" style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 7, color: 'var(--text)' }}>
-              <span style={{ fontSize: 22 }}>📊</span> Confidence Score
+            <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <BarChart3 size={18} style={{ color: 'var(--primary)' }} /> Confidence Score
             </div>
-            <div className="small" style={{ marginTop: 6, opacity: 0.75, lineHeight: 1.5 }}>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Shows reliability of assessment
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', position: 'relative' }}>
-          <Link 
-            className="btn primary" 
-            to="/scan" 
-            style={{ 
-              fontSize: 15, 
-              padding: '13px 26px',
-              fontWeight: 700,
-              boxShadow: '0 4px 14px rgba(155,125,212,.3)'
-            }}
-          >
-            <Shield size={18} />
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <Link className="btn primary" to="/scan" style={{ fontSize: '1.05em', padding: '12px 24px' }}>
             Start Guided Scan
           </Link>
           <Link className="btn" to="/about">How it works</Link>
         </div>
       </section>
 
-      <section className="card" style={{ borderWidth: 2 }}>
-        <h1 className="h1" style={{ paddingBottom: 20, marginBottom: 20 }}>Question what looks real online.</h1>
-        <p className="p" style={{ fontSize: 16, lineHeight: 1.75 }}>
+      <section className="card">
+        <h1 className="h1">Question what looks real online.</h1>
+        <p className="p">
           Cyberstition helps you identify phishing, fraud, and deception through intelligent analysis. All processing happens locally in your browser—no data collection, no tracking, complete privacy.
         </p>
       </section>
@@ -344,22 +332,16 @@ export default function Home() {
         </p>
       </div>
 
-      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1.5px solid var(--border)' }}>
-        <div className="kicker" style={{ color: 'var(--text)', marginBottom: 4 }}>
+      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+        <div className="kicker" style={{ color: 'var(--text)' }}>
           <FileText size={16} /> Your Analysis History
         </div>
-        <p className="p" style={{ marginTop: 12, lineHeight: 1.7 }}>
+        <p className="p" style={{ marginTop: 8 }}>
           All scan sessions and individual reports are saved to your dashboard. Review complete findings, pattern matches, confidence scores, and recommendations anytime.
         </p>
-        <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
-          <Link className="btn primary" to="/dashboard">
-            <FileText size={16} />
-            View Dashboard
-          </Link>
-          <Link className="btn" to="/account">
-            <Settings size={16} />
-            Preferences
-          </Link>
+        <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+          <Link className="btn primary" to="/dashboard">View Dashboard</Link>
+          <Link className="btn" to="/account">Preferences</Link>
         </div>
       </section>
 

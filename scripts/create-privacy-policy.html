@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy Generator - Cyberstition</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #7c3aed;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            margin-bottom: 16px;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        button {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #6d28d9;
+        }
+        .output {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            display: none;
+        }
+        .output.show {
+            display: block;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            background: #10b981;
+            margin-top: 10px;
+        }
+        .info {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Privacy Policy Generator</h1>
+        <p class="subtitle">Generate a privacy policy for Cyberstition</p>
+
+        <div class="info">
+            <strong>Note:</strong> This generates a basic privacy policy. Review and customize it for your specific needs. 
+            The policy must be published at a publicly accessible HTTPS URL before submitting to Play Store.
+        </div>
+
+        <form id="policyForm">
+            <div class="section">
+                <label>Last Updated Date:</label>
+                <input type="date" id="lastUpdated" required>
+            </div>
+
+            <div class="section">
+                <label>Support Email:</label>
+                <input type="email" id="supportEmail" value="support@ermits.com" required>
+            </div>
+
+            <div class="section">
+                <label>Company/Developer Name (optional):</label>
+                <input type="text" id="companyName" placeholder="Ermits" value="Ermits">
+            </div>
+
+            <div class="section">
+                <label>Additional Notes (optional):</label>
+                <textarea id="additionalNotes" placeholder="Add any specific privacy practices or disclosures here..."></textarea>
+            </div>
+
+            <button type="submit">Generate Privacy Policy</button>
+            <button type="button" onclick="loadTemplate()">Load Template</button>
+        </form>
+
+        <div id="output" class="output">
+            <h3>Generated Privacy Policy:</h3>
+            <pre id="policyText"></pre>
+            <button class="copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+            <button onclick="downloadAsFile()">Download as .txt</button>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('lastUpdated').valueAsDate = new Date();
+
+        document.getElementById('policyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generatePolicy();
+        });
+
+        function generatePolicy() {
+            const lastUpdated = document.getElementById('lastUpdated').value;
+            const supportEmail = document.getElementById('supportEmail').value;
+            const companyName = document.getElementById('companyName').value || 'Ermits';
+            const additionalNotes = document.getElementById('additionalNotes').value;
+
+            const date = new Date(lastUpdated).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            let policy = `# Privacy Policy for Cyberstition
+
+**Last Updated:** ${date}
+
+## Introduction
+
+${companyName} ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our mobile application ("App").
+
+## Information We Collect
+
+### Information You Provide
+- **Analysis Data**: When you use our scam detection features, you may provide messages, emails, images, profiles, or videos for analysis. This data is processed entirely on your device and is never transmitted to our servers.
+
+### Automatically Collected Information
+- **Usage Data**: We do not collect usage analytics or tracking data.
+- **Device Information**: We do not collect device identifiers or personal device information.
+- **Location Data**: We do not collect location information.
+
+## How We Use Information
+
+### On-Device Processing
+All analysis and processing of your data occurs entirely on your device. We do not:
+- Store your analysis data on our servers
+- Transmit your data over the internet
+- Share your data with third parties
+- Use your data for advertising or marketing
+
+### Local Storage
+- Analysis results are stored locally on your device
+- You can export or delete this data at any time through the app
+- Data is stored using standard device storage mechanisms
+
+## Data Sharing and Disclosure
+
+We do not share, sell, or disclose your personal information to third parties. Your data remains on your device and is never transmitted to external servers.
+
+## In-App Purchases
+
+If you make in-app purchases:
+- Purchase transactions are processed by Google Play Store
+- We receive purchase verification data (not personal information)
+- Payment information is handled by Google, not by us
+- See Google's Privacy Policy for payment processing details
+
+## Data Security
+
+- All processing occurs on your device
+- No data transmission over networks
+- Standard device security measures apply
+- You control all data through the app's export/delete features
+
+## Your Rights
+
+You have the right to:
+- **Access**: View all data stored in the app
+- **Export**: Export your data as JSON or PDF
+- **Delete**: Delete any or all data at any time
+- **Control**: All data remains under your control
+
+## Children's Privacy
+
+Our App is not intended for children under 13. We do not knowingly collect information from children.
+
+## Changes to This Policy
+
+We may update this Privacy Policy from time to time. We will notify you of any changes by updating the "Last Updated" date.
+
+## Contact Us
+
+If you have questions about this Privacy Policy, please contact us at:
+- **Email**: ${supportEmail}
+
+## Data Processing Summary
+
+- **Data Collection**: Minimal (only what you provide for analysis)
+- **Data Storage**: Local device only
+- **Data Transmission**: None
+- **Data Sharing**: None
+- **Third-Party Services**: Google Play Store (for purchases only)
+- **Analytics**: None
+- **Advertising**: None`;
+
+            if (additionalNotes.trim()) {
+                policy += `\n\n## Additional Information\n\n${additionalNotes}`;
+            }
+
+            policy += `\n\n---\n\n**Your Privacy Matters**: Cyberstition is designed with privacy as a core principle. All analysis happens on your device, and your data never leaves your device unless you explicitly export it.`;
+
+            document.getElementById('policyText').textContent = policy;
+            document.getElementById('output').classList.add('show');
+        }
+
+        function loadTemplate() {
+            document.getElementById('lastUpdated').valueAsDate = new Date();
+            document.getElementById('supportEmail').value = 'support@ermits.com';
+            document.getElementById('companyName').value = 'Ermits';
+            document.getElementById('additionalNotes').value = '';
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('policyText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Privacy policy copied to clipboard!');
+            });
+        }
+
+        function downloadAsFile() {
+            const text = document.getElementById('policyText').textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'privacy-policy.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
+
