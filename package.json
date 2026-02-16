@@ -28,7 +28,8 @@
     "ios:open": "npx cap open ios",
     "ios:run": "npm run ios:sync && npx cap run ios",
     "ios:build": "npm run build:app && npx cap sync ios",
-    "icons:generate": "npx @capacitor/assets generate --iconBackgroundColor '#0a0f1a' --iconBackgroundColorDark '#0a0f1a' --splashBackgroundColor '#0a0f1a' --splashBackgroundColorDark '#0a0f1a' --logoSplashScale 0.35"
+    "icons:generate": "npx @capacitor/assets generate --iconBackgroundColor '#0a0f1a' --iconBackgroundColorDark '#0a0f1a' --splashBackgroundColor '#0a0f1a' --splashBackgroundColorDark '#0a0f1a' --logoSplashScale 0.35",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
@@ -60,6 +61,7 @@
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^28.1.0",
+    "patch-package": "^8.0.1",
     "prettier": "^3.8.1",
     "typescript": "^5.5.4",
     "vite": "^7.3.1",

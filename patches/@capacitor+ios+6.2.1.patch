@@ -1,0 +1,53 @@
+diff --git a/node_modules/@capacitor/ios/CapacitorCordova/CapacitorCordova/Classes/Public/CDVWebViewProcessPoolFactory.h b/node_modules/@capacitor/ios/CapacitorCordova/CapacitorCordova/Classes/Public/CDVWebViewProcessPoolFactory.h
+index b156289..16fd4ba 100644
+--- a/node_modules/@capacitor/ios/CapacitorCordova/CapacitorCordova/Classes/Public/CDVWebViewProcessPoolFactory.h
++++ b/node_modules/@capacitor/ios/CapacitorCordova/CapacitorCordova/Classes/Public/CDVWebViewProcessPoolFactory.h
+@@ -20,7 +20,10 @@
+ #import <WebKit/WebKit.h>
+ 
+ @interface CDVWebViewProcessPoolFactory : NSObject
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+ @property (nonatomic, retain) WKProcessPool* sharedPool;
++#pragma clang diagnostic pop
+ 
+ +(instancetype) sharedFactory;
+ -(WKProcessPool*) sharedProcessPool;
+diff --git a/node_modules/@capacitor/ios/CapacitorCordova/CapacitorCordova/Classes/Public/CDVWebViewProcessPoolFactory.m b/node_modules/@capacitor/ios/CapacitorCordova/CapacitorCordova/Classes/Public/CDVWebViewProcessPoolFactory.m
+index 3781f48..59ddcbf 100644
+--- a/node_modules/@capacitor/ios/CapacitorCordova/CapacitorCordova/Classes/Public/CDVWebViewProcessPoolFactory.m
++++ b/node_modules/@capacitor/ios/CapacitorCordova/CapacitorCordova/Classes/Public/CDVWebViewProcessPoolFactory.m
+@@ -21,7 +21,13 @@ Licensed to the Apache Software Foundation (ASF) under one
+ @import WebKit;
+ #import <Cordova/CDVWebViewProcessPoolFactory.h>
+ 
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wdeprecated-declarations"
++
+ static CDVWebViewProcessPoolFactory *factory = nil;
++// Single app-wide process pool (iOS 15+ ignores multiple instances; one shared pool is correct)
++static WKProcessPool *_sharedProcessPool = nil;
++static dispatch_once_t poolOnceToken;
+ 
+ @implementation CDVWebViewProcessPoolFactory
+ 
+@@ -38,12 +44,17 @@ + (instancetype)sharedFactory
+ - (instancetype)init
+ {
+     if (self = [super init]) {
+-        _sharedPool = [[WKProcessPool alloc] init];
++        dispatch_once(&poolOnceToken, ^{
++            _sharedProcessPool = [[WKProcessPool alloc] init];
++        });
++        _sharedPool = _sharedProcessPool;
+     }
+     return self;
+ }
+ 
+ - (WKProcessPool*) sharedProcessPool {
+-    return _sharedPool;
++    return _sharedPool ?: _sharedProcessPool;
+ }
+ @end
++
++#pragma clang diagnostic pop
