@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { X, Download, Lock, Sparkles, Check } from 'lucide-react';
 import { priceLabel } from '../config/product';
-import { appConfig } from '../../config/app';
-import { isDemoMode, getUsageStatus, TOOL_IDS } from '../core/usageLimits';
+import { isDemoMode, getUsageStatus } from '../core/usageLimits';
 import { initiatePurchase, restorePurchases } from '../../services/purchaseService';
 
 interface PaywallModalProps {
@@ -14,7 +12,6 @@ interface PaywallModalProps {
 }
 
 export default function PaywallModal({ isOpen, onClose, toolName, toolId }: PaywallModalProps) {
-  const navigate = useNavigate();
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   

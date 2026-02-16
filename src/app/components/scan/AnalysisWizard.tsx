@@ -1,14 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSessionStore } from '../../../state/sessionStore';
-import { analyzeMessage, analyzeEmail, analyzeImage, analyzeProfile, analyzeVideo } from '../../../services/unifiedAnalyzer';
+import { analyzeMessage, analyzeEmail, analyzeImage, analyzeProfile } from '../../../services/unifiedAnalyzer';
 import {
   MessageSquare, Mail, Image as ImageIcon, User, Video,
-  CheckCircle, Circle, ArrowRight, Info, TrendingUp, Sparkles
+  CheckCircle, ArrowRight, Info, TrendingUp, Sparkles
 } from 'lucide-react';
 import VideoAnalyzer from './VideoAnalyzer';
+import type { EvidenceItem, WorkflowStep } from '../../../types/scan';
 
 interface AnalysisWizardProps {
   onComplete: () => void;
+}
+
+interface AnalyzerCardProps {
+  step: WorkflowStep;
+  isNext: boolean;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+interface AnalyzerPanelProps {
+  type: string;
+  onAnalyze: (evidence: EvidenceItem) => void;
+  onClose: () => void;
 }
 
 export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
@@ -197,7 +211,7 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
       {activeAnalyzer && (
         <AnalyzerPanel
           type={activeAnalyzer}
-          onAnalyze={(evidence: any) => {
+          onAnalyze={(evidence: EvidenceItem) => {
             addEvidence(evidence);
             setActiveAnalyzer(null);
           }}
@@ -231,7 +245,7 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
   );
 }
 
-function AnalyzerCard({ step, isNext, isActive, onClick }: any) {
+function AnalyzerCard({ step, isNext, isActive, onClick }: AnalyzerCardProps) {
   const icons: Record<string, React.ReactNode> = {
     message: <MessageSquare size={20} />,
     email: <Mail size={20} />,
@@ -321,7 +335,7 @@ function AnalyzerCard({ step, isNext, isActive, onClick }: any) {
   );
 }
 
-function AnalyzerPanel({ type, onAnalyze, onClose }: any) {
+function AnalyzerPanel({ type, onAnalyze, onClose }: AnalyzerPanelProps) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -355,14 +369,14 @@ function AnalyzerPanel({ type, onAnalyze, onClose }: any) {
     setLoading(false);
   };
 
-  const handleProfileAnalyze = async (profileData: any) => {
+  const handleProfileAnalyze = async (profileData: Record<string, unknown>) => {
     setLoading(true);
     const evidence = await analyzeProfile(profileData);
     onAnalyze(evidence);
     setLoading(false);
   };
 
-  const handleVideoAnalyze = async (evidence: any) => {
+  const handleVideoAnalyze = async (evidence: EvidenceItem) => {
     onAnalyze(evidence);
   };
 
