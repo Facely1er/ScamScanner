@@ -773,8 +773,8 @@ hr{
   box-shadow: 0 1px 3px 0 rgba(0,0,0,.05);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding-top: env(safe-area-inset-top);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   touch-action: manipulation;
 }
 
@@ -830,8 +830,8 @@ hr{
   color: var(--accent-primary);
 }
 
-.header .brand strong{
-  font-size:14px;
+.header .brand .brand-name{
+  font-size:12px;
 }
 
 .brand span{
@@ -974,33 +974,72 @@ hr{
 }
 
 .language-toggle{
+  position: relative;
   display: inline-flex;
   align-items: center;
+}
+
+.language-toggle-trigger{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
   border-radius: 10px;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
-  padding: 2px;
-  gap: 2px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.language-toggle button{
-  padding: 6px 10px;
-  font-size: 12px;
-  font-weight: 600;
+.language-toggle-trigger:hover{
+  color: var(--text);
+  background: var(--card-hover);
+  border-color: var(--border-hover);
+}
+
+.language-toggle-dropdown{
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 140px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+}
+
+.language-toggle-dropdown li{
+  margin: 0;
+}
+
+.language-toggle-dropdown button{
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 13px;
+  text-align: left;
   border: none;
   border-radius: 8px;
   background: transparent;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.language-toggle button:hover{
+.language-toggle-dropdown button:hover{
   color: var(--text);
   background: var(--card-hover);
 }
 
-.language-toggle button.active{
+.language-toggle-dropdown button.active{
   background: var(--primary);
   color: #fff;
 }
@@ -1210,6 +1249,10 @@ select.input {
   }
 
   .header .brand strong{
+    font-size:11px;
+  }
+
+  .header .brand .brand-name{
     font-size:12px;
   }
 
@@ -1358,6 +1401,10 @@ select.input {
   }
 
   .header .brand strong{
+    font-size:11px;
+  }
+
+  .header .brand .brand-name{
     font-size:12px;
   }
 
@@ -1427,7 +1474,11 @@ select.input {
   }
 
   .header .brand strong{
-    font-size:13px;
+    font-size:12px;
+  }
+
+  .header .brand .brand-name{
+    font-size:12px;
   }
 
   .brand span{

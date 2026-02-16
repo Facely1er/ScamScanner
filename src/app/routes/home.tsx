@@ -4,9 +4,10 @@ import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shie
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
-import { priceLabel } from '../config/product';
+import { useLocale } from '../../contexts/LocaleContext';
 
 export default function Home() {
+  const { t } = useLocale();
   const handleGetApp = () => {
     // TODO: Replace with actual Play Store URL
     window.open('https://play.google.com/store/apps', '_blank');
@@ -17,45 +18,38 @@ export default function Home() {
     return (
       <div className="grid">
         <section className="card">
-          <h1 className="h1">Question what looks real online.</h1>
-          <p className="p">
-            Identify scams, fake profiles, manipulated images, and suspicious emails using on-device analysis. 
-            All processing happens locally—no data collection, no tracking.
-          </p>
+          <h1 className="h1">{t('home.heroTitle')}</h1>
+          <p className="p">{t('home.heroSubtitle')}</p>
           <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-            <Link className="btn" to="/about">How it works</Link>
+            <Link className="btn" to="/about">{t('home.howItWorksLink')}</Link>
           </div>
         </section>
 
         <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
           <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Shield size={16} /> Available Tools
+            <Shield size={16} /> {t('home.availableToolsKicker')}
           </div>
-          <p className="p" style={{ marginTop: 8 }}>
-            All tools are available in the app after purchase. Download to get started.
-          </p>
+          <p className="p" style={{ marginTop: 8 }}>{t('home.availableToolsDesc')}</p>
         </section>
 
         <div className="grid cols-2">
-          <ToolCard title="Message Detective" desc="Detect scam, phishing, and AI-generated message patterns." icon={<MessageSquare size={18} />} />
-          <ToolCard title="Profile Checker" desc="Verify social profile authenticity and identify deception signals." icon={<User size={18} />} />
-          <ToolCard title="Image Inspector" desc="Inspect metadata and detect manipulation indicators in images." icon={<ImageIcon size={18} />} />
-          <ToolCard title="Email Analyzer" desc="Analyze email headers for spoofing and routing anomalies." icon={<Mail size={18} />} />
+          <ToolCard title={t('home.toolMessageDetective')} desc={t('home.toolMessageDetectiveDesc')} icon={<MessageSquare size={18} />} />
+          <ToolCard title={t('home.toolProfileChecker')} desc={t('home.toolProfileCheckerDesc')} icon={<User size={18} />} />
+          <ToolCard title={t('home.toolImageInspector')} desc={t('home.toolImageInspectorDesc')} icon={<ImageIcon size={18} />} />
+          <ToolCard title={t('home.toolEmailAnalyzer')} desc={t('home.toolEmailAnalyzerDesc')} icon={<Mail size={18} />} />
         </div>
 
         <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
           <div className="kicker" style={{ color: 'var(--text)' }}>
-            <Download size={16} /> Get Started
+            <Download size={16} /> {t('home.getStartedKicker')}
           </div>
-          <p className="p" style={{ marginTop: 8 }}>
-            Purchase and download the app to access all analysis tools. One-time payment, no subscription required.
-          </p>
+          <p className="p" style={{ marginTop: 8 }}>{t('home.getStartedDesc')}</p>
           <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
             <button onClick={handleGetApp} className="btn primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
               <Download size={16} />
-              Get the app
+              {t('home.getTheApp')}
             </button>
-            <Link className="btn" to="/pricing">View Pricing</Link>
+            <Link className="btn" to="/pricing">{t('home.viewPricing')}</Link>
           </div>
         </section>
 
@@ -85,7 +79,7 @@ export default function Home() {
           }}>
             <img 
               src="/cyberstition_logo.png" 
-              alt="Cyberstition" 
+              alt={t('product.brandName')} 
               style={{ 
                 width: '100%', 
                 height: '100%', 
@@ -94,13 +88,11 @@ export default function Home() {
             />
           </div>
           <div>
-            <div className="kicker" style={{ margin: 0, color: 'var(--primary)' }}>Recommended</div>
-            <h2 className="h2" style={{ margin: 0, marginTop: 4 }}>Guided Scam Scanner</h2>
+            <div className="kicker" style={{ margin: 0, color: 'var(--primary)' }}>{t('home.recommendedKicker')}</div>
+            <h2 className="h2" style={{ margin: 0, marginTop: 4 }}>{t('home.guidedScanTitle')}</h2>
           </div>
         </div>
-        <p className="p">
-          Our intelligent analysis system guides you through comprehensive scam detection. Add evidence piece by piece while the system detects patterns, finds inconsistencies, and builds a confidence-rated risk assessment.
-        </p>
+        <p className="p">{t('home.guidedScanIntro')}</p>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -113,103 +105,82 @@ export default function Home() {
         }}>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Target size={18} style={{ color: 'var(--primary)' }} /> Context-Aware
+              <Target size={18} style={{ color: 'var(--primary)' }} /> {t('home.contextAware')}
             </div>
-            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
-              Analyzes based on how you received it
-            </div>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.contextAwareDesc')}</div>
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Search size={18} style={{ color: 'var(--primary)' }} /> Pattern Detection
+              <Search size={18} style={{ color: 'var(--primary)' }} /> {t('home.patternDetection')}
             </div>
-            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
-              Identifies common scam tactics
-            </div>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.patternDetectionDesc')}</div>
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Link2 size={18} style={{ color: 'var(--primary)' }} /> Cross-Signals
+              <Link2 size={18} style={{ color: 'var(--primary)' }} /> {t('home.crossSignals')}
             </div>
-            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
-              Finds inconsistencies across evidence
-            </div>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.crossSignalsDesc')}</div>
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <BarChart3 size={18} style={{ color: 'var(--primary)' }} /> Confidence Score
+              <BarChart3 size={18} style={{ color: 'var(--primary)' }} /> {t('home.confidenceScore')}
             </div>
-            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
-              Shows reliability of assessment
-            </div>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.confidenceScoreDesc')}</div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           <Link className="btn primary" to="/scan" style={{ fontSize: '1.05em', padding: '12px 24px' }}>
-            Start Guided Scan
+            {t('home.startGuidedScan')}
           </Link>
-          <Link className="btn" to="/about">How it works</Link>
+          <Link className="btn" to="/about">{t('home.howItWorksLink')}</Link>
         </div>
       </section>
 
       <section className="card">
-        <h1 className="h1">Question what looks real online.</h1>
-        <p className="p">
-          Cyberstition helps you identify phishing, fraud, and deception through intelligent analysis. All processing happens locally in your browser—no data collection, no tracking, complete privacy.
-        </p>
+        <h1 className="h1">{t('home.questionTitle')}</h1>
+        <p className="p">{t('home.questionSubtitle')}</p>
       </section>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)' }}>
         <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
           <Shield size={24} style={{ color: 'var(--primary)' }} />
-          Why Cyberstition?
+          {t('home.whyCyberstition')}
         </h2>
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <Shield size={20} style={{ color: 'var(--primary)' }} />
-              <h3 className="h3" style={{ margin: 0 }}>100% Private</h3>
+              <h3 className="h3" style={{ margin: 0 }}>{t('home.privateTitle')}</h3>
             </div>
-            <p className="small">
-              All analysis runs on your device. Nothing leaves your browser. No data collection, no tracking.
-            </p>
+            <p className="small">{t('home.privateDesc')}</p>
           </div>
-          
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <Download size={20} style={{ color: 'var(--primary)' }} />
-              <h3 className="h3" style={{ margin: 0 }}>One-Time Payment</h3>
+              <h3 className="h3" style={{ margin: 0 }}>{t('home.oneTimeTitle')}</h3>
             </div>
-            <p className="small">
-              No subscription required. Pay once, use forever. Better value than monthly subscriptions.
-            </p>
+            <p className="small">{t('home.oneTimeDesc')}</p>
           </div>
-          
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <User size={20} style={{ color: 'var(--primary)' }} />
-              <h3 className="h3" style={{ margin: 0 }}>No Account Needed</h3>
+              <h3 className="h3" style={{ margin: 0 }}>{t('home.noAccountTitle')}</h3>
             </div>
-            <p className="small">
-              Start using immediately. No sign-up, no email required. Maximum privacy.
-            </p>
+            <p className="small">{t('home.noAccountDesc')}</p>
           </div>
-          
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <WifiOff size={20} style={{ color: 'var(--primary)' }} />
-              <h3 className="h3" style={{ margin: 0 }}>Works Offline</h3>
+              <h3 className="h3" style={{ margin: 0 }}>{t('home.worksOfflineTitle')}</h3>
             </div>
-            <p className="small">
-              Once loaded, all tools work without internet. Perfect for sensitive content.
-            </p>
+            <p className="small">{t('home.worksOfflineDesc')}</p>
           </div>
         </div>
       </section>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
         <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Shield size={16} /> How Guided Scans Work
+          <Shield size={16} /> {t('home.howGuidedScansKicker')}
         </div>
         <div style={{ marginTop: 16 }}>
           <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
@@ -225,10 +196,8 @@ export default function Home() {
               fontWeight: 600
             }}>1</div>
             <div>
-              <div className="small" style={{ fontWeight: 600 }}>Provide Context</div>
-              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
-                Tell us where you received it and what they're asking
-              </div>
+              <div className="small" style={{ fontWeight: 600 }}>{t('home.step1Title')}</div>
+              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.step1Desc')}</div>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
@@ -244,10 +213,8 @@ export default function Home() {
               fontWeight: 600
             }}>2</div>
             <div>
-              <div className="small" style={{ fontWeight: 600 }}>Add Evidence</div>
-              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
-                Analyze messages, profiles, emails, or images—system guides you
-              </div>
+              <div className="small" style={{ fontWeight: 600 }}>{t('home.step2Title')}</div>
+              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.step2Desc')}</div>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
@@ -263,10 +230,8 @@ export default function Home() {
               fontWeight: 600
             }}>3</div>
             <div>
-              <div className="small" style={{ fontWeight: 600 }}>Pattern Detection</div>
-              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
-                System identifies threat patterns and cross-references signals
-              </div>
+              <div className="small" style={{ fontWeight: 600 }}>{t('home.step3Title')}</div>
+              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.step3Desc')}</div>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'start' }}>
@@ -282,66 +247,62 @@ export default function Home() {
               fontWeight: 600
             }}>4</div>
             <div>
-              <div className="small" style={{ fontWeight: 600 }}>Get Assessment</div>
-              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
-                Receive confidence-rated risk score with clear recommendations
-              </div>
+              <div className="small" style={{ fontWeight: 600 }}>{t('home.step4Title')}</div>
+              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.step4Desc')}</div>
             </div>
           </div>
         </div>
       </section>
 
       <div style={{ marginTop: 8 }}>
-        <h2 className="h2" style={{ marginBottom: 16 }}>Or Use Individual Tools</h2>
+        <h2 className="h2" style={{ marginBottom: 16 }}>{t('home.orUseIndividualTools')}</h2>
         <div className="grid cols-2">
           <ToolCard 
             to="/messages" 
-            title="Message Detective" 
-            desc="Quick analysis of message text for scam patterns." 
+            title={t('home.toolMessageDetective')} 
+            desc={t('home.messageDetectiveExample')} 
             example='Example: "Urgent! Your account will be suspended in 24 hours. Click here now!"'
             icon={<MessageSquare size={18} />} 
             color="#3b82f6"
           />
           <ToolCard 
             to="/profiles" 
-            title="Profile Checker" 
-            desc="Verify social profile authenticity signals." 
-            example="Checks profile age, follower ratios, activity patterns, and verification status"
+            title={t('home.toolProfileChecker')} 
+            desc={t('home.profileCheckerExample')} 
+            example={t('home.profileCheckerExample')}
             icon={<User size={18} />} 
             color="#10b981"
           />
           <ToolCard 
             to="/images" 
-            title="Image Inspector" 
-            desc="Inspect image metadata and properties." 
-            example="Detects editing software, creation dates, GPS location, and manipulation indicators"
+            title={t('home.toolImageInspector')} 
+            desc={t('home.imageInspectorExample')} 
+            example={t('home.imageInspectorExample')}
             icon={<ImageIcon size={18} />} 
             color="#f59e0b"
           />
           <ToolCard 
             to="/email" 
-            title="Email Analyzer" 
-            desc="Check email headers for spoofing indicators." 
-            example="Analyzes SPF, DKIM, DMARC records and routing paths to detect spoofing"
+            title={t('home.toolEmailAnalyzer')} 
+            desc={t('home.emailAnalyzerExample')} 
+            example={t('home.emailAnalyzerExample')}
             icon={<Mail size={18} />} 
             color="#ef4444"
           />
         </div>
         <p className="small" style={{ marginTop: 12, opacity: 0.7, textAlign: 'center' }}>
-          Individual tools provide single-signal analysis. For comprehensive assessment, use Guided Scan.
+          {t('home.individualToolsNote')}
         </p>
       </div>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
         <div className="kicker" style={{ color: 'var(--text)' }}>
-          <FileText size={16} /> Your Analysis History
+          <FileText size={16} /> {t('home.yourHistoryKicker')}
         </div>
-        <p className="p" style={{ marginTop: 8 }}>
-          All scan sessions and individual reports are saved to your dashboard. Review complete findings, pattern matches, confidence scores, and recommendations anytime.
-        </p>
+        <p className="p" style={{ marginTop: 8 }}>{t('home.yourHistoryDesc')}</p>
         <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-          <Link className="btn primary" to="/dashboard">View Dashboard</Link>
-          <Link className="btn" to="/account">Preferences</Link>
+          <Link className="btn primary" to="/dashboard">{t('home.viewDashboard')}</Link>
+          <Link className="btn" to="/account">{t('home.preferences')}</Link>
         </div>
       </section>
 
@@ -358,6 +319,7 @@ function ToolCard({ to, title, desc, icon, example, color = 'var(--primary)' }: 
   example?: string;
   color?: string;
 }) {
+  const { t } = useLocale();
   if (IS_WEB_BUILD) {
     return (
       <div className="card" style={{ opacity: 0.8 }}>
@@ -377,7 +339,7 @@ function ToolCard({ to, title, desc, icon, example, color = 'var(--primary)' }: 
           <div style={{ flex: 1 }}>
             <div className="kicker" style={{ justifyContent: 'space-between', marginBottom: 4 }}>
               <span>{title}</span>
-              <span className="badge">In App</span>
+              <span className="badge">{t('home.inAppBadge')}</span>
             </div>
             <p className="p" style={{ marginTop: 8, marginBottom: 0 }}>{desc}</p>
             {example && (
@@ -392,7 +354,7 @@ function ToolCard({ to, title, desc, icon, example, color = 'var(--primary)' }: 
                 {example}
               </p>
             )}
-            <div style={{ marginTop: 12 }} className="small">Available after purchase</div>
+            <div style={{ marginTop: 12 }} className="small">{t('home.availableAfterPurchase')}</div>
           </div>
         </div>
       </div>
@@ -417,7 +379,7 @@ function ToolCard({ to, title, desc, icon, example, color = 'var(--primary)' }: 
         <div style={{ flex: 1 }}>
           <div className="kicker" style={{ justifyContent: 'space-between', marginBottom: 4 }}>
             <span>{title}</span>
-            <span className="badge">Signals</span>
+            <span className="badge">{t('home.signalsBadge')}</span>
           </div>
           <p className="p" style={{ marginTop: 8, marginBottom: 0 }}>{desc}</p>
           {example && (
@@ -432,7 +394,7 @@ function ToolCard({ to, title, desc, icon, example, color = 'var(--primary)' }: 
               {example}
             </p>
           )}
-          <div style={{ marginTop: 12 }} className="small">High-level indicators only. Always verify before acting.</div>
+          <div style={{ marginTop: 12 }} className="small">{t('home.highLevelIndicators')}</div>
         </div>
       </div>
     </Link>

@@ -31,7 +31,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 loading="eager"
               />
               <div className="brand-text">
-                <strong>{t('product.brandName')}™</strong>
+                <strong className="brand-name">{t('product.brandName')}™</strong>
                 <span className="brand-subtitle">{t('product.tagline')}</span>
                 <span className="brand-subtext">{t('product.publisher')}</span>
               </div>
@@ -71,11 +71,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <main className="container app-main">{children}</main>
 
       <nav className="bottomnav" aria-label="Primary mobile navigation">
-        <NavItem to="/" label="Home" icon={<HomeIcon size={20} />} end />
-        <NavItem to="/scan" label="Scan" icon={<Shield size={20} />} />
-        <NavItem to="/tools" label="Tools" icon={<Wrench size={20} />} />
-        <NavItem to="/dashboard" label="History" icon={<FileText size={20} />} />
-        <NavItem to="/account" label="Settings" icon={<Settings size={20} />} />
+        <NavItem to="/" label={t('nav.home')} icon={<HomeIcon size={20} />} end />
+        <NavItem to="/scan" label={t('nav.scan')} icon={<Shield size={20} />} />
+        <NavItem to="/tools" label={t('nav.tools')} icon={<Wrench size={20} />} />
+        <NavItem to="/dashboard" label={t('nav.history')} icon={<FileText size={20} />} />
+        <NavItem to="/account" label={t('nav.settings')} icon={<Settings size={20} />} />
       </nav>
 
       <footer className="footer" role="contentinfo">
@@ -83,18 +83,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div className="brand">
             <img
               src="/cyberstition_logo.png"
-              alt="Cyberstition Logo"
+              alt={t('product.brandName') + ' Logo'}
               className="brand-logo"
               loading="lazy"
             />
-            <strong>Cyberstition™</strong>
+            <strong>{t('product.brandName')}™</strong>
           </div>
-          <p className="footer-tagline">Digital Safety Tools for Everyone</p>
+          <p className="footer-tagline">{t('nav.footerTagline')}</p>
           <div className="footer-links">
-            <NavLink to="/about" className="footer-link">About</NavLink>
-            <NavLink to="/how-it-works" className="footer-link">How it Works</NavLink>
-            <NavLink to="/privacy" className="footer-link">Privacy</NavLink>
-            <NavLink to="/terms" className="footer-link">Terms</NavLink>
+            <NavLink to="/about" className="footer-link">{t('nav.about')}</NavLink>
+            <NavLink to="/how-it-works" className="footer-link">{t('nav.howItWorks')}</NavLink>
+            <NavLink to="/privacy" className="footer-link">{t('nav.privacy')}</NavLink>
+            <NavLink to="/terms" className="footer-link">{t('nav.terms')}</NavLink>
           </div>
         </div>
       </footer>
