@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { PreferencesProvider } from './contexts/PreferencesContext';
+import { LocaleProvider } from './contexts/LocaleContext';
 import AppShell from './app/layout/AppShell';
 import Home from './app/routes/home';
 import Scan from './app/routes/scan';
@@ -34,8 +35,9 @@ export default function App() {
   const showWelcome = IS_APP_BUILD && (!ready || showOnboarding);
 
   return (
-    <PreferencesProvider>
-      {showWelcome ? (
+    <LocaleProvider>
+      <PreferencesProvider>
+        {showWelcome ? (
         <Onboarding onComplete={finishOnboarding} />
       ) : (
         <>
@@ -66,7 +68,8 @@ export default function App() {
           </AppShell>
           <ToastContainer />
         </>
-      )}
-    </PreferencesProvider>
+        )}
+      </PreferencesProvider>
+    </LocaleProvider>
   );
 }

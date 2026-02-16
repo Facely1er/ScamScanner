@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Home as HomeIcon, Shield, Wrench, HelpCircle, Settings, FileText } from 'lucide-react';
 import ThemeToggle from '../../components/common/ThemeToggle';
+import LanguageToggle from '../../components/common/LanguageToggle';
+import { useLocale } from '../../contexts/LocaleContext';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useLocale();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,44 +22,45 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <>
       <header className={`header ${scrolled ? 'scrolled' : ''}`} role="banner">
         <div className="inner">
-          <NavLink to="/" className="brand-link" aria-label="Cyberstition Home">
+          <NavLink to="/" className="brand-link" aria-label={t('nav.ariaCyberstitionHome')}>
             <div className="brand">
               <img
                 src="/cyberstition_logo.png"
-                alt="Cyberstition Logo"
+                alt={t('product.brandName') + ' Logo'}
                 className="brand-logo"
                 loading="eager"
               />
               <div className="brand-text">
-                <strong>Cyberstition™</strong>
-                <span className="brand-subtitle">Trust Signals</span>
-                <span className="brand-subtext">by ERMITS</span>
+                <strong>{t('product.brandName')}™</strong>
+                <span className="brand-subtitle">{t('product.tagline')}</span>
+                <span className="brand-subtext">{t('product.publisher')}</span>
               </div>
             </div>
           </NavLink>
 
           <nav className="topnav" aria-label="Primary navigation">
-            <NavItem to="/" label="Home" icon={<HomeIcon size={18} />} end />
-            <NavItem to="/scan" label="Scan" icon={<Shield size={18} />} />
-            <NavItem to="/tools" label="Tools" icon={<Wrench size={18} />} />
-            <NavItem to="/how-it-works" label="How it Works" icon={<HelpCircle size={18} />} />
+            <NavItem to="/" label={t('nav.home')} icon={<HomeIcon size={18} />} end />
+            <NavItem to="/scan" label={t('nav.scan')} icon={<Shield size={18} />} />
+            <NavItem to="/tools" label={t('nav.tools')} icon={<Wrench size={18} />} />
+            <NavItem to="/how-it-works" label={t('nav.howItWorks')} icon={<HelpCircle size={18} />} />
           </nav>
 
           <div className="header-actions">
+            <LanguageToggle />
             <ThemeToggle />
             <NavLink
               to="/dashboard"
               className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label="Dashboard - View analysis history"
-              title="View Analysis History"
+              aria-label={t('nav.ariaDashboard')}
+              title={t('dashboard.title')}
             >
               <FileText size={16} aria-hidden="true" />
             </NavLink>
             <NavLink
               to="/account"
               className={({ isActive }) => `btn ${isActive ? 'primary' : ''}`}
-              aria-label="Account - Preferences and settings"
-              title="Preferences and Settings"
+              aria-label={t('nav.ariaAccount')}
+              title={t('nav.settings')}
             >
               <Settings size={16} aria-hidden="true" />
             </NavLink>
