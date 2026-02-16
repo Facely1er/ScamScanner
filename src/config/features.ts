@@ -20,7 +20,7 @@ export const FEATURES = {
   // Video analysis (basic metadata - can be enabled for v1)
   VIDEO_ANALYSIS: {
     enabled: true, // Basic metadata is safe for v1
-    deepfakeEnabled: false, // Deepfake disabled by default
+    deepfakeEnabled: import.meta.env.VITE_ENABLE_DEEPFAKE === 'true', // Deepfake enabled via env var
   },
 } as const;
 
