@@ -39,7 +39,8 @@ const ImageMetadataAnalyzer: React.FC = () => {
     // Create preview
     const reader = new FileReader();
     reader.onload = (e) => {
-      setPreview(e.target?.result as string);
+      const result = e.target?.result;
+      setPreview(typeof result === 'string' ? result : null);
     };
     reader.readAsDataURL(selectedFile);
   }, []);

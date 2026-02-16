@@ -55,9 +55,14 @@ function loadRecord(productId: string): UsageRecord {
 }
 
 function saveRecord(productId: string, record: UsageRecord): void {
-  const key = STORAGE_PREFIX + productId;
-  window.localStorage.setItem(key, JSON.stringify(record));
-  window.dispatchEvent(new CustomEvent(USAGE_EVENT, { detail: { productId } }));
+  if (typeof window === 'undefined') return;
+  try {
+    const key = STORAGE_PREFIX + productId;
+    window.localStorage.setItem(key, JSON.stringify(record));
+    window.dispatchEvent(new CustomEvent(USAGE_EVENT, { detail: { productId } }));
+  } catch {
+    // ignore storage errors
+  }
 }
 
 function normalizeRecord(productId: string, record: UsageRecord): UsageRecord {

@@ -46,12 +46,12 @@ export function isUnlocked(): boolean {
     return true;
   }
   
-  // Check localStorage override (for development/testing)
-  const unlocked = window.localStorage.getItem(UNLOCK_KEY);
-  if (unlocked === 'true') {
-    return true;
+  try {
+    const unlocked = window.localStorage.getItem(UNLOCK_KEY);
+    if (unlocked === 'true') return true;
+  } catch {
+    // localStorage unavailable (private mode, quota, etc.)
   }
-  
   return false;
 }
 
@@ -84,19 +84,18 @@ function isTrialExpired(): boolean {
   }
   
   if (typeof window === 'undefined') return true;
-  
-  const trialStartStr = window.localStorage.getItem(TRIAL_START_KEY);
-  if (!trialStartStr) {
-    // Start trial now
-    window.localStorage.setItem(TRIAL_START_KEY, Date.now().toString());
+  try {
+    const trialStartStr = window.localStorage.getItem(TRIAL_START_KEY);
+    if (!trialStartStr) {
+      window.localStorage.setItem(TRIAL_START_KEY, Date.now().toString());
+      return false;
+    }
+    const trialStart = parseInt(trialStartStr, 10);
+    const trialEnd = trialStart + (appConfig.demo.trialDays * 24 * 60 * 60 * 1000);
+    return Date.now() >= trialEnd;
+  } catch {
     return false;
   }
-  
-  const trialStart = parseInt(trialStartStr, 10);
-  const trialEnd = trialStart + (appConfig.demo.trialDays * 24 * 60 * 60 * 1000);
-  const now = Date.now();
-  
-  return now >= trialEnd;
 }
 
 /**
@@ -111,8 +110,12 @@ function getDemoLimit(toolId: string): number {
  */
 export function setUnlocked(unlocked: boolean): void {
   if (typeof window === 'undefined') return;
-  window.localStorage.setItem(UNLOCK_KEY, unlocked ? 'true' : 'false');
-  window.dispatchEvent(new CustomEvent(USAGE_EVENT));
+  try {
+    window.localStorage.setItem(UNLOCK_KEY, unlocked ? 'true' : 'false');
+    window.dispatchEvent(new CustomEvent(USAGE_EVENT));
+  } catch {
+    // ignore storage errors
+  }
 }
 
 /**
@@ -151,9 +154,13 @@ function loadRecord(toolId: string): UsageRecord {
  * Save usage record
  */
 function saveRecord(record: UsageRecord): void {
-  const key = STORAGE_PREFIX + record.toolId;
-  window.localStorage.setItem(key, JSON.stringify(record));
-  window.dispatchEvent(new CustomEvent(USAGE_EVENT, { detail: { toolId: record.toolId } }));
+  try {
+    const key = STORAGE_PREFIX + record.toolId;
+    window.localStorage.setItem(key, JSON.stringify(record));
+    window.dispatchEvent(new CustomEvent(USAGE_EVENT, { detail: { toolId: record.toolId } }));
+  } catch {
+    // ignore storage errors (quota, private mode)
+  }
 }
 
 /**

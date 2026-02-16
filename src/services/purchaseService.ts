@@ -21,15 +21,14 @@ export interface PurchaseResult {
  */
 export function hasVerifiedPurchase(): boolean {
   if (typeof window === 'undefined') return false;
-  
-  const verified = window.localStorage.getItem(PURCHASE_KEY);
-  if (verified !== 'true') return false;
-  
-  // Verify purchase token exists
-  const token = window.localStorage.getItem(PURCHASE_TOKEN_KEY);
-  if (!token) return false;
-  
-  return true;
+  try {
+    const verified = window.localStorage.getItem(PURCHASE_KEY);
+    if (verified !== 'true') return false;
+    const token = window.localStorage.getItem(PURCHASE_TOKEN_KEY);
+    return !!token;
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -55,16 +54,16 @@ export async function verifyPurchase(purchaseToken: string): Promise<PurchaseRes
     
     // For development/testing, accept any non-empty token
     if (purchaseToken && purchaseToken.length > 0) {
-      // Store verified purchase
       if (typeof window !== 'undefined') {
-        window.localStorage.setItem(PURCHASE_KEY, 'true');
-        window.localStorage.setItem(PURCHASE_TOKEN_KEY, purchaseToken);
-        window.localStorage.setItem(PURCHASE_TIMESTAMP_KEY, Date.now().toString());
-        
-        // Unlock the app
-        setUnlocked(true);
+        try {
+          window.localStorage.setItem(PURCHASE_KEY, 'true');
+          window.localStorage.setItem(PURCHASE_TOKEN_KEY, purchaseToken);
+          window.localStorage.setItem(PURCHASE_TIMESTAMP_KEY, Date.now().toString());
+          setUnlocked(true);
+        } catch {
+          return { success: false, verified: false, error: 'Could not save purchase' };
+        }
       }
-      
       return { success: true, verified: true };
     }
     
@@ -152,10 +151,13 @@ export async function restorePurchases(): Promise<PurchaseResult> {
  */
 export function clearPurchaseData(): void {
   if (typeof window === 'undefined') return;
-  
-  window.localStorage.removeItem(PURCHASE_KEY);
-  window.localStorage.removeItem(PURCHASE_TOKEN_KEY);
-  window.localStorage.removeItem(PURCHASE_TIMESTAMP_KEY);
-  setUnlocked(false);
+  try {
+    window.localStorage.removeItem(PURCHASE_KEY);
+    window.localStorage.removeItem(PURCHASE_TOKEN_KEY);
+    window.localStorage.removeItem(PURCHASE_TIMESTAMP_KEY);
+    setUnlocked(false);
+  } catch {
+    // ignore storage errors
+  }
 }
 

@@ -114,7 +114,12 @@ export default function Dashboard() {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const data = JSON.parse(e.target?.result as string);
+        const raw = e.target?.result;
+        if (typeof raw !== 'string') {
+          alert('Invalid backup file.');
+          return;
+        }
+        const data = JSON.parse(raw);
         if (confirm('This will replace your current data. Continue?')) {
           if (data.reports) setAllReports(data.reports);
           if (data.documents) setAllDocuments(data.documents);
