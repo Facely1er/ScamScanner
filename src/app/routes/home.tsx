@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff, Target, Search, Link2, BarChart3 } from 'lucide-react';
+import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff, Target, Search, Link2, BarChart3, Brain, FileCheck } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
@@ -58,13 +58,53 @@ export default function Home() {
     );
   }
 
-  // App build: Full functionality
+  // App build: Full functionality — value prop (Question...) is the top section; Recommended is below How It Works
   return (
     <div className="grid loose">
+      <section id="home-top" className="card" style={{ marginTop: 0 }}>
+        <h1 className="h1">{t('home.questionTitle')}</h1>
+        <p className="p">{t('home.questionSubtitle')}</p>
+      </section>
+
+      <section className="card">
+        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Shield size={16} /> {t('howItWorks.kicker')}
+        </div>
+        <h2 className="h2" style={{ marginTop: 8 }}>{t('howItWorks.title')}</h2>
+        <p className="p">{t('howItWorks.intro')}</p>
+      </section>
+
+      <section className="card">
+        <h2 className="h2">{t('howItWorks.processTitle')}</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 24 }}>
+          <HowItWorksStep
+            number={1}
+            icon={<Search size={32} />}
+            title={t('howItWorks.step1Title')}
+            description={t('howItWorks.step1Desc')}
+            color="#3b82f6"
+          />
+          <HowItWorksStep
+            number={2}
+            icon={<Brain size={32} />}
+            title={t('howItWorks.step2Title')}
+            description={t('howItWorks.step2Desc')}
+            color="#8b5cf6"
+          />
+          <HowItWorksStep
+            number={3}
+            icon={<FileCheck size={32} />}
+            title={t('howItWorks.step3Title')}
+            description={t('howItWorks.step3Desc')}
+            color="#10b981"
+          />
+        </div>
+      </section>
+
       <section className="card" style={{
         background: 'linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 100%)',
         border: '2px solid var(--primary)',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
           <div style={{
@@ -80,11 +120,7 @@ export default function Home() {
             <img 
               src="/cyberstition_logo.png" 
               alt={t('product.brandName')} 
-              style={{ 
-                width: '100%', 
-                height: '100%', 
-                objectFit: 'contain' 
-              }} 
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
             />
           </div>
           <div>
@@ -134,11 +170,6 @@ export default function Home() {
           </Link>
           <Link className="btn" to="/how-it-works">{t('home.howItWorksLink')}</Link>
         </div>
-      </section>
-
-      <section className="card">
-        <h1 className="h1">{t('home.questionTitle')}</h1>
-        <p className="p">{t('home.questionSubtitle')}</p>
       </section>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)' }}>
@@ -307,6 +338,59 @@ export default function Home() {
       </section>
 
       <TrustNotice />
+    </div>
+  );
+}
+
+function HowItWorksStep({
+  number,
+  icon,
+  title,
+  description,
+  color,
+}: {
+  number: number;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  color: string;
+}) {
+  return (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'start' }}>
+      <div style={{
+        minWidth: 56,
+        height: 56,
+        borderRadius: 12,
+        backgroundColor: `${color}15`,
+        color: color,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+      }}>
+        {icon}
+        <div style={{
+          position: 'absolute',
+          top: -8,
+          right: -8,
+          width: 28,
+          height: 28,
+          borderRadius: '50%',
+          backgroundColor: color,
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+        }}>
+          {number}
+        </div>
+      </div>
+      <div style={{ flex: 1 }}>
+        <h3 className="h3" style={{ margin: 0, marginBottom: 6 }}>{title}</h3>
+        <p className="p" style={{ margin: 0, opacity: 0.85 }}>{description}</p>
+      </div>
     </div>
   );
 }

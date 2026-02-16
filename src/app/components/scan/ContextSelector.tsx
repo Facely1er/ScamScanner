@@ -126,8 +126,10 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: 16,
-          marginTop: 24
-        }}>
+          marginTop: 24,
+        }}
+        className="scan-context-origins"
+        >
           {origins.map((origin) => (
             <button
               key={origin.id}

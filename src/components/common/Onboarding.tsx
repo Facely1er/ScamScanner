@@ -64,18 +64,21 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      zIndex: 10000,
-      backgroundColor: 'var(--bg)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 28,
-      animation: 'fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-    }}>
+    <div
+      data-theme="dark"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 10000,
+        backgroundColor: 'var(--bg)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 28,
+        animation: 'fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+      }}
+    >
       <div style={{
         maxWidth: 480,
         width: '100%',
@@ -109,7 +112,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <div
               key={i}
               role="tab"
-              aria-selected={i === step}
+              aria-selected={i === step ? 'true' : 'false'}
               aria-label={`Step ${i + 1} of ${slides.length}`}
               style={{
                 width: i === step ? 32 : 10,
@@ -125,12 +128,44 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
         <div style={{ display: 'flex', gap: 14, marginTop: 24, width: '100%' }}>
           {!isLast && (
-            <button onClick={onComplete} className="btn" style={{ flex: 1, padding: '14px 24px' }}>
+            <button
+              type="button"
+              onClick={onComplete}
+              className="btn"
+              style={{
+                flex: 1,
+                padding: '14px 24px',
+                minHeight: 48,
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent',
+              }}
+            >
               Skip
             </button>
           )}
-          <button onClick={handleNext} className="btn primary" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '14px 28px', fontSize: 15 }}>
-            {isLast ? 'Get Started' : 'Next'} <ArrowRight size={18} strokeWidth={2.5} />
+          <button
+            type="button"
+            onClick={handleNext}
+            className="btn primary"
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 10,
+              padding: '14px 28px',
+              minHeight: 48,
+              fontSize: 15,
+              fontWeight: 600,
+              backgroundColor: 'var(--accent-primary)',
+              color: '#ffffff',
+              border: 'none',
+              touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            <span style={{ color: 'inherit' }}>{isLast ? 'Get Started' : 'Next'}</span>
+            <ArrowRight size={18} strokeWidth={2.5} style={{ flexShrink: 0, color: 'inherit' }} />
           </button>
         </div>
       </div>

@@ -153,6 +153,7 @@ a:hover{
 
 .app-main{
   padding-bottom: 24px;
+  overflow-y: visible;
 }
 
 @media(min-width:640px){
@@ -329,6 +330,7 @@ a.card{
   justify-content: center;
   gap: 8px;
   padding: 11px 18px;
+  min-height: 44px;
   border-radius: 10px;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
@@ -340,6 +342,7 @@ a.card{
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:hover:not(:disabled){
@@ -356,6 +359,7 @@ a.card{
 
 .btn.primary{
   background: var(--accent-primary);
+  border: none;
   border-color: transparent;
   color: #fff;
   font-weight: 600;
@@ -1530,7 +1534,14 @@ select.input {
     pointer-events: auto;
   }
 
-  .app-main{
-    padding-bottom: calc(84px + env(safe-area-inset-bottom));
+.app-main{
+  padding-bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Scan page: single-column origin cards on small screens so content is fully visible and scrollable */
+@media (max-width: 600px) {
+  .scan-context-origins {
+    grid-template-columns: 1fr;
   }
 }
