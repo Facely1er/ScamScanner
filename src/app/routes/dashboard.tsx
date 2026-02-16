@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { FileText, Trash2, Clock, Settings, Home, Download, Upload, Shield, Search, X, FileDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { usePreferences } from '../../contexts/PreferencesContext';
 import { useSessionStore } from '../../state/sessionStore';
+import { useLocale } from '../../contexts/LocaleContext';
 import EmptyState from '../../components/common/EmptyState';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { exportReportToPDF, exportAllReportsToPDF, exportSessionToPDF } from '../../utils/pdfExporter';
@@ -26,6 +27,7 @@ interface Document {
 }
 
 export default function Dashboard() {
+  const { t } = useLocale();
   const [allReports, setAllReports] = useLocalStorage<Report[]>('cyberstition_reports', []);
   const [allDocuments, setAllDocuments] = useLocalStorage<Document[]>('cyberstition_documents', []);
   const [loading, setLoading] = useState(false);
@@ -93,7 +95,7 @@ export default function Dashboard() {
 
   const exportToPDF = () => {
     if (allReports.length === 0) {
-      alert('No reports to export. Please create some reports first.');
+      alert(t('dashboard.noReportsToExport'));
       return;
     }
     exportAllReportsToPDF(allReports);
@@ -116,20 +118,20 @@ export default function Dashboard() {
       try {
         const raw = e.target?.result;
         if (typeof raw !== 'string') {
-          alert('Invalid backup file.');
+          alert(t('dashboard.invalidBackupFile'));
           return;
         }
         const data = JSON.parse(raw);
-        if (confirm('This will replace your current data. Continue?')) {
+        if (confirm(t('dashboard.importReplaceConfirm'))) {
           if (data.reports) setAllReports(data.reports);
           if (data.documents) setAllDocuments(data.documents);
           if (data.preferences) {
             updatePreferences(data.preferences);
           }
-          alert('Data imported successfully!');
+          alert(t('dashboard.dataImportedSuccess'));
         }
       } catch (err) {
-        alert('Invalid backup file. Please check the file format.');
+        alert(t('dashboard.invalidBackupFormat'));
       }
     };
     reader.readAsText(file);
@@ -138,12 +140,12 @@ export default function Dashboard() {
   };
 
   const deleteReport = (id: string) => {
-    if (!confirm('Are you sure you want to delete this report?')) return;
+    if (!confirm(t('dashboard.deleteReportConfirm'))) return;
     setAllReports(allReports.filter((r) => r.id !== id));
   };
 
   const deleteDocument = (id: string) => {
-    if (!confirm('Are you sure you want to delete this document?')) return;
+    if (!confirm(t('dashboard.deleteDocumentConfirm'))) return;
     setAllDocuments(allDocuments.filter((d) => d.id !== id));
   };
 
@@ -171,45 +173,45 @@ export default function Dashboard() {
       <section className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <div className="kicker"><FileText size={16} /> Dashboard</div>
-            <h1 className="h1">Analysis History</h1>
-            <p className="p">View and manage your saved reports and documents.</p>
+            <div className="kicker"><FileText size={16} /> {t('dashboard.kicker')}</div>
+            <h1 className="h1">{t('dashboard.title')}</h1>
+            <p className="p">{t('dashboard.subtitle')}</p>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link to="/" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <Home size={16} aria-hidden="true" /> <span>Home</span>
+              <Home size={16} aria-hidden="true" /> <span>{t('dashboard.home')}</span>
             </Link>
             <Link to="/account" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <Settings size={16} aria-hidden="true" /> <span>Preferences</span>
+              <Settings size={16} aria-hidden="true" /> <span>{t('dashboard.preferences')}</span>
             </Link>
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <button
                 onClick={exportToPDF}
                 className="btn primary"
                 style={{ display: 'flex', gap: 8, alignItems: 'center' }}
-                aria-label="Export all reports to PDF"
-                title="Export all reports as PDF"
+                aria-label={t('dashboard.ariaExportPdf')}
+                title={t('dashboard.exportToPdf')}
               >
-                <FileDown size={16} aria-hidden="true" /> <span>Export PDF</span>
+                <FileDown size={16} aria-hidden="true" /> <span>{t('dashboard.exportPdf')}</span>
               </button>
             </div>
             <button
               onClick={exportData}
               className="btn"
               style={{ display: 'flex', gap: 8, alignItems: 'center' }}
-              aria-label="Export all data as JSON"
-              title="Export all data as JSON backup"
+              aria-label={t('dashboard.ariaExportJson')}
+              title={t('dashboard.ariaExportJson')}
             >
-              <Download size={16} aria-hidden="true" /> <span>Export JSON</span>
+              <Download size={16} aria-hidden="true" /> <span>{t('dashboard.exportJson')}</span>
             </button>
             <label className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center', cursor: 'pointer' }}>
-              <Upload size={16} aria-hidden="true" /> <span>Import</span>
+              <Upload size={16} aria-hidden="true" /> <span>{t('dashboard.import')}</span>
               <input
                 type="file"
                 accept=".json"
                 onChange={importData}
                 style={{ display: 'none' }}
-                aria-label="Import data from file"
+                aria-label={t('dashboard.ariaImport')}
               />
             </label>
           </div>
@@ -233,12 +235,12 @@ export default function Dashboard() {
           />
           <input
             type="text"
-            placeholder="Search sessions, reports, documents..."
+            placeholder={t('dashboard.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="input"
             style={{ paddingLeft: 40, paddingRight: searchQuery ? 40 : 16 }}
-            aria-label="Search dashboard"
+            aria-label={t('dashboard.ariaSearch')}
           />
           {searchQuery && (
             <button
@@ -251,7 +253,7 @@ export default function Dashboard() {
                 transform: 'translateY(-50%)',
                 padding: 6
               }}
-              aria-label="Clear search"
+              aria-label={t('dashboard.clearSearch')}
             >
               <X size={16} aria-hidden="true" />
             </button>
@@ -288,7 +290,7 @@ export default function Dashboard() {
               }
             }}
           >
-            Scan Sessions ({searchQuery ? filteredSessions.length : sessions.length})
+            {t('dashboard.tabSessions')} ({searchQuery ? filteredSessions.length : sessions.length})
           </button>
           <button
             onClick={() => setActiveTab('reports')}
@@ -317,7 +319,7 @@ export default function Dashboard() {
               }
             }}
           >
-            Reports ({searchQuery ? filteredReports.length : reports.length})
+            {t('dashboard.tabReports')} ({searchQuery ? filteredReports.length : reports.length})
           </button>
           <button
             onClick={() => setActiveTab('documents')}
@@ -346,14 +348,14 @@ export default function Dashboard() {
               }
             }}
           >
-            Documents ({searchQuery ? filteredDocuments.length : documents.length})
+            {t('dashboard.tabDocuments')} ({searchQuery ? filteredDocuments.length : documents.length})
           </button>
         </div>
 
         <div style={{ padding: 20 }}>
           {loading ? (
             <div style={{ textAlign: 'center', padding: 40 }}>
-              <LoadingSpinner size={32} label="Loading..." />
+              <LoadingSpinner size={32} label={t('dashboard.loading')} />
             </div>
           ) : (
             <>
@@ -363,20 +365,20 @@ export default function Dashboard() {
                     searchQuery ? (
                       <EmptyState
                         icon={Search}
-                        title="No sessions found"
-                        description={`No scan sessions match "${searchQuery}". Try a different search term.`}
+                        title={t('dashboard.noSessionsFound')}
+                        description={t('dashboard.noSessionsMatch', { query: searchQuery })}
                         action={{
-                          label: "Clear Search",
+                          label: t('dashboard.clearSearchAction'),
                           onClick: () => setSearchQuery('')
                         }}
                       />
                     ) : (
                       <EmptyState
                         icon={Shield}
-                        title="No scan sessions yet"
-                        description="Start a new guided scan to analyze suspicious content. The guided workflow will help you through the analysis process."
+                        title={t('dashboard.noScanSessionsYet')}
+                        description={t('dashboard.noScanSessionsDesc')}
                         action={{
-                          label: "Start New Scan",
+                          label: t('dashboard.startNewScan'),
                           onClick: () => navigate('/scan')
                         }}
                       />
@@ -409,7 +411,7 @@ export default function Dashboard() {
                             <div style={{ flex: 1 }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                 <h3 className="h3" style={{ margin: 0 }}>
-                                  {session.context.senderName || 'Unknown Sender'}
+                                  {session.context.senderName || t('dashboard.unknownSender')}
                                 </h3>
                                 <span
                                   className="badge"
@@ -419,7 +421,7 @@ export default function Dashboard() {
                                     textTransform: 'capitalize',
                                   }}
                                 >
-                                  {session.overallRiskLevel} risk
+                                  {session.overallRiskLevel} {t('dashboard.risk')}
                                 </span>
                               </div>
                               <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
@@ -427,7 +429,7 @@ export default function Dashboard() {
                                   {session.context.origin.replace('_', ' ')}
                                 </span>
                               <span style={{ color: 'var(--text-muted)' }}>
-                                {session.evidence.length} evidence • {session.patternMatches.length} patterns
+                                {session.evidence.length} {t('dashboard.evidence')} • {session.patternMatches.length} {t('dashboard.patterns')}
                               </span>
                               <span style={{ color: 'var(--text-muted)', display: 'flex', gap: 4, alignItems: 'center' }}>
                                 <Clock size={12} /> {formatDate(new Date(session.updatedAt).toISOString())}
@@ -445,8 +447,8 @@ export default function Dashboard() {
                               color: 'var(--primary)',
                               marginLeft: 8
                             }}
-                            aria-label={`Export session to PDF: ${session.context.senderName || 'Unknown'}`}
-                            title="Export to PDF"
+                            aria-label={`${t('dashboard.exportToPdf')}: ${session.context.senderName || t('dashboard.unknownSender')}`}
+                            title={t('dashboard.exportToPdf')}
                           >
                             <FileDown size={16} aria-hidden="true" />
                           </button>
@@ -463,20 +465,20 @@ export default function Dashboard() {
                     searchQuery ? (
                       <EmptyState
                         icon={Search}
-                        title="No reports found"
-                        description={`No reports match "${searchQuery}". Try a different search term.`}
+                        title={t('dashboard.noReportsFound')}
+                        description={t('dashboard.noReportsMatch', { query: searchQuery })}
                         action={{
-                          label: "Clear Search",
+                          label: t('dashboard.clearSearchAction'),
                           onClick: () => setSearchQuery('')
                         }}
                       />
                     ) : (
                       <EmptyState
                         icon={FileText}
-                        title="No reports yet"
-                        description="Reports from individual tool analyses will appear here. Try analyzing a message, email, image, or profile."
+                        title={t('dashboard.noReportsYet')}
+                        description={t('dashboard.noReportsDesc')}
                         action={{
-                          label: "Go to Tools",
+                          label: t('dashboard.goToTools'),
                           onClick: () => navigate('/tools')
                         }}
                       />
@@ -505,7 +507,7 @@ export default function Dashboard() {
                                   textTransform: 'capitalize',
                                 }}
                               >
-                                {report.risk_level} risk
+                                {report.risk_level} {t('dashboard.risk')}
                               </span>
                             </div>
                             <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
@@ -523,7 +525,7 @@ export default function Dashboard() {
                                 color: 'var(--primary)',
                               }}
                               aria-label={`Export report to PDF: ${report.title}`}
-                              title="Export to PDF"
+                              title={t('dashboard.exportToPdf')}
                             >
                               <FileDown size={16} aria-hidden="true" />
                             </button>
@@ -533,7 +535,7 @@ export default function Dashboard() {
                               style={{
                                 color: 'var(--error)',
                               }}
-                              aria-label={`Delete report: ${report.title}`}
+                              aria-label={`${t('dashboard.deleteReportConfirm')} ${report.title}`}
                             >
                               <Trash2 size={16} aria-hidden="true" />
                             </button>
@@ -551,20 +553,20 @@ export default function Dashboard() {
                     searchQuery ? (
                       <EmptyState
                         icon={Search}
-                        title="No documents found"
-                        description={`No documents match "${searchQuery}". Try a different search term.`}
+                        title={t('dashboard.noDocumentsFound')}
+                        description={t('dashboard.noDocumentsMatch', { query: searchQuery })}
                         action={{
-                          label: "Clear Search",
+                          label: t('dashboard.clearSearchAction'),
                           onClick: () => setSearchQuery('')
                         }}
                       />
                     ) : (
                       <EmptyState
                         icon={FileText}
-                        title="No documents saved yet"
-                        description="Documents uploaded for analysis will appear here once saved."
+                        title={t('dashboard.noDocumentsYet')}
+                        description={t('dashboard.noDocumentsDesc')}
                         action={{
-                          label: "Go to Tools",
+                          label: t('dashboard.goToTools'),
                           onClick: () => navigate('/tools')
                         }}
                       />
@@ -585,7 +587,7 @@ export default function Dashboard() {
                           <div style={{ flex: 1 }}>
                             <h3 className="h3" style={{ margin: 0 }}>{doc.title}</h3>
                             <p className="small" style={{ marginTop: 4, color: 'var(--text-secondary)' }}>
-                              {doc.description || 'No description'}
+                              {doc.description || t('dashboard.noDescription')}
                             </p>
                             <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
                               <span className="badge">{doc.file_type}</span>
@@ -600,7 +602,7 @@ export default function Dashboard() {
                             style={{
                               color: 'var(--error)',
                             }}
-                            aria-label={`Delete document: ${doc.title}`}
+                            aria-label={`${t('dashboard.deleteDocumentConfirm')} ${doc.title}`}
                           >
                             <Trash2 size={16} aria-hidden="true" />
                           </button>

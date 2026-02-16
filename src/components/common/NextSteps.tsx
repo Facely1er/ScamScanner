@@ -1,50 +1,17 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Compass, ChevronRight, MessageSquare, Users, Image as ImageIcon, Mail } from 'lucide-react';
+import { useLocale } from '../../contexts/LocaleContext';
 
 type EntryPoint = 'messages' | 'profiles' | 'images' | 'email';
 type Origin = 'email' | 'profile' | 'message' | 'unknown';
 type ToolKey = 'messages' | 'profiles' | 'images' | 'email';
-
-const originOptions: Array<{ value: Origin; label: string }> = [
-  { value: 'email', label: 'Email' },
-  { value: 'profile', label: 'Social profile' },
-  { value: 'message', label: 'Direct message' },
-  { value: 'unknown', label: 'Not sure' },
-];
 
 const defaultOriginByEntry: Record<EntryPoint, Origin> = {
   messages: 'message',
   profiles: 'profile',
   images: 'message',
   email: 'email',
-};
-
-const toolMeta: Record<ToolKey, { label: string; to: string; description: string; icon: React.ReactNode }> = {
-  messages: {
-    label: 'Message Detective',
-    to: '/messages',
-    description: 'Analyze message content for scam and manipulation patterns.',
-    icon: <MessageSquare size={16} />,
-  },
-  profiles: {
-    label: 'Profile Checker',
-    to: '/profiles',
-    description: 'Verify profile authenticity and identify deception signals.',
-    icon: <Users size={16} />,
-  },
-  images: {
-    label: 'Image Inspector',
-    to: '/images',
-    description: 'Inspect image metadata and detect manipulation indicators.',
-    icon: <ImageIcon size={16} />,
-  },
-  email: {
-    label: 'Email Analyzer',
-    to: '/email',
-    description: 'Analyze email headers for spoofing and routing anomalies.',
-    icon: <Mail size={16} />,
-  },
 };
 
 const entryRecommendations: Record<EntryPoint, ToolKey[]> = {
@@ -61,15 +28,50 @@ const originPriority: Record<Origin, ToolKey | null> = {
   unknown: null,
 };
 
-const originSummary: Record<Origin, string> = {
-  email: 'Email selected. Verify sender identity and header authenticity.',
-  profile: 'Social profile selected. Verify profile authenticity and context.',
-  message: 'Direct message selected. Cross-check message content and sender identity.',
-  unknown: 'Not sure. Start with the most common verification checks.',
-};
-
 export default function NextSteps({ entryPoint }: { entryPoint: EntryPoint }) {
+  const { t } = useLocale();
   const [origin, setOrigin] = useState<Origin>(defaultOriginByEntry[entryPoint]);
+
+  const originOptions: Array<{ value: Origin; label: string }> = [
+    { value: 'email', label: t('common.originEmail') },
+    { value: 'profile', label: t('common.originProfile') },
+    { value: 'message', label: t('common.originMessage') },
+    { value: 'unknown', label: t('common.originUnknown') },
+  ];
+
+  const toolMeta: Record<ToolKey, { label: string; to: string; description: string; icon: React.ReactNode }> = {
+    messages: {
+      label: t('common.toolMessageDetectiveLabel'),
+      to: '/messages',
+      description: t('common.toolMessageDetectiveDesc'),
+      icon: <MessageSquare size={16} />,
+    },
+    profiles: {
+      label: t('common.toolProfileCheckerLabel'),
+      to: '/profiles',
+      description: t('common.toolProfileCheckerDesc'),
+      icon: <Users size={16} />,
+    },
+    images: {
+      label: t('common.toolImageInspectorLabel'),
+      to: '/images',
+      description: t('common.toolImageInspectorDesc'),
+      icon: <ImageIcon size={16} />,
+    },
+    email: {
+      label: t('common.toolEmailAnalyzerLabel'),
+      to: '/email',
+      description: t('common.toolEmailAnalyzerDesc'),
+      icon: <Mail size={16} />,
+    },
+  };
+
+  const originSummary: Record<Origin, string> = {
+    email: t('common.originSummaryEmail'),
+    profile: t('common.originSummaryProfile'),
+    message: t('common.originSummaryMessage'),
+    unknown: t('common.originSummaryUnknown'),
+  };
 
   const { recommendations, highlightTool } = useMemo(() => {
     const list: ToolKey[] = [];
@@ -94,12 +96,12 @@ export default function NextSteps({ entryPoint }: { entryPoint: EntryPoint }) {
   return (
     <section className="card next-steps">
       <div className="kicker" style={{ color: 'var(--text)' }}>
-        <Compass size={16} /> Recommended next steps
+        <Compass size={16} /> {t('common.nextStepsKicker')}
       </div>
       <p className="small" style={{ marginTop: 6 }}>
-        Select the content source to prioritize the next verification step.
+        {t('common.nextStepsIntro')}
       </p>
-      <div className="choice-group" role="group" aria-label="Content origin">
+      <div className="choice-group" role="group" aria-label={t('common.contentOrigin')}>
         {originOptions.map((option) => (
           <button
             key={option.value}
@@ -129,7 +131,7 @@ export default function NextSteps({ entryPoint }: { entryPoint: EntryPoint }) {
                 </div>
               </div>
               <div className="link-actions">
-                {isHighlighted && <span className="link-badge">Recommended</span>}
+                {isHighlighted && <span className="link-badge">{t('common.recommendedBadge')}</span>}
                 <ChevronRight size={16} />
               </div>
             </Link>

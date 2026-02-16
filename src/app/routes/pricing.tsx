@@ -1,11 +1,12 @@
 import React from 'react';
-import { Check, Download, X } from 'lucide-react';
-import { brandName, priceLabel } from '../config/product';
+import { Check, Download } from 'lucide-react';
 import { appConfig } from '../../config/app';
+import { useLocale } from '../../contexts/LocaleContext';
 import { isDemoMode, isUnlocked } from '../core/usageLimits';
 import { initiatePurchase } from '../../services/purchaseService';
 
 export default function Pricing() {
+  const { t } = useLocale();
   const demoMode = isDemoMode();
   const unlocked = isUnlocked();
   const [isPurchasing, setIsPurchasing] = React.useState(false);
@@ -32,40 +33,40 @@ export default function Pricing() {
   return (
     <div className="grid" style={{ maxWidth: 600, margin: '0 auto' }}>
       <section className="card">
-        <h1 className="h1">Get {brandName}</h1>
+        <h1 className="h1">{t('pricing.getBrand', { brandName: t('product.brandName') })}</h1>
         {unlocked ? (
           <p className="p" style={{ marginTop: 8, color: 'var(--success, rgb(21 128 61))' }}>
-            ✓ You have full access to all features. Thank you for your purchase!
+            ✓ {t('pricing.fullAccessThanks')}
           </p>
         ) : demoMode ? (
           <p className="p" style={{ marginTop: 8 }}>
-            Upgrade from the demo version to unlock unlimited scans and all features. One-time payment, no subscription.
+            {t('pricing.upgradeFromDemo')}
           </p>
         ) : (
           <p className="p" style={{ marginTop: 8 }}>
-            Purchase the app to access all analysis tools. One-time payment, no subscription, no account required.
+            {t('pricing.purchaseToAccess')}
           </p>
         )}
       </section>
 
       {demoMode && (
         <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-          <h2 className="h2" style={{ marginBottom: 12 }}>Demo Version</h2>
+          <h2 className="h2" style={{ marginBottom: 12 }}>{t('pricing.demoVersion')}</h2>
           <p className="p" style={{ marginBottom: 16 }}>
-            You're currently using the demo version with limited features:
+            {t('pricing.demoLimitsIntro')}
           </p>
           <ul style={{ margin: 0, paddingLeft: 20 }}>
             <li className="small" style={{ marginBottom: 8 }}>
-              {appConfig.demo.scansPerTool} scans per tool per day
+              {t('pricing.scansPerToolPerDay', { count: appConfig.demo.scansPerTool })}
             </li>
             <li className="small" style={{ marginBottom: 8 }}>
-              No batch processing
+              {t('pricing.noBatchProcessing')}
             </li>
             <li className="small" style={{ marginBottom: 8 }}>
-              No export functionality
+              {t('pricing.noExportFunctionality')}
             </li>
             <li className="small">
-              Limited advanced features
+              {t('pricing.limitedAdvancedFeatures')}
             </li>
           </ul>
         </section>
@@ -76,33 +77,33 @@ export default function Pricing() {
         backgroundColor: 'var(--bg-secondary)' 
       }}>
         <div className="kicker" style={{ color: 'var(--primary)' }}>
-          {priceLabel}
+          {t('product.priceLabel')}
         </div>
-        <h2 className="h2" style={{ marginTop: 8 }}>Full Access</h2>
+        <h2 className="h2" style={{ marginTop: 8 }}>{t('pricing.unlockAllFeatures')}</h2>
         <ul style={{ marginTop: 16, paddingLeft: 0, listStyle: 'none' }}>
           <li style={{ marginBottom: 12, display: 'flex', alignItems: 'start', gap: 12 }}>
             <Check size={18} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: 2 }} />
-            <span>Unlimited analyses for all tools</span>
+            <span>{t('product.premiumFeatures.0')}</span>
           </li>
           <li style={{ marginBottom: 12, display: 'flex', alignItems: 'start', gap: 12 }}>
             <Check size={18} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: 2 }} />
-            <span>Full signal explanations</span>
+            <span>{t('product.premiumFeatures.1')}</span>
           </li>
           <li style={{ marginBottom: 12, display: 'flex', alignItems: 'start', gap: 12 }}>
             <Check size={18} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: 2 }} />
-            <span>Batch processing</span>
+            <span>{t('product.premiumFeatures.2')}</span>
           </li>
           <li style={{ marginBottom: 12, display: 'flex', alignItems: 'start', gap: 12 }}>
             <Check size={18} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: 2 }} />
-            <span>Export results</span>
+            <span>{t('product.premiumFeatures.3')}</span>
           </li>
           <li style={{ marginBottom: 12, display: 'flex', alignItems: 'start', gap: 12 }}>
             <Check size={18} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: 2 }} />
-            <span>Advanced analysis features</span>
+            <span>{t('product.premiumFeatures.4')}</span>
           </li>
           <li style={{ marginBottom: 12, display: 'flex', alignItems: 'start', gap: 12 }}>
             <Check size={18} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: 2 }} />
-            <span>No subscription. No account.</span>
+            <span>{t('product.premiumFeatures.5')}</span>
           </li>
         </ul>
 
@@ -116,7 +117,7 @@ export default function Pricing() {
               textAlign: 'center'
             }}>
               <p className="p" style={{ margin: 0, color: 'var(--success, rgb(21 128 61))' }}>
-                ✓ Full Access Active
+                ✓ {t('pricing.fullAccessThanks')}
               </p>
             </div>
           ) : (
@@ -127,7 +128,7 @@ export default function Pricing() {
               style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
             >
               <Download size={16} />
-              {isPurchasing ? 'Processing...' : (demoMode ? 'Upgrade Now' : 'Get the app')}
+              {isPurchasing ? '...' : (demoMode ? t('pricing.buyNow') : t('pricing.getTheApp'))}
             </button>
           )}
         </div>
