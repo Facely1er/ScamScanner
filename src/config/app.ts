@@ -6,12 +6,12 @@
 export const appConfig = {
   // App Information
   appName: 'Cyberstition',
-  packageName: 'com.ermits.cyberstition',
+  packageName: 'app.cyberstition.scamscanner',
   version: '1.0.0',
   
   // Store URLs (update Apple app ID after publishing to App Store)
-  playStoreUrl: 'https://play.google.com/store/apps/details?id=com.ermits.cyberstition',
-  playStorePackageName: 'com.ermits.cyberstition',
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=app.cyberstition.scamscanner',
+  playStorePackageName: 'app.cyberstition.scamscanner',
   appStoreUrl: 'https://apps.apple.com/app/id000000000', // Replace 000000000 with your Apple app ID from App Store Connect
   
   // Support

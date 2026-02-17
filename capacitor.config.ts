@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.ermits.cyberstition',
+  appId: 'app.cyberstition.scamscanner',
   appName: 'Cyberstition',
   webDir: 'dist/app',
   server: {
