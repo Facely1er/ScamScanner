@@ -53,8 +53,11 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
       return false;
     });
 
-    if (suggestedSteps.length === 0) {
-      return workflowSteps.slice(0, 2);
+    // Always show at least the top 4 priority steps to ensure video is visible
+    if (suggestedSteps.length < 4) {
+      const topSteps = workflowSteps.slice(0, 4);
+      const uniqueSteps = [...new Map([...suggestedSteps, ...topSteps].map(s => [s.id, s])).values()];
+      return uniqueSteps.sort((a, b) => a.priority - b.priority);
     }
 
     return suggestedSteps;

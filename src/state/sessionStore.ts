@@ -293,21 +293,21 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
         required: state.currentSession.context.origin === 'email'
       },
       {
+        id: 'video',
+        type: 'video',
+        label: 'Video Analysis',
+        description: 'Inspect video metadata and deepfake detection',
+        priority: 3,
+        completed: analyzedTypes.has('video'),
+        required: false
+      },
+      {
         id: 'image',
         type: 'image',
         label: 'Image Analysis',
         description: 'Inspect image metadata and properties',
         priority: 4,
         completed: analyzedTypes.has('image'),
-        required: false
-      },
-      {
-        id: 'video',
-        type: 'video',
-        label: 'Video Analysis',
-        description: 'Inspect video metadata and properties',
-        priority: 5,
-        completed: analyzedTypes.has('video'),
         required: false
       }
     ];

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MessageSquare, Mail, Image as ImageIcon, User, ChevronDown, ChevronUp } from 'lucide-react';
+import { MessageSquare, Mail, Image as ImageIcon, User, Video, ChevronDown, ChevronUp } from 'lucide-react';
 import AICheckMessagePanel from '../../components/tools/AICheckMessagePanel';
 import EmailHeaderAnalyzer from '../../components/tools/EmailHeaderAnalyzer';
 import ImageMetadataAnalyzer from '../../components/tools/ImageMetadataAnalyzer';
 import SocialProfileVerifier from '../../components/tools/SocialProfileVerifier';
+import VideoMetadataAnalyzer from '../../components/tools/VideoMetadataAnalyzer';
 import { useLocale } from '../../contexts/LocaleContext';
 
-type ToolType = 'message' | 'email' | 'image' | 'profile' | null;
+type ToolType = 'message' | 'email' | 'image' | 'profile' | 'video' | null;
 
-const VALID_TOOLS: ToolType[] = ['message', 'email', 'image', 'profile'];
+const VALID_TOOLS: ToolType[] = ['message', 'email', 'image', 'profile', 'video'];
 
 export default function Tools() {
   const { t } = useLocale();
@@ -26,7 +27,8 @@ export default function Tools() {
         '1': 'message',
         '2': 'email',
         '3': 'image',
-        '4': 'profile'
+        '4': 'profile',
+        '5': 'video'
       };
 
       if (toolMap[e.key]) {
@@ -72,6 +74,14 @@ export default function Tools() {
       title: t('toolsPage.profileTitle'),
       description: t('toolsPage.profileDesc'),
       color: '#f59e0b'
+    },
+    {
+      id: 'video' as ToolType,
+      icon: <Video size={28} />,
+      shortTitle: t('toolsPage.videoShort'),
+      title: t('toolsPage.videoTitle'),
+      description: t('toolsPage.videoDesc'),
+      color: '#ec4899'
     }
   ];
 
@@ -218,6 +228,7 @@ export default function Tools() {
                 {tool.id === 'email' && <EmailHeaderAnalyzer />}
                 {tool.id === 'image' && <ImageMetadataAnalyzer />}
                 {tool.id === 'profile' && <SocialProfileVerifier />}
+                {tool.id === 'video' && <VideoMetadataAnalyzer />}
               </div>
             )}
           </div>

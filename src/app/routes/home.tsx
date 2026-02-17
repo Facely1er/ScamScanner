@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield, WifiOff, Target, Search, Link2, BarChart3, Brain, FileCheck } from 'lucide-react';
+import { MessageSquare, User, Image as ImageIcon, Mail, Video, FileText, Download, Shield, WifiOff, Target, Search, Link2, BarChart3, Brain, FileCheck } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
@@ -37,6 +37,7 @@ export default function Home() {
           <ToolCard title={t('home.toolProfileChecker')} desc={t('home.toolProfileCheckerDesc')} icon={<User size={18} />} />
           <ToolCard title={t('home.toolImageInspector')} desc={t('home.toolImageInspectorDesc')} icon={<ImageIcon size={18} />} />
           <ToolCard title={t('home.toolEmailAnalyzer')} desc={t('home.toolEmailAnalyzerDesc')} icon={<Mail size={18} />} />
+          <ToolCard title={t('home.toolVideoAnalyzer')} desc={t('home.toolVideoAnalyzerDesc')} icon={<Video size={18} />} />
         </div>
 
         <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
@@ -242,6 +243,14 @@ export default function Home() {
             example={t('home.emailAnalyzerExample')}
             icon={<Mail size={18} />}
             color="#ef4444"
+          />
+          <ToolCard
+            to="/tools?tool=video"
+            title={t('home.toolVideoAnalyzer')}
+            desc={t('home.videoAnalyzerExample')}
+            example={t('home.videoAnalyzerExample')}
+            icon={<Video size={18} />}
+            color="#ec4899"
           />
         </div>
         <p className="small" style={{ marginTop: 12, opacity: 0.7, textAlign: 'center' }}>
