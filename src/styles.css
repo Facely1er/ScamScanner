@@ -1308,7 +1308,7 @@ select.input {
     right: 0;
     min-height: calc(72px + env(safe-area-inset-bottom, 0px));
     height: auto;
-    padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px));
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
     background: var(--bg-secondary);
     border-top: 1px solid var(--border);
     align-items: center;
@@ -1317,6 +1317,10 @@ select.input {
     box-shadow: var(--shadow-md);
     pointer-events: auto;
     touch-action: manipulation;
+    overflow: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    box-sizing: border-box;
   }
 
   .bottomnav .navitem{
@@ -1324,18 +1328,23 @@ select.input {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 4px;
-    padding: 6px 8px;
-    min-height: 44px;
+    gap: 2px;
+    padding: 4px 6px;
+    min-height: 0;
+    max-height: 48px;
     min-width: 44px;
     font-size: 11px;
-    border-radius: 10px;
+    border-radius: 8px;
     pointer-events: auto;
     position: relative;
     z-index: 121;
     touch-action: manipulation;
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  .bottomnav .navitem.active::after{
+    display: none;
   }
 
   .bottomnav .navitem span{
@@ -1370,7 +1379,7 @@ select.input {
   }
 
   .app-main{
-    padding-bottom: calc(92px + env(safe-area-inset-bottom));
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
   }
 
   .footer{
@@ -1455,27 +1464,28 @@ select.input {
   }
 
   .bottomnav{
-    height:68px;
-    padding:6px 12px calc(6px + env(safe-area-inset-bottom));
-    pointer-events: auto;
+    min-height: calc(68px + env(safe-area-inset-bottom, 0px));
+    height: auto;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
   .bottomnav .navitem{
     font-size: 10px;
-    pointer-events: auto;
-    position: relative;
-    z-index: 121;
-    min-height: 44px;
+    min-height: 0;
+    max-height: 44px;
+    padding: 4px 4px;
     min-width: 44px;
   }
 
   .bottomnav {
-    gap: 4px;
+    gap: 2px;
   }
 
   .bottomnav .navitem {
     font-size: 9px;
-    padding: 6px 2px;
+    padding: 4px 2px;
     min-width: 44px;
   }
   
@@ -1485,7 +1495,7 @@ select.input {
   }
 
   .app-main{
-    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -1558,12 +1568,19 @@ select.input {
   .bottomnav{
     min-height: calc(64px + env(safe-area-inset-bottom, 0px));
     height: auto;
-    padding:6px 10px calc(6px + env(safe-area-inset-bottom, 0px));
-    pointer-events: auto;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .bottomnav .navitem{
+    min-height: 0;
+    max-height: 42px;
+    padding: 4px 2px;
   }
 
   .app-main{
-    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
   }
 }
 
