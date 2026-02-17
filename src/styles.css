@@ -1248,7 +1248,7 @@ select.input {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .header .inner{
     gap:12px;
     padding:8px 20px;
