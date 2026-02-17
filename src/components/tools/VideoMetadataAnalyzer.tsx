@@ -21,9 +21,8 @@ const VideoMetadataAnalyzer: React.FC = () => {
     // Create alert if suspicious
     if (evidence.riskLevel === 'high' || evidence.riskLevel === 'medium') {
       addAlert({
-        id: `video-${Date.now()}`,
         type: 'video',
-        severity: evidence.riskLevel === 'high' ? 'critical' : 'warning',
+        severity: evidence.riskLevel,
         title: 'Suspicious Video Detected',
         summary: evidence.summary || 'Video analysis flagged potential issues',
         timestamp: new Date().toISOString(),
