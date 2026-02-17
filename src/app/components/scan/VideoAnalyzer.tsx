@@ -4,6 +4,7 @@ import { isFeatureEnabledSync } from '../../../config/features';
 import { deepfakeDetector } from '../../../services/deepfakeDetector';
 import { Video, CheckCircle } from 'lucide-react';
 import { IS_APP_BUILD } from '../../../config/env';
+import styles from './VideoAnalyzer.module.css';
 
 interface VideoAnalyzerProps {
   onAnalyze: (evidence: any) => void;
@@ -69,26 +70,17 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
   return (
     <div>
       {/* Feature Status Banner */}
-      <div style={{
-        marginBottom: 16,
-        padding: 12,
-        backgroundColor: deepfakeAvailable ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-        borderRadius: 8,
-        border: `1px solid ${deepfakeAvailable ? 'var(--success)' : 'var(--primary)'}`,
-        display: 'flex',
-        alignItems: 'start',
-        gap: 10
-      }}>
+      <div className={`${styles.featureStatusBanner} ${deepfakeAvailable ? styles.available : styles.basic}`}>
         {deepfakeAvailable ? (
-          <CheckCircle size={20} color="var(--success)" style={{ marginTop: 2, flexShrink: 0 }} />
+          <CheckCircle size={20} color="var(--success)" className={styles.icon} />
         ) : (
-          <Video size={20} color="var(--primary)" style={{ marginTop: 2, flexShrink: 0 }} />
+          <Video size={20} color="var(--primary)" className={styles.icon} />
         )}
-        <div style={{ flex: 1 }}>
-          <div className="small" style={{ fontWeight: 600, marginBottom: 4 }}>
+        <div className={styles.bannerContent}>
+          <div className={`small ${styles.bannerTitle}`}>
             {deepfakeAvailable ? '✨ Deepfake Detection Enabled' : '📹 Basic Video Analysis'}
           </div>
-          <div className="small" style={{ opacity: 0.8, fontSize: '0.85rem' }}>
+          <div className={`small ${styles.bannerDescription}`}>
             {deepfakeAvailable ? (
               'Premium AI-powered deepfake detection is active and ready to use.'
             ) : !isAppBuild ? (
@@ -102,23 +94,17 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
         </div>
       </div>
 
-      <p className="small" style={{ marginBottom: 12, opacity: 0.8 }}>
+      <p className={`small ${styles.description}`}>
         Upload a video to inspect metadata and file characteristics.
         {deepfakeAvailable && ' Advanced deepfake detection available.'}
       </p>
 
       {deepfakeAvailable && (
-        <div style={{
-          marginBottom: 12,
-          padding: 12,
-          backgroundColor: 'var(--bg-secondary)',
-          borderRadius: 8,
-          border: '1px solid var(--border)'
-        }}>
-          <div className="small" style={{ marginBottom: 8, fontWeight: 600 }}>
+        <div className={styles.limitationsBox}>
+          <div className={`small ${styles.limitationsTitle}`}>
             ⚠️ Limitations & Credibility
           </div>
-          <ul className="small" style={{ margin: 0, paddingLeft: 20, opacity: 0.8 }}>
+          <ul className={`small ${styles.limitationsList}`}>
             <li>Maximum file size: 100MB</li>
             <li>Maximum duration: 10 minutes recommended</li>
             <li>Supported formats: MP4, WebM, MOV, OGG</li>
@@ -128,50 +114,33 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
         </div>
       )}
 
-      <label htmlFor="video-file-input" style={{ width: '100%', display: 'block' }}>
+      <label htmlFor="video-file-input" className={styles.fileInputLabel}>
         <input
           id="video-file-input"
           type="file"
           accept="video/mp4,video/webm,video/quicktime,video/ogg"
           onChange={handleFileChange}
-          className="btn"
-          style={{ width: '100%' }}
+          className={`btn ${styles.fileInput}`}
           aria-label="Upload video file for analysis"
         />
       </label>
 
       {error && (
-        <div className="small" style={{
-          marginTop: 8,
-          padding: 8,
-          backgroundColor: 'rgb(239 68 68 / 0.1)',
-          borderRadius: 4,
-          color: 'rgb(239 68 68)'
-        }}>
+        <div className={`small ${styles.errorMessage}`}>
           {error}
         </div>
       )}
 
       {file && !error && (
-        <div style={{ marginTop: 12 }}>
-          <div className="small" style={{
-            marginBottom: 8,
-            padding: 8,
-            backgroundColor: 'var(--bg-secondary)',
-            borderRadius: 4
-          }}>
+        <div className={styles.filePreviewContainer}>
+          <div className={`small ${styles.fileInfo}`}>
             Selected: {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
           </div>
           {preview && (
             <video
               src={preview}
               controls
-              style={{
-                width: '100%',
-                maxHeight: 300,
-                borderRadius: 8,
-                backgroundColor: 'var(--bg-secondary)'
-              }}
+              className={styles.videoPreview}
             />
           )}
         </div>
@@ -179,24 +148,18 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
 
       {/* Deepfake option - only shown if feature is enabled */}
       {deepfakeAvailable && (
-        <div style={{
-          marginTop: 12,
-          padding: 12,
-          backgroundColor: 'var(--bg-secondary)',
-          borderRadius: 8,
-          border: '1px solid var(--primary)'
-        }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+        <div className={styles.deepfakeOption}>
+          <label className={styles.deepfakeLabel}>
             <input
               type="checkbox"
               checked={deepfakeEnabled}
               onChange={(e) => setDeepfakeEnabled(e.target.checked)}
             />
             <div>
-              <div className="small" style={{ fontWeight: 600 }}>
+              <div className={`small ${styles.deepfakeTitle}`}>
                 🔍 Enable Deepfake Detection (Premium)
               </div>
-              <div className="small" style={{ opacity: 0.7, fontSize: '0.8rem' }}>
+              <div className={`small ${styles.deepfakeDescription}`}>
                 Advanced AI analysis to detect synthetic/manipulated videos
               </div>
             </div>
@@ -207,8 +170,7 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
       <button
         onClick={handleAnalyze}
         disabled={!file || loading || !!error}
-        className="btn primary"
-        style={{ marginTop: 12 }}
+        className={`btn primary ${styles.analyzeButton}`}
       >
         {loading ? 'Analyzing...' : 'Analyze Video'}
       </button>
