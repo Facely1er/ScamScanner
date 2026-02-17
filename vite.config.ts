@@ -27,6 +27,15 @@ export default defineConfig({
   server: { 
     port: 3000,
     strictPort: false, // Try next available port if 3000 is taken
+    // Proxy configuration for deepfake API to handle CORS in development
+    proxy: {
+      '/api/deepfake': {
+        target: 'https://api.truthscan.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/deepfake/, ''),
+        secure: true,
+      },
+    },
   },
   build: {
     outDir: buildTarget === 'web' ? 'dist/web' : 'dist/app',

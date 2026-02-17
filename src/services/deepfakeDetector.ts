@@ -73,8 +73,15 @@ class DeepfakeDetectorService {
     formData.append('file', file);
 
     try {
+      // Determine API base URL
+      // In development with Vite dev server, use proxy to avoid CORS
+      // In production/app builds, use direct API
+      const isDev = import.meta.env.DEV;
+      const useProxy = isDev && typeof window !== 'undefined' && window.location.hostname === 'localhost';
+      const apiBase = useProxy ? '/api/deepfake' : 'https://api.truthscan.com';
+
       // Step 1: Upload video
-      const uploadRes = await fetch('https://api.truthscan.com/v1/detect-file', {
+      const uploadRes = await fetch(`${apiBase}/v1/detect-file`, {
         method: 'POST',
         headers: {
           'X-API-Key': this.config!.apiKey,
@@ -100,7 +107,7 @@ class DeepfakeDetectorService {
       for (let i = 0; i < maxAttempts; i++) {
         await new Promise(resolve => setTimeout(resolve, delay));
 
-        const resultRes = await fetch('https://api.truthscan.com/v1/query', {
+        const resultRes = await fetch(`${apiBase}/v1/query`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
