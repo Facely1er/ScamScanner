@@ -1,6 +1,6 @@
 # Privacy Policy for Cyberstition
 
-**Last Updated:** [Date]
+**Last Updated:** February 16, 2026
 
 ## Introduction
 
@@ -9,7 +9,7 @@ Cyberstition ("we," "our," or "us") is committed to protecting your privacy. Thi
 ## Information We Collect
 
 ### Information You Provide
-- **Analysis Data**: When you use our scam detection features, you may provide messages, emails, images, profiles, or videos for analysis. This data is processed entirely on your device and is never transmitted to our servers.
+- **Analysis Data**: When you use our scam detection features, you may provide messages, emails, images, profiles, or videos for analysis. This data is processed entirely on your device and is never transmitted to our servers or any external services.
 
 ### Automatically Collected Information
 - **Usage Data**: We do not collect usage analytics or tracking data.
@@ -33,6 +33,16 @@ All analysis and processing of your data occurs entirely on your device. We do n
 ## Data Sharing and Disclosure
 
 We do not share, sell, or disclose your personal information to third parties. Your data remains on your device and is never transmitted to external servers.
+
+## External Services
+
+While this app operates entirely on your device, we may offer separate web-based services (such as advanced deepfake detection) that require data upload. These services:
+- Are completely optional and separate from this app
+- Have their own privacy policies
+- Require explicit action to use (visiting a different website)
+- Are clearly labeled as external services
+
+This app itself does not connect to or share data with any external services.
 
 ## In-App Purchases
 

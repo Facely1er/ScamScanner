@@ -38,15 +38,15 @@ interface OnboardingProps {
 const slides = [
   {
     title: 'Detect Scams Before They Strike',
-    body: 'Cyberstition™ analyzes messages, profiles, emails, images, and videos for common scam patterns, phishing tactics, deepfakes, and manipulation techniques.',
+    body: 'Cyberstition™ analyzes messages, profiles, emails, images, and videos for common scam patterns, phishing tactics, and manipulation techniques.',
   },
   {
     title: 'Guided Multi-Signal Analysis',
     body: 'Our guided scanner combines evidence from multiple sources to detect cross-signal patterns and provide a confidence-rated risk assessment.',
   },
   {
-    title: 'Privacy First by Default',
-    body: 'Basic analysis runs locally on your device with zero uploads. Optional premium AI features (deepfake detection) require secure uploads to our trusted partners with your explicit consent.',
+    title: 'Privacy First — Always',
+    body: 'All analysis runs locally on your device. Nothing is uploaded, tracked, or shared. Your data stays yours.',
   },
 ];
 

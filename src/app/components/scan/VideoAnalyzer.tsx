@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { analyzeVideo } from '../../../services/unifiedAnalyzer';
-import { isFeatureEnabledSync } from '../../../config/features';
-import { deepfakeDetector } from '../../../services/deepfakeDetector';
-import { Video, CheckCircle } from 'lucide-react';
-import { IS_APP_BUILD } from '../../../config/env';
-import DeepfakeConsentDialog, { useDeepfakeConsent } from './DeepfakeConsentDialog';
+import { Video, ExternalLink } from 'lucide-react';
 import PrivacyBadge from '../../../components/common/PrivacyBadge';
 import styles from './VideoAnalyzer.module.css';
 
@@ -17,15 +13,6 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [deepfakeEnabled, setDeepfakeEnabled] = useState(false);
-  const [showConsentDialog, setShowConsentDialog] = useState(false);
-  
-  const { consentGiven, giveConsent, checked } = useDeepfakeConsent();
-  const deepfakeAvailable = isFeatureEnabledSync('DEEPFAKE_DETECTION') && 
-                            deepfakeDetector.isAvailable();
-  
-  const deepfakeConfigured = isFeatureEnabledSync('DEEPFAKE_DETECTION');
-  const isAppBuild = IS_APP_BUILD;
 
   useEffect(() => {
     return () => {
@@ -62,93 +49,52 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
     if (!file) return;
 
     try {
-      const evidence = await analyzeVideo(file, {
-        enableDeepfake: deepfakeEnabled && deepfakeAvailable && consentGiven
-      });
+      const evidence = await analyzeVideo(file);
       onAnalyze(evidence);
     } catch (error: any) {
       setError(error.message || 'Analysis failed');
     }
   };
 
-  const handleDeepfakeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    
-    if (isChecked && !consentGiven) {
-      // Show consent dialog on first enable
-      setShowConsentDialog(true);
-    } else {
-      setDeepfakeEnabled(isChecked);
-    }
-  };
-
-  const handleConsentAccept = () => {
-    giveConsent();
-    setDeepfakeEnabled(true);
-    setShowConsentDialog(false);
-  };
-
-  const handleConsentDecline = () => {
-    setDeepfakeEnabled(false);
-    setShowConsentDialog(false);
-  };
-
   return (
     <div>
-      {/* Consent Dialog */}
-      <DeepfakeConsentDialog
-        isOpen={showConsentDialog}
-        onAccept={handleConsentAccept}
-        onDecline={handleConsentDecline}
-      />
-
       {/* Feature Status Banner */}
-      <div className={`${styles.featureStatusBanner} ${deepfakeAvailable ? styles.available : styles.basic}`}>
-        {deepfakeAvailable ? (
-          <CheckCircle size={20} color="var(--success)" className={styles.icon} />
-        ) : (
-          <Video size={20} color="var(--primary)" className={styles.icon} />
-        )}
+      <div className={`${styles.featureStatusBanner} ${styles.basic}`}>
+        <Video size={20} color="var(--primary)" className={styles.icon} />
         <div className={styles.bannerContent}>
           <div className={`small ${styles.bannerTitle}`}>
-            {deepfakeAvailable ? '✨ Deepfake Detection Enabled' : '📹 Basic Video Analysis'}
-            {' '}
-            <PrivacyBadge type="local" />
-            {deepfakeAvailable && deepfakeEnabled && <PrivacyBadge type="cloud" />}
+            📹 Video Metadata Analysis <PrivacyBadge type="local" />
           </div>
           <div className={`small ${styles.bannerDescription}`}>
-            {deepfakeAvailable ? (
-              'Premium AI-powered deepfake detection is active and ready to use.'
-            ) : !isAppBuild ? (
-              'Deepfake detection requires the app build. Basic metadata analysis is available.'
-            ) : !deepfakeConfigured ? (
-              'Configure VITE_DEEPFAKE_API_KEY in .env to enable deepfake detection.'
-            ) : (
-              'Basic video metadata analysis is available.'
-            )}
+            Analyze video metadata locally on your device. No uploads required.
           </div>
         </div>
       </div>
 
       <p className={`small ${styles.description}`}>
-        Upload a video to inspect metadata and file characteristics.
-        {deepfakeAvailable && ' Advanced deepfake detection available.'}
+        Upload a video to inspect metadata and file characteristics including format, duration, dimensions, and file properties.
       </p>
 
-      {deepfakeAvailable && (
-        <div className={styles.limitationsBox}>
-          <div className={`small ${styles.limitationsTitle}`}>
-            ⚠️ Limitations & Credibility
-          </div>
-          <ul className={`small ${styles.limitationsList}`}>
-            <li>Maximum file size: 100MB</li>
-            <li>Maximum duration: 10 minutes recommended</li>
-            <li>Supported formats: MP4, WebM, MOV, OGG</li>
-            <li>Deepfake detection requires API access</li>
-            <li>Results are heuristic indicators, not definitive proof</li>
-          </ul>
+      {/* Deepfake Web Service Link */}
+      <div className={styles.externalServiceBox}>
+        <div className={`small ${styles.externalServiceTitle}`}>
+          🔍 Need Deepfake Detection?
         </div>
-      )}
+        <p className={`small ${styles.externalServiceDescription}`}>
+          Advanced AI-powered deepfake detection is available through our web service.
+        </p>
+        <a 
+          href="https://cyberstition.app/deepfake-checker" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={`btn ${styles.externalServiceButton}`}
+        >
+          Use Web Service <ExternalLink size={14} style={{ marginLeft: 6 }} />
+        </a>
+        <p className={`small ${styles.externalServiceNote}`}>
+          Note: Web service requires video upload. Separate privacy policy applies.
+        </p>
+      </div>
 
       <label htmlFor="video-file-input" className={styles.fileInputLabel}>
         <input
@@ -182,42 +128,12 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
         </div>
       )}
 
-      {/* Deepfake option - only shown if feature is enabled */}
-      {deepfakeAvailable && (
-        <div className={styles.deepfakeOption}>
-          {/* Privacy Notice */}
-          <div className={styles.privacyNotice}>
-            <div className={`small ${styles.privacyIcon}`}>🔒</div>
-            <div className={`small ${styles.privacyText}`}>
-              <strong>Privacy Notice:</strong> Deepfake detection requires uploading your video to our secure AI partner. 
-              Videos are encrypted in transit, processed immediately, and deleted within 24 hours. Not used for training.
-            </div>
-          </div>
-          
-          <label className={styles.deepfakeLabel}>
-            <input
-              type="checkbox"
-              checked={deepfakeEnabled}
-              onChange={handleDeepfakeToggle}
-            />
-            <div>
-              <div className={`small ${styles.deepfakeTitle}`}>
-                🔍 Enable Deepfake Detection (Premium)
-              </div>
-              <div className={`small ${styles.deepfakeDescription}`}>
-                Advanced AI analysis to detect synthetic/manipulated videos
-              </div>
-            </div>
-          </label>
-        </div>
-      )}
-
       <button
         onClick={handleAnalyze}
         disabled={!file || loading || !!error}
         className={`btn primary ${styles.analyzeButton}`}
       >
-        {loading ? 'Analyzing...' : 'Analyze Video'}
+        {loading ? 'Analyzing...' : 'Analyze Video Metadata'}
       </button>
     </div>
   );

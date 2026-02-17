@@ -87,6 +87,9 @@ export default function Privacy() {
           <li className="small" style={{ lineHeight: 1.7 }}>
             <strong>Profiles:</strong> Risk assessment is calculated locally based on the information you provide
           </li>
+          <li className="small" style={{ lineHeight: 1.7 }}>
+            <strong>Videos:</strong> Metadata inspection (format, duration, dimensions) runs locally in your browser
+          </li>
         </ul>
 
         <div className="info-box primary" style={{ marginTop: 20 }}>
@@ -94,7 +97,7 @@ export default function Privacy() {
             <AlertCircle size={20} style={{ flexShrink: 0, marginTop: 2 }} />
             <p className="small" style={{ margin: 0, lineHeight: 1.7 }}>
               <strong>Zero Backend:</strong> This app has no server infrastructure. There are no API calls, 
-              no databases, and no cloud services involved in the analysis process.
+              no databases, and no cloud services involved in the analysis process. Everything stays on your device.
             </p>
           </div>
         </div>
