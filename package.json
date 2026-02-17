@@ -30,7 +30,8 @@
     "ios:build": "npm run build:app && npx cap sync ios",
     "icons:generate": "npx @capacitor/assets generate --iconBackgroundColor '#0A0F1A' --iconBackgroundColorDark '#0A0F1A' --splashBackgroundColor '#0A0F1A' --splashBackgroundColorDark '#0A0F1A' --logoSplashScale 0.35",
     "postinstall": "patch-package",
-    "check:env": "node -e \"console.log('Build Target:', process.env.BUILD_TARGET || 'web'); console.log('Deepfake Enabled:', process.env.VITE_ENABLE_DEEPFAKE || 'false');\""
+    "check:env": "node -e \"console.log('Build Target:', process.env.BUILD_TARGET || 'web'); console.log('Deepfake Enabled:', process.env.VITE_ENABLE_DEEPFAKE || 'false');\"",
+    "test:deepfake-config": "node scripts/test-deepfake-config.js"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
