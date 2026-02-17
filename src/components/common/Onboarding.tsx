@@ -112,7 +112,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <div
               key={i}
               role="tab"
-              aria-selected={i === step ? 'true' : 'false'}
+              aria-selected={i === step}
               aria-label={`Step ${i + 1} of ${slides.length}`}
               style={{
                 width: i === step ? 32 : 10,

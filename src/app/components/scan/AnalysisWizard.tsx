@@ -99,9 +99,9 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
             </div>
             <div
               role="progressbar"
-              aria-valuenow={completedSteps}
-              aria-valuemin={0}
-              aria-valuemax={totalSteps}
+              aria-valuenow={Number(completedSteps)}
+              aria-valuemin={Number(0)}
+              aria-valuemax={Number(totalSteps)}
               aria-label={`Analysis progress: ${completedSteps} of ${totalSteps} steps completed`}
               style={{ height: 10, backgroundColor: 'var(--border)', borderRadius: 5, overflow: 'hidden' }}
             >
@@ -423,7 +423,27 @@ function AnalyzerPanel({ type, onAnalyze, onClose }: AnalyzerPanelProps) {
   );
 }
 
-function MessageAnalyzer({ onAnalyze, loading }: any) {
+interface MessageAnalyzerProps {
+  onAnalyze: (text: string) => void;
+  loading: boolean;
+}
+
+interface EmailAnalyzerProps {
+  onAnalyze: (headers: string) => void;
+  loading: boolean;
+}
+
+interface ImageAnalyzerProps {
+  onAnalyze: (file: File) => void;
+  loading: boolean;
+}
+
+interface ProfileAnalyzerProps {
+  onAnalyze: (profileData: Record<string, unknown>) => void;
+  loading: boolean;
+}
+
+function MessageAnalyzer({ onAnalyze, loading }: MessageAnalyzerProps) {
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -472,7 +492,7 @@ function MessageAnalyzer({ onAnalyze, loading }: any) {
   );
 }
 
-function EmailAnalyzer({ onAnalyze, loading }: any) {
+function EmailAnalyzer({ onAnalyze, loading }: EmailAnalyzerProps) {
   const [headers, setHeaders] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -521,7 +541,7 @@ function EmailAnalyzer({ onAnalyze, loading }: any) {
   );
 }
 
-function ImageAnalyzer({ onAnalyze, loading }: any) {
+function ImageAnalyzer({ onAnalyze, loading }: ImageAnalyzerProps) {
   const [file, setFile] = useState<File | null>(null);
 
   return (
@@ -535,6 +555,7 @@ function ImageAnalyzer({ onAnalyze, loading }: any) {
         onChange={(e) => setFile(e.target.files?.[0] || null)}
         className="btn"
         style={{ width: '100%' }}
+        aria-label="Upload image for metadata analysis"
       />
       {file && (
         <div className="small" style={{ marginTop: 8, padding: 8, backgroundColor: 'var(--bg-secondary)', borderRadius: 4 }}>
@@ -553,7 +574,7 @@ function ImageAnalyzer({ onAnalyze, loading }: any) {
   );
 }
 
-function ProfileAnalyzer({ onAnalyze, loading }: any) {
+function ProfileAnalyzer({ onAnalyze, loading }: ProfileAnalyzerProps) {
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [followerCount, setFollowerCount] = useState('');

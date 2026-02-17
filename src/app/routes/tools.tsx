@@ -110,10 +110,10 @@ export default function Tools() {
 
         <div className="kicker" style={{ marginTop: 16, marginBottom: 10 }}>{t('toolsPage.quickAccess')}</div>
         <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(72px, 1fr))',
           gap: 12,
-          alignItems: 'center'
+          maxWidth: '100%'
         }}>
           {tools.map((tool) => (
             <button
