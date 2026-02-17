@@ -30,7 +30,7 @@ See [PRIVACY_TRANSPARENCY.md](./PRIVACY_TRANSPARENCY.md) for full details.
 - **Profile Verification**: Assess social profile authenticity and identify deception signals
 - **Image Inspection**: Reveal hidden metadata and manipulation indicators
 - **Email Header Analysis**: Check for email spoofing and routing anomalies
-- **Video Analysis**: Inspect video metadata and detect deepfakes (premium feature)
+- **Video Analysis**: Inspect video metadata, format, and file properties locally
 
 ### Intelligence Features
 - Pre-loaded threat pattern library for phishing, romance scams, investment fraud, and more

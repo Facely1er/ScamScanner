@@ -108,6 +108,14 @@
   font-weight: 600;
   margin-bottom: 8px;
   font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.inlineIcon {
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
 .externalServiceDescription {

@@ -2,7 +2,7 @@
 // Analyzes video files for metadata and deepfake detection
 
 import React from 'react';
-import { Info } from 'lucide-react';
+import { Info, Lightbulb } from 'lucide-react';
 import VideoAnalyzer from '../../app/components/scan/VideoAnalyzer';
 import { showToast } from '../common/Toast';
 
@@ -36,7 +36,9 @@ const VideoMetadataAnalyzer: React.FC = () => {
 
       {/* Educational Footer */}
       <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800 rounded-xl">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-2">💡 What this tool checks:</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+          <Lightbulb className="h-4 w-4 flex-shrink-0" aria-hidden /> What this tool checks:
+        </h3>
         <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
           <li>Video metadata and properties</li>
           <li>File format and codec information</li>

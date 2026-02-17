@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { analyzeVideo } from '../../../services/unifiedAnalyzer';
-import { Video, ExternalLink } from 'lucide-react';
+import { Video, ExternalLink, Search } from 'lucide-react';
 import PrivacyBadge from '../../../components/common/PrivacyBadge';
 import styles from './VideoAnalyzer.module.css';
 
@@ -63,7 +63,7 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
         <Video size={20} color="var(--primary)" className={styles.icon} />
         <div className={styles.bannerContent}>
           <div className={`small ${styles.bannerTitle}`}>
-            📹 Video Metadata Analysis <PrivacyBadge type="local" />
+            Video Metadata Analysis <PrivacyBadge type="local" />
           </div>
           <div className={`small ${styles.bannerDescription}`}>
             Analyze video metadata locally on your device. No uploads required.
@@ -78,7 +78,7 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
       {/* Deepfake Web Service Link */}
       <div className={styles.externalServiceBox}>
         <div className={`small ${styles.externalServiceTitle}`}>
-          🔍 Need Deepfake Detection?
+          <Search size={16} className={styles.inlineIcon} aria-hidden /> Need Deepfake Detection?
         </div>
         <p className={`small ${styles.externalServiceDescription}`}>
           Advanced AI-powered deepfake detection is available through our web service.
