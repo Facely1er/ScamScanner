@@ -103,6 +103,35 @@
   border: 1px solid var(--primary);
 }
 
+.privacyNotice {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 12px;
+  background-color: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 6px;
+  align-items: start;
+}
+
+.privacyIcon {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.privacyText {
+  flex: 1;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+.privacyText strong {
+  font-weight: 600;
+  color: rgba(234, 179, 8, 1);
+}
+
 .deepfakeLabel {
   display: flex;
   align-items: center;

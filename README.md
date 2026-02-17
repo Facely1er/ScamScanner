@@ -1,6 +1,20 @@
 # Cyberstition
 
-A privacy-first scam detection guide that helps users identify phishing, fraud, and deception through context-aware, guided analysis. All processing happens locally in your browser—no data collection, no server uploads.
+A privacy-first scam detection guide that helps users identify phishing, fraud, and deception through context-aware, guided analysis.
+
+## Privacy Model
+
+**FREE TIER** - 100% local processing, zero uploads:
+- All basic analysis runs on your device
+- Messages, profiles, emails, image/video metadata
+- Complete privacy guaranteed
+
+**PREMIUM TIER** - Optional cloud AI with explicit consent:
+- Advanced deepfake video detection
+- Requires user opt-in via consent dialog
+- Data encrypted and deleted within 24 hours
+
+See [PRIVACY_TRANSPARENCY.md](./PRIVACY_TRANSPARENCY.md) for full details.
 
 ## Features
 
@@ -26,10 +40,23 @@ A privacy-first scam detection guide that helps users identify phishing, fraud, 
 
 ## Privacy & Security
 
-- All analysis runs on-device in your browser
-- No data collection or tracking
-- No server uploads or account monitoring
-- Results are indicators only—always verify independently
+### Free Tier (100% Local)
+- ✅ All basic analysis runs on-device in your browser
+- ✅ Messages, profiles, emails, image/video metadata
+- ✅ No data collection or tracking
+- ✅ No server uploads
+- ✅ Zero external dependencies
+
+### Premium Tier (Optional Cloud AI)
+- ⚠️ Deepfake video detection requires upload
+- ✅ Explicit consent required via dialog
+- ✅ Videos encrypted in transit
+- ✅ Automatically deleted within 24 hours
+- ✅ Never used for AI training
+
+**Privacy Badges**: Look for 🟢 "100% Local" and 🟡 "Cloud AI" indicators in the app.
+
+See [PRIVACY_TRANSPARENCY.md](./PRIVACY_TRANSPARENCY.md) for complete details.
 
 ## How It Works
 

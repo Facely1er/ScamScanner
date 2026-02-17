@@ -1,0 +1,32 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.text {
+  line-height: 1;
+}
+
+.local {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: rgb(16, 185, 129);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.cloud {
+  background-color: rgba(234, 179, 8, 0.15);
+  color: rgba(234, 179, 8, 1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}

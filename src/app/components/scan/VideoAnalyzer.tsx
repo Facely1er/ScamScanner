@@ -4,6 +4,8 @@ import { isFeatureEnabledSync } from '../../../config/features';
 import { deepfakeDetector } from '../../../services/deepfakeDetector';
 import { Video, CheckCircle } from 'lucide-react';
 import { IS_APP_BUILD } from '../../../config/env';
+import DeepfakeConsentDialog, { useDeepfakeConsent } from './DeepfakeConsentDialog';
+import PrivacyBadge from '../../../components/common/PrivacyBadge';
 import styles from './VideoAnalyzer.module.css';
 
 interface VideoAnalyzerProps {
@@ -16,7 +18,9 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [deepfakeEnabled, setDeepfakeEnabled] = useState(false);
+  const [showConsentDialog, setShowConsentDialog] = useState(false);
   
+  const { consentGiven, giveConsent, checked } = useDeepfakeConsent();
   const deepfakeAvailable = isFeatureEnabledSync('DEEPFAKE_DETECTION') && 
                             deepfakeDetector.isAvailable();
   
@@ -59,7 +63,7 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
 
     try {
       const evidence = await analyzeVideo(file, {
-        enableDeepfake: deepfakeEnabled && deepfakeAvailable
+        enableDeepfake: deepfakeEnabled && deepfakeAvailable && consentGiven
       });
       onAnalyze(evidence);
     } catch (error: any) {
@@ -67,8 +71,37 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
     }
   };
 
+  const handleDeepfakeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    
+    if (isChecked && !consentGiven) {
+      // Show consent dialog on first enable
+      setShowConsentDialog(true);
+    } else {
+      setDeepfakeEnabled(isChecked);
+    }
+  };
+
+  const handleConsentAccept = () => {
+    giveConsent();
+    setDeepfakeEnabled(true);
+    setShowConsentDialog(false);
+  };
+
+  const handleConsentDecline = () => {
+    setDeepfakeEnabled(false);
+    setShowConsentDialog(false);
+  };
+
   return (
     <div>
+      {/* Consent Dialog */}
+      <DeepfakeConsentDialog
+        isOpen={showConsentDialog}
+        onAccept={handleConsentAccept}
+        onDecline={handleConsentDecline}
+      />
+
       {/* Feature Status Banner */}
       <div className={`${styles.featureStatusBanner} ${deepfakeAvailable ? styles.available : styles.basic}`}>
         {deepfakeAvailable ? (
@@ -79,6 +112,9 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
         <div className={styles.bannerContent}>
           <div className={`small ${styles.bannerTitle}`}>
             {deepfakeAvailable ? '✨ Deepfake Detection Enabled' : '📹 Basic Video Analysis'}
+            {' '}
+            <PrivacyBadge type="local" />
+            {deepfakeAvailable && deepfakeEnabled && <PrivacyBadge type="cloud" />}
           </div>
           <div className={`small ${styles.bannerDescription}`}>
             {deepfakeAvailable ? (
@@ -149,11 +185,20 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
       {/* Deepfake option - only shown if feature is enabled */}
       {deepfakeAvailable && (
         <div className={styles.deepfakeOption}>
+          {/* Privacy Notice */}
+          <div className={styles.privacyNotice}>
+            <div className={`small ${styles.privacyIcon}`}>🔒</div>
+            <div className={`small ${styles.privacyText}`}>
+              <strong>Privacy Notice:</strong> Deepfake detection requires uploading your video to our secure AI partner. 
+              Videos are encrypted in transit, processed immediately, and deleted within 24 hours. Not used for training.
+            </div>
+          </div>
+          
           <label className={styles.deepfakeLabel}>
             <input
               type="checkbox"
               checked={deepfakeEnabled}
-              onChange={(e) => setDeepfakeEnabled(e.target.checked)}
+              onChange={handleDeepfakeToggle}
             />
             <div>
               <div className={`small ${styles.deepfakeTitle}`}>
