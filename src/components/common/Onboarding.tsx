@@ -108,22 +108,25 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
         {/* Step indicators */}
         <div style={{ display: 'flex', gap: 10, marginTop: 12 }} role="tablist" aria-label="Onboarding steps">
-          {slides.map((_, i) => (
-            <div
-              key={i}
-              role="tab"
-              aria-selected={i === step}
-              aria-label={`Step ${i + 1} of ${slides.length}`}
-              style={{
-                width: i === step ? 32 : 10,
-                height: 10,
-                borderRadius: 5,
-                backgroundColor: i === step ? 'var(--primary)' : 'var(--border)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: i === step ? '0 2px 8px rgba(155,125,212,.3)' : 'none',
-              }}
-            />
-          ))}
+          {slides.map((_, i) => {
+            const isSelected = i === step;
+            return (
+              <div
+                key={i}
+                role="tab"
+                {...(isSelected && { 'aria-selected': true })}
+                aria-label={`Step ${i + 1} of ${slides.length}`}
+                style={{
+                  width: isSelected ? 32 : 10,
+                  height: 10,
+                  borderRadius: 5,
+                  backgroundColor: isSelected ? 'var(--primary)' : 'var(--border)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: isSelected ? '0 2px 8px rgba(155,125,212,.3)' : 'none',
+                }}
+              />
+            );
+          })}
         </div>
 
         <div style={{ display: 'flex', gap: 14, marginTop: 24, width: '100%' }}>
