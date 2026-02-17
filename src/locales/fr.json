@@ -86,6 +86,8 @@
     "toolImageInspectorDesc": "Inspecter les métadonnées et détecter des indicateurs de manipulation.",
     "toolEmailAnalyzer": "Analyseur d’email",
     "toolEmailAnalyzerDesc": "Analyser les en-têtes email pour l’usurpation et les anomalies d’acheminement.",
+    "toolVideoAnalyzer": "Analyseur vidéo",
+    "toolVideoAnalyzerDesc": "Analyser les métadonnées vidéo et détecter les deepfakes avec l IA.",
     "getStartedKicker": "Commencer",
     "getStartedDesc": "Essayez l'app avec une démo gratuite, puis débloquez tous les outils avec un paiement unique—sans abonnement. Essayez avant d'acheter.",
     "getTheApp": "Télécharger l’app",

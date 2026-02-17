@@ -4,12 +4,9 @@
 import React from 'react';
 import { Info } from 'lucide-react';
 import VideoAnalyzer from '../../app/components/scan/VideoAnalyzer';
-import { useCautionStore } from '../../state/cautionStore';
 import { showToast } from '../common/Toast';
 
 const VideoMetadataAnalyzer: React.FC = () => {
-  const addAlert = useCautionStore((s) => s.addAlert);
-
   const handleAnalyze = (evidence: any) => {
     showToast(
       evidence.riskLevel === 'high' 
@@ -17,18 +14,6 @@ const VideoMetadataAnalyzer: React.FC = () => {
         : 'Analysis complete',
       evidence.riskLevel === 'high' ? 'warning' : 'success'
     );
-
-    // Create alert if suspicious
-    if (evidence.riskLevel === 'high' || evidence.riskLevel === 'medium') {
-      addAlert({
-        type: 'video',
-        severity: evidence.riskLevel,
-        title: 'Suspicious Video Detected',
-        summary: evidence.summary || 'Video analysis flagged potential issues',
-        timestamp: new Date().toISOString(),
-        source: evidence.fileName || 'Unknown'
-      });
-    }
   };
 
   return (
