@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { analyzeVideo } from '../../../services/unifiedAnalyzer';
 import { isFeatureEnabledSync } from '../../../config/features';
 import { deepfakeDetector } from '../../../services/deepfakeDetector';
-import { Video, AlertTriangle } from 'lucide-react';
+import { Video, CheckCircle } from 'lucide-react';
+import { IS_APP_BUILD } from '../../../config/env';
 
 interface VideoAnalyzerProps {
   onAnalyze: (evidence: any) => void;
@@ -17,6 +18,9 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
   
   const deepfakeAvailable = isFeatureEnabledSync('DEEPFAKE_DETECTION') && 
                             deepfakeDetector.isAvailable();
+  
+  const deepfakeConfigured = isFeatureEnabledSync('DEEPFAKE_DETECTION');
+  const isAppBuild = IS_APP_BUILD;
 
   useEffect(() => {
     return () => {
@@ -64,9 +68,43 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
 
   return (
     <div>
+      {/* Feature Status Banner */}
+      <div style={{
+        marginBottom: 16,
+        padding: 12,
+        backgroundColor: deepfakeAvailable ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+        borderRadius: 8,
+        border: `1px solid ${deepfakeAvailable ? 'var(--success)' : 'var(--primary)'}`,
+        display: 'flex',
+        alignItems: 'start',
+        gap: 10
+      }}>
+        {deepfakeAvailable ? (
+          <CheckCircle size={20} color="var(--success)" style={{ marginTop: 2, flexShrink: 0 }} />
+        ) : (
+          <Video size={20} color="var(--primary)" style={{ marginTop: 2, flexShrink: 0 }} />
+        )}
+        <div style={{ flex: 1 }}>
+          <div className="small" style={{ fontWeight: 600, marginBottom: 4 }}>
+            {deepfakeAvailable ? '✨ Deepfake Detection Enabled' : '📹 Basic Video Analysis'}
+          </div>
+          <div className="small" style={{ opacity: 0.8, fontSize: '0.85rem' }}>
+            {deepfakeAvailable ? (
+              'Premium AI-powered deepfake detection is active and ready to use.'
+            ) : !isAppBuild ? (
+              'Deepfake detection requires the app build. Basic metadata analysis is available.'
+            ) : !deepfakeConfigured ? (
+              'Configure VITE_DEEPFAKE_API_KEY in .env to enable deepfake detection.'
+            ) : (
+              'Basic video metadata analysis is available.'
+            )}
+          </div>
+        </div>
+      </div>
+
       <p className="small" style={{ marginBottom: 12, opacity: 0.8 }}>
         Upload a video to inspect metadata and file characteristics.
-        {deepfakeAvailable && ' Deepfake detection is available for premium users.'}
+        {deepfakeAvailable && ' Advanced deepfake detection available.'}
       </p>
 
       {deepfakeAvailable && (
@@ -90,13 +128,17 @@ export default function VideoAnalyzer({ onAnalyze, loading }: VideoAnalyzerProps
         </div>
       )}
 
-      <input
-        type="file"
-        accept="video/mp4,video/webm,video/quicktime,video/ogg"
-        onChange={handleFileChange}
-        className="btn"
-        style={{ width: '100%' }}
-      />
+      <label htmlFor="video-file-input" style={{ width: '100%', display: 'block' }}>
+        <input
+          id="video-file-input"
+          type="file"
+          accept="video/mp4,video/webm,video/quicktime,video/ogg"
+          onChange={handleFileChange}
+          className="btn"
+          style={{ width: '100%' }}
+          aria-label="Upload video file for analysis"
+        />
+      </label>
 
       {error && (
         <div className="small" style={{
