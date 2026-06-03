@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Cyberstition</string>
+    <string name="title_activity_main">Cyberstition</string>
+    <string name="package_name">com.ermits.cyberstition</string>
+    <string name="custom_url_scheme">com.ermits.cyberstition</string>
+</resources>
