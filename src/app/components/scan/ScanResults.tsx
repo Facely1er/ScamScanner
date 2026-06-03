@@ -2,10 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Shield, AlertTriangle, CheckCircle, Info, FileText,
-  TrendingUp, AlertCircle, XCircle, Home, RotateCcw, FileDown
+  TrendingUp, AlertCircle, XCircle, Home, RotateCcw
 } from 'lucide-react';
 import { ScanSession } from '../../../types/scan';
-import { exportSessionToPDF } from '../../../utils/pdfExporter';
 
 interface ScanResultsProps {
   session: ScanSession;
@@ -290,16 +289,8 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
         </p>
         <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
           <button
-            onClick={() => exportSessionToPDF(session)}
-            className="btn primary"
-            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
-            title="Export this session as PDF"
-          >
-            <FileDown size={16} /> Export PDF
-          </button>
-          <button
             onClick={onComplete}
-            className="btn"
+            className="btn primary"
             style={{ display: 'flex', alignItems: 'center', gap: 8 }}
           >
             <FileText size={16} /> Save to Dashboard

@@ -35,7 +35,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="grid" style={{ maxWidth: 480, margin: '0 auto' }}>
+    <div className="grid" style={{ maxWidth: 480, margin: '0 auto', gap: 14 }}>
       <section className="card">
         <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <UserPlus size={16} /> Create Account

@@ -28,7 +28,7 @@ function recalculateSession(session: ScanSession): ScanSession {
   const threatCategory = determineThreatCategory(patterns);
 
   const analyzedTypes = new Set(session.evidence.map(e => e.type));
-  const totalSteps = 5; // Updated to include video
+  const totalSteps = 4;
   const completionPercentage = (analyzedTypes.size / totalSteps) * 100;
 
   const nextSteps = generateNextSteps(session, patterns, riskCalc);
@@ -291,15 +291,6 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
         priority: state.currentSession.context.origin === 'email' ? 1 : 3,
         completed: analyzedTypes.has('email'),
         required: state.currentSession.context.origin === 'email'
-      },
-      {
-        id: 'video',
-        type: 'video',
-        label: 'Video Analysis',
-        description: 'Inspect video metadata and deepfake detection',
-        priority: 3,
-        completed: analyzedTypes.has('video'),
-        required: false
       },
       {
         id: 'image',

@@ -6,13 +6,11 @@ import { Mail, AlertTriangle, ShieldCheck, XCircle, Info, HelpCircle, Download }
 import { analyzeEmailHeaders, getEmailRiskLevel } from '../../utils/emailHeaderAnalyzer';
 import { mapEmailAnalysisToAlert } from '../../mappers/emailToCautionAlert';
 import { useCautionStore } from '../../state/cautionStore';
-import { showToast } from '../common/Toast';
 
 const EmailHeaderAnalyzer: React.FC = () => {
   const [headerText, setHeaderText] = useState('');
   const [result, setResult] = useState<any>(null);
   const [showHelp, setShowHelp] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const addAlert = useCautionStore((s) => s.addAlert);
@@ -20,27 +18,19 @@ const EmailHeaderAnalyzer: React.FC = () => {
   const handleAnalyze = () => {
     if (!headerText.trim()) return;
 
-    setIsAnalyzing(true);
-    setTimeout(() => {
-      const analysis = analyzeEmailHeaders(headerText);
-      setResult(analysis);
-      setIsAnalyzing(false);
-      showToast(
-        analysis.isSuspicious ? `Suspicious headers: ${analysis.riskScore}% risk` : 'Analysis complete — headers look OK',
-        analysis.isSuspicious ? 'warning' : 'success'
-      );
+    const analysis = analyzeEmailHeaders(headerText);
+    setResult(analysis);
 
-      // Create alert if suspicious
-      if (analysis.isSuspicious) {
-        const alert = mapEmailAnalysisToAlert(analysis, {
-          id: `email-${Date.now()}`,
-          from: analysis.headerInfo.from
-        });
-        if (alert) {
-          addAlert(alert);
-        }
+    // Create alert if suspicious
+    if (analysis.isSuspicious) {
+      const alert = mapEmailAnalysisToAlert(analysis, {
+        id: `email-${Date.now()}`,
+        from: analysis.headerInfo.from
+      });
+      if (alert) {
+        addAlert(alert);
       }
-    }, 300);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -143,15 +133,15 @@ const EmailHeaderAnalyzer: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleAnalyze}
-            disabled={!headerText.trim() || isAnalyzing}
+            disabled={!headerText.trim()}
             className={`flex-1 inline-flex items-center justify-center px-6 py-3 rounded-lg text-sm font-medium transition-colors ${
-              !headerText.trim() || isAnalyzing
+              !headerText.trim()
                 ? 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-cyan-600 to-teal-600 text-white hover:from-cyan-500 hover:to-teal-500 shadow-lg hover:shadow-cyan-500/30 transition-all duration-200 hover:scale-[1.02]'
             }`}
           >
-            {isAnalyzing ? <span className="spinner" style={{ marginRight: 8 }} /> : <Mail className="h-4 w-4 mr-2" />}
-            {isAnalyzing ? 'Analyzing...' : 'Analyze Headers'}
+            <Mail className="h-4 w-4 mr-2" />
+            Analyze Headers
           </button>
           
           <button
@@ -193,7 +183,6 @@ const EmailHeaderAnalyzer: React.FC = () => {
       </div>
 
       {/* Results */}
-      <div aria-live="polite" aria-atomic="true">
       {result && (
         <div className={`border-2 rounded-xl p-6 ${
           result.isSuspicious
@@ -295,7 +284,6 @@ const EmailHeaderAnalyzer: React.FC = () => {
           </div>
         </div>
       )}
-      </div>
 
       {/* Educational Footer */}
       <div className="mt-8 p-6 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border border-cyan-200 dark:border-cyan-800 rounded-xl">

@@ -30,7 +30,7 @@ export default function Login() {
   };
 
   return (
-    <div className="grid" style={{ maxWidth: 480, margin: '0 auto' }}>
+    <div className="grid" style={{ maxWidth: 480, margin: '0 auto', gap: 14 }}>
       <section className="card">
         <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <LogIn size={16} /> Sign In

@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { MessageSquare, Mail, Image as ImageIcon, User, Video, ChevronDown, ChevronUp } from 'lucide-react';
+import { MessageSquare, Mail, Image as ImageIcon, User, ChevronDown, ChevronUp } from 'lucide-react';
 import AICheckMessagePanel from '../../components/tools/AICheckMessagePanel';
 import EmailHeaderAnalyzer from '../../components/tools/EmailHeaderAnalyzer';
 import ImageMetadataAnalyzer from '../../components/tools/ImageMetadataAnalyzer';
 import SocialProfileVerifier from '../../components/tools/SocialProfileVerifier';
-import VideoMetadataAnalyzer from '../../components/tools/VideoMetadataAnalyzer';
-import { useLocale } from '../../contexts/LocaleContext';
 
-type ToolType = 'message' | 'email' | 'image' | 'profile' | 'video' | null;
-
-const VALID_TOOLS: ToolType[] = ['message', 'email', 'image', 'profile', 'video'];
+type ToolType = 'message' | 'email' | 'image' | 'profile' | null;
 
 export default function Tools() {
-  const { t } = useLocale();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const toolParam = searchParams.get('tool') as ToolType;
-  const initialTool = toolParam && VALID_TOOLS.includes(toolParam) ? toolParam : null;
-  const [activeTool, setActiveTool] = useState<ToolType>(initialTool);
+  const [activeTool, setActiveTool] = useState<ToolType>('message');
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -27,8 +18,7 @@ export default function Tools() {
         '1': 'message',
         '2': 'email',
         '3': 'image',
-        '4': 'profile',
-        '5': 'video'
+        '4': 'profile'
       };
 
       if (toolMap[e.key]) {
@@ -46,118 +36,46 @@ export default function Tools() {
     {
       id: 'message' as ToolType,
       icon: <MessageSquare size={28} />,
-      shortTitle: t('toolsPage.messageShort'),
-      title: t('toolsPage.messageTitle'),
-      description: t('toolsPage.messageDesc'),
+      title: 'Message Analysis',
+      description: 'Analyze message text for scam patterns, urgency tactics, and manipulation techniques',
       color: '#3b82f6'
     },
     {
       id: 'email' as ToolType,
       icon: <Mail size={28} />,
-      shortTitle: t('toolsPage.emailShort'),
-      title: t('toolsPage.emailTitle'),
-      description: t('toolsPage.emailDesc'),
+      title: 'Email Header Analysis',
+      description: 'Check email authenticity, routing paths, and spoofing indicators',
       color: '#8b5cf6'
     },
     {
       id: 'image' as ToolType,
       icon: <ImageIcon size={28} />,
-      shortTitle: t('toolsPage.imageShort'),
-      title: t('toolsPage.imageTitle'),
-      description: t('toolsPage.imageDesc'),
+      title: 'Image Metadata Analysis',
+      description: 'Inspect image metadata, editing history, and manipulation indicators',
       color: '#10b981'
     },
     {
       id: 'profile' as ToolType,
       icon: <User size={28} />,
-      shortTitle: t('toolsPage.profileShort'),
-      title: t('toolsPage.profileTitle'),
-      description: t('toolsPage.profileDesc'),
+      title: 'Profile Verification',
+      description: 'Verify social media profiles for fake account indicators and suspicious patterns',
       color: '#f59e0b'
-    },
-    {
-      id: 'video' as ToolType,
-      icon: <Video size={28} />,
-      shortTitle: t('toolsPage.videoShort'),
-      title: t('toolsPage.videoTitle'),
-      description: t('toolsPage.videoDesc'),
-      color: '#ec4899'
     }
   ];
 
-  // Sync active tool when URL param changes (e.g., navigating from Home tool cards)
-  useEffect(() => {
-    if (toolParam && VALID_TOOLS.includes(toolParam)) {
-      setActiveTool(toolParam);
-    }
-  }, [toolParam]);
-
   const toggleTool = (toolId: ToolType) => {
-    const next = activeTool === toolId ? null : toolId;
-    setActiveTool(next);
-    // Keep URL clean after initial navigation
-    if (searchParams.has('tool')) {
-      searchParams.delete('tool');
-      setSearchParams(searchParams, { replace: true });
-    }
+    setActiveTool(activeTool === toolId ? null : toolId);
   };
 
   return (
-    <div className="grid loose">
+    <div className="grid" style={{ gap: 20 }}>
       <section className="card">
-        <h1 className="h1">{t('toolsPage.title')}</h1>
-        <p className="p">{t('toolsPage.intro')}</p>
-
-        <div className="kicker" style={{ marginTop: 16, marginBottom: 10 }}>{t('toolsPage.quickAccess')}</div>
+        <h1 className="h1">Analysis Tools</h1>
+        <p className="p">
+          Use these specialized tools to analyze different types of suspicious content. Each tool focuses on specific indicators and patterns.
+        </p>
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(72px, 1fr))',
-          gap: 12,
-          maxWidth: '100%'
-        }}>
-          {tools.map((tool) => (
-            <button
-              key={tool.id}
-              type="button"
-              onClick={() => toggleTool(tool.id)}
-              aria-label={tool.title}
-              title={tool.title}
-              style={{
-                display: 'inline-flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 8,
-                padding: '12px 14px',
-                minWidth: 72,
-                borderRadius: 12,
-                border: activeTool === tool.id ? `2px solid ${tool.color}` : '1px solid var(--border)',
-                background: activeTool === tool.id ? `${tool.color}12` : 'var(--bg-secondary)',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                fontSize: 12,
-                fontWeight: 600,
-                color: 'var(--text)'
-              }}
-            >
-              <div style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                backgroundColor: `${tool.color}15`,
-                color: tool.color,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {React.cloneElement(tool.icon as React.ReactElement, { size: 20, color: tool.color })}
-              </div>
-              <span>{tool.shortTitle}</span>
-            </button>
-          ))}
-        </div>
-
-        <div style={{
-          marginTop: 16,
+          marginTop: 12,
           padding: 12,
           backgroundColor: 'var(--bg-secondary)',
           borderRadius: 6,
@@ -166,8 +84,8 @@ export default function Tools() {
           gap: 8,
           flexWrap: 'wrap'
         }}>
-          <span className="small" style={{ fontWeight: 600, opacity: 0.7 }}>{t('toolsPage.keyboardLabel')}</span>
-          <span className="small" style={{ opacity: 0.6 }}>{t('toolsPage.keyboardHint')} &bull; {t('toolsPage.keyboardEsc')}</span>
+          <span className="small" style={{ fontWeight: 600, opacity: 0.7 }}>Keyboard shortcuts:</span>
+          <span className="small" style={{ opacity: 0.6 }}>1-4 to toggle tools • Esc to close</span>
         </div>
       </section>
 
@@ -228,7 +146,6 @@ export default function Tools() {
                 {tool.id === 'email' && <EmailHeaderAnalyzer />}
                 {tool.id === 'image' && <ImageMetadataAnalyzer />}
                 {tool.id === 'profile' && <SocialProfileVerifier />}
-                {tool.id === 'video' && <VideoMetadataAnalyzer />}
               </div>
             )}
           </div>
@@ -236,8 +153,11 @@ export default function Tools() {
       </div>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-        <div className="kicker" style={{ marginBottom: 8 }}>{t('toolsPage.proTip')}</div>
-        <p className="p" style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: t('toolsPage.proTipDesc') }} />
+        <div className="kicker" style={{ marginBottom: 8 }}>Pro Tip</div>
+        <p className="p" style={{ margin: 0 }}>
+          For the most comprehensive analysis, use the <strong>Guided Scan</strong> workflow. It automatically
+          recommends which tools to use based on your situation and combines results for better accuracy.
+        </p>
       </section>
     </div>
   );

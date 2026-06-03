@@ -2,27 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSessionStore } from '../../../state/sessionStore';
 import { analyzeMessage, analyzeEmail, analyzeImage, analyzeProfile } from '../../../services/unifiedAnalyzer';
 import {
-  MessageSquare, Mail, Image as ImageIcon, User, Video,
-  CheckCircle, ArrowRight, Info, TrendingUp, Sparkles
+  MessageSquare, Mail, Image as ImageIcon, User,
+  CheckCircle, Circle, ArrowRight, Info, TrendingUp, Sparkles
 } from 'lucide-react';
-import VideoAnalyzer from './VideoAnalyzer';
-import type { EvidenceItem, WorkflowStep } from '../../../types/scan';
 
 interface AnalysisWizardProps {
   onComplete: () => void;
-}
-
-interface AnalyzerCardProps {
-  step: WorkflowStep;
-  isNext: boolean;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-interface AnalyzerPanelProps {
-  type: string;
-  onAnalyze: (evidence: EvidenceItem) => void;
-  onClose: () => void;
 }
 
 export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
@@ -53,11 +38,8 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
       return false;
     });
 
-    // Always show at least the top 4 priority steps to ensure video is visible
-    if (suggestedSteps.length < 4) {
-      const topSteps = workflowSteps.slice(0, 4);
-      const uniqueSteps = [...new Map([...suggestedSteps, ...topSteps].map(s => [s.id, s])).values()];
-      return uniqueSteps.sort((a, b) => a.priority - b.priority);
+    if (suggestedSteps.length === 0) {
+      return workflowSteps.slice(0, 2);
     }
 
     return suggestedSteps;
@@ -72,45 +54,36 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
 
   return (
     <>
-      <section className="card" style={{ border: '1.5px solid var(--border)' }}>
-        <div className="kicker" style={{ marginBottom: 6 }}>Step 2 of 3</div>
-        <h2 className="h2" style={{ marginBottom: 10 }}>Add Evidence for Analysis</h2>
-        <p className="p" style={{ marginTop: 10, lineHeight: 1.7 }}>
+      <section className="card">
+        <div className="kicker" style={{ marginBottom: 8 }}>Step 2 of 3</div>
+        <h2 className="h2">Add Evidence for Analysis</h2>
+        <p className="p" style={{ marginTop: 8 }}>
           Add different types of evidence to build a comprehensive assessment. The more evidence, the more accurate the analysis.
         </p>
 
         <div style={{
-          marginTop: 24,
-          padding: 18,
+          marginTop: 20,
+          padding: 16,
           backgroundColor: 'var(--bg-secondary)',
-          borderRadius: 10,
-          border: '1px solid var(--border)',
+          borderRadius: 8,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: 18
+          gap: 16
         }}>
           <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-              <span className="small" style={{ fontWeight: 700, fontSize: 13 }}>Progress</span>
-              <span className="small" style={{ fontWeight: 700, fontSize: 13 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+              <span className="small" style={{ fontWeight: 600 }}>Progress</span>
+              <span className="small" style={{ fontWeight: 600 }}>
                 {completedSteps} of {totalSteps} completed
               </span>
             </div>
-            <div
-              role="progressbar"
-              aria-valuenow={Number(completedSteps)}
-              aria-valuemin={Number(0)}
-              aria-valuemax={Number(totalSteps)}
-              aria-label={`Analysis progress: ${completedSteps} of ${totalSteps} steps completed`}
-              style={{ height: 10, backgroundColor: 'var(--border)', borderRadius: 5, overflow: 'hidden' }}
-            >
+            <div style={{ height: 8, backgroundColor: 'var(--border)', borderRadius: 4, overflow: 'hidden' }}>
               <div style={{
                 height: '100%',
                 width: `${(completedSteps / totalSteps) * 100}%`,
                 backgroundColor: 'var(--primary)',
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: '0 0 8px rgba(155,125,212,.3)'
+                transition: 'width 0.3s ease'
               }} />
             </div>
           </div>
@@ -118,46 +91,37 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
 
         {currentSession.confidence > 0 && (
           <div style={{
-            marginTop: 20,
-            padding: 20,
+            marginTop: 16,
+            padding: 16,
             backgroundColor: 'var(--bg-secondary)',
-            borderRadius: 10,
-            border: '1.5px solid var(--border)'
+            borderRadius: 8,
+            border: '1px solid var(--border)'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-              <TrendingUp size={18} color="var(--primary)" />
-              <span className="small" style={{ fontWeight: 700, fontSize: 14 }}>Current Assessment</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <TrendingUp size={16} color="var(--primary)" />
+              <span className="small" style={{ fontWeight: 600 }}>Current Assessment</span>
             </div>
-            <div style={{ display: 'flex', gap: 20, marginTop: 16 }}>
+            <div style={{ display: 'flex', gap: 16, marginTop: 12 }}>
               <div>
-                <div className="small" style={{ opacity: 0.65, fontSize: 12, marginBottom: 4 }}>Confidence</div>
-                <div style={{ 
-                  fontSize: 20, 
-                  fontWeight: 700,
-                  color: 'var(--text)'
-                }}>
+                <div className="small" style={{ opacity: 0.7 }}>Confidence</div>
+                <div className="kicker" style={{ marginTop: 4 }}>
                   {Math.round(currentSession.confidence * 100)}%
                 </div>
               </div>
               <div>
-                <div className="small" style={{ opacity: 0.65, fontSize: 12, marginBottom: 4 }}>Risk Level</div>
-                <div style={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  color: currentSession.overallRiskLevel === 'high' ? 'var(--error)' :
-                         currentSession.overallRiskLevel === 'medium' ? 'var(--warning)' : 'var(--success)',
+                <div className="small" style={{ opacity: 0.7 }}>Risk Level</div>
+                <div className="kicker" style={{
+                  marginTop: 4,
+                  color: currentSession.overallRiskLevel === 'high' ? 'rgb(239 68 68)' :
+                         currentSession.overallRiskLevel === 'medium' ? 'rgb(251 146 60)' : 'rgb(34 197 94)',
                   textTransform: 'capitalize'
                 }}>
                   {currentSession.overallRiskLevel}
                 </div>
               </div>
               <div>
-                <div className="small" style={{ opacity: 0.65, fontSize: 12, marginBottom: 4 }}>Risk Score</div>
-                <div style={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  color: 'var(--text)'
-                }}>
+                <div className="small" style={{ opacity: 0.7 }}>Risk Score</div>
+                <div className="kicker" style={{ marginTop: 4 }}>
                   {currentSession.overallRiskScore}/100
                 </div>
               </div>
@@ -166,19 +130,19 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
         )}
       </section>
 
-      <section className="card" style={{ border: '1.5px solid var(--border)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 12, flexWrap: 'wrap' }}>
+      <section className="card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div className="kicker">
             <Sparkles size={16} /> Available Analyzers
           </div>
           {nextStep && (
-            <span className="badge" style={{ backgroundColor: 'var(--primary)', color: 'white', fontSize: 11 }}>
+            <span className="badge" style={{ backgroundColor: 'var(--primary)', color: 'white' }}>
               {nextStep.label} recommended
             </span>
           )}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {suggestedSteps.map((step) => (
             <AnalyzerCard
               key={step.id}
@@ -214,7 +178,7 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
       {activeAnalyzer && (
         <AnalyzerPanel
           type={activeAnalyzer}
-          onAnalyze={(evidence: EvidenceItem) => {
+          onAnalyze={(evidence: any) => {
             addEvidence(evidence);
             setActiveAnalyzer(null);
           }}
@@ -222,20 +186,20 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
         />
       )}
 
-      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1.5px solid var(--border)' }}>
-        <div className="kicker" style={{ marginBottom: 6 }}>
+      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+        <div className="kicker" style={{ marginBottom: 8 }}>
           <Info size={16} /> Ready to see results?
         </div>
-        <p className="p" style={{ lineHeight: 1.7 }}>
+        <p className="p">
           You can view results anytime, even with partial evidence. More evidence = more accurate assessment.
         </p>
-        <div style={{ display: 'flex', gap: 12, marginTop: 20, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
           <button
             onClick={onComplete}
             className="btn primary"
-            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
           >
-            View Results <ArrowRight size={18} />
+            View Results <ArrowRight size={16} />
           </button>
           {completedSteps < totalSteps && (
             <button onClick={handleFinishEarly} className="btn">
@@ -248,21 +212,19 @@ export default function AnalysisWizard({ onComplete }: AnalysisWizardProps) {
   );
 }
 
-function AnalyzerCard({ step, isNext, isActive, onClick }: AnalyzerCardProps) {
+function AnalyzerCard({ step, isNext, isActive, onClick }: any) {
   const icons: Record<string, React.ReactNode> = {
     message: <MessageSquare size={20} />,
     email: <Mail size={20} />,
     image: <ImageIcon size={20} />,
-    profile: <User size={20} />,
-    video: <Video size={20} />
+    profile: <User size={20} />
   };
 
   const colors: Record<string, string> = {
     message: '#3b82f6',
     email: '#8b5cf6',
     image: '#10b981',
-    profile: '#f59e0b',
-    video: '#ec4899'
+    profile: '#f59e0b'
   };
 
   const color = colors[step.type as string] || '#6b7280';
@@ -272,39 +234,35 @@ function AnalyzerCard({ step, isNext, isActive, onClick }: AnalyzerCardProps) {
       onClick={onClick}
       className="card"
       style={{
-        padding: 18,
-        border: isNext ? `2px solid ${color}` : isActive ? `2px solid ${color}` : '1.5px solid var(--border)',
+        padding: 16,
+        border: isNext ? `2px solid ${color}` : isActive ? `2px solid ${color}` : '1px solid var(--border)',
         cursor: 'pointer',
-        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.2s ease',
         textAlign: 'left',
-        backgroundColor: isActive ? `${color}08` : 'var(--bg)',
-        boxShadow: isActive ? `0 4px 16px ${color}15` : 'var(--shadow-sm)'
+        backgroundColor: isActive ? `${color}08` : 'var(--bg)'
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'start', gap: 14, flex: 1 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'start', gap: 12, flex: 1 }}>
           {step.completed ? (
             <div style={{
-              minWidth: 44,
-              height: 44,
+              minWidth: 40,
+              height: 40,
               borderRadius: 10,
-              backgroundColor: 'rgba(16,185,129,0.12)',
-              border: '2px solid var(--success)',
-              color: 'var(--success)',
+              backgroundColor: 'rgb(34 197 94, 0.1)',
+              color: 'rgb(34 197 94)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(16,185,129,0.15)'
+              justifyContent: 'center'
             }}>
-              <CheckCircle size={24} strokeWidth={2.5} />
+              <CheckCircle size={22} />
             </div>
           ) : (
             <div style={{
-              minWidth: 44,
-              height: 44,
+              minWidth: 40,
+              height: 40,
               borderRadius: 10,
               backgroundColor: `${color}15`,
-              border: `2px solid ${color}30`,
               color: color,
               display: 'flex',
               alignItems: 'center',
@@ -314,21 +272,21 @@ function AnalyzerCard({ step, isNext, isActive, onClick }: AnalyzerCardProps) {
             </div>
           )}
           <div style={{ flex: 1 }}>
-            <div className="small" style={{ fontWeight: 700, marginBottom: 5, fontSize: 14, color: 'var(--text)' }}>
+            <div className="small" style={{ fontWeight: 600, marginBottom: 4 }}>
               {step.label}
             </div>
-            <div className="small" style={{ opacity: 0.7, fontSize: 13, lineHeight: 1.6 }}>
+            <div className="small" style={{ opacity: 0.7, fontSize: '0.85rem' }}>
               {step.description}
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}>
-          {isNext && <span className="badge" style={{ fontSize: 10 }}>Next</span>}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-end' }}>
+          {isNext && <span className="badge" style={{ fontSize: '0.75rem' }}>Next</span>}
           {step.required && !step.completed && (
-            <span className="badge" style={{ fontSize: 10, opacity: 0.8 }}>Recommended</span>
+            <span className="badge" style={{ fontSize: '0.75rem', opacity: 0.6 }}>Recommended</span>
           )}
           {step.completed && (
-            <span className="badge" style={{ fontSize: 10, backgroundColor: 'var(--success)', color: 'white', border: 'none' }}>
+            <span className="badge" style={{ fontSize: '0.75rem', backgroundColor: 'rgb(34 197 94)', color: 'white' }}>
               Done
             </span>
           )}
@@ -338,7 +296,7 @@ function AnalyzerCard({ step, isNext, isActive, onClick }: AnalyzerCardProps) {
   );
 }
 
-function AnalyzerPanel({ type, onAnalyze, onClose }: AnalyzerPanelProps) {
+function AnalyzerPanel({ type, onAnalyze, onClose }: any) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -372,43 +330,37 @@ function AnalyzerPanel({ type, onAnalyze, onClose }: AnalyzerPanelProps) {
     setLoading(false);
   };
 
-  const handleProfileAnalyze = async (profileData: Record<string, unknown>) => {
+  const handleProfileAnalyze = async (profileData: any) => {
     setLoading(true);
     const evidence = await analyzeProfile(profileData);
     onAnalyze(evidence);
     setLoading(false);
   };
 
-  const handleVideoAnalyze = async (evidence: EvidenceItem) => {
-    onAnalyze(evidence);
-  };
-
   const titles: Record<string, string> = {
     message: 'Analyze Message Content',
     email: 'Analyze Email Headers',
     image: 'Analyze Image Metadata',
-    profile: 'Analyze Profile Information',
-    video: 'Analyze Video Metadata'
+    profile: 'Analyze Profile Information'
   };
 
   const icons: Record<string, React.ReactNode> = {
     message: <MessageSquare size={18} />,
     email: <Mail size={18} />,
     image: <ImageIcon size={18} />,
-    profile: <User size={18} />,
-    video: <Video size={18} />
+    profile: <User size={18} />
   };
 
   return (
-    <section className="card" style={{ border: '2px solid var(--primary)', boxShadow: '0 8px 24px rgba(155,125,212,.2)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 14, flexWrap: 'wrap' }}>
-        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14 }}>
+    <section className="card" style={{ border: '2px solid var(--primary)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, gap: 12, flexWrap: 'wrap' }}>
+        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {icons[type]}
           {titles[type]}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span className="small" style={{ opacity: 0.6, fontSize: 12 }}>Press Esc to close</span>
-          <button onClick={onClose} className="btn" style={{ minWidth: 'auto', padding: '8px 16px' }}>
+          <span className="small" style={{ opacity: 0.6 }}>Press Esc to close</span>
+          <button onClick={onClose} className="btn" style={{ minWidth: 'auto', padding: '6px 14px' }}>
             Close
           </button>
         </div>
@@ -418,32 +370,11 @@ function AnalyzerPanel({ type, onAnalyze, onClose }: AnalyzerPanelProps) {
       {type === 'email' && <EmailAnalyzer onAnalyze={handleEmailAnalyze} loading={loading} />}
       {type === 'image' && <ImageAnalyzer onAnalyze={handleImageAnalyze} loading={loading} />}
       {type === 'profile' && <ProfileAnalyzer onAnalyze={handleProfileAnalyze} loading={loading} />}
-      {type === 'video' && <VideoAnalyzer onAnalyze={handleVideoAnalyze} loading={loading} />}
     </section>
   );
 }
 
-interface MessageAnalyzerProps {
-  onAnalyze: (text: string) => void;
-  loading: boolean;
-}
-
-interface EmailAnalyzerProps {
-  onAnalyze: (headers: string) => void;
-  loading: boolean;
-}
-
-interface ImageAnalyzerProps {
-  onAnalyze: (file: File) => void;
-  loading: boolean;
-}
-
-interface ProfileAnalyzerProps {
-  onAnalyze: (profileData: Record<string, unknown>) => void;
-  loading: boolean;
-}
-
-function MessageAnalyzer({ onAnalyze, loading }: MessageAnalyzerProps) {
+function MessageAnalyzer({ onAnalyze, loading }: any) {
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -492,7 +423,7 @@ function MessageAnalyzer({ onAnalyze, loading }: MessageAnalyzerProps) {
   );
 }
 
-function EmailAnalyzer({ onAnalyze, loading }: EmailAnalyzerProps) {
+function EmailAnalyzer({ onAnalyze, loading }: any) {
   const [headers, setHeaders] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -541,7 +472,7 @@ function EmailAnalyzer({ onAnalyze, loading }: EmailAnalyzerProps) {
   );
 }
 
-function ImageAnalyzer({ onAnalyze, loading }: ImageAnalyzerProps) {
+function ImageAnalyzer({ onAnalyze, loading }: any) {
   const [file, setFile] = useState<File | null>(null);
 
   return (
@@ -555,7 +486,6 @@ function ImageAnalyzer({ onAnalyze, loading }: ImageAnalyzerProps) {
         onChange={(e) => setFile(e.target.files?.[0] || null)}
         className="btn"
         style={{ width: '100%' }}
-        aria-label="Upload image for metadata analysis"
       />
       {file && (
         <div className="small" style={{ marginTop: 8, padding: 8, backgroundColor: 'var(--bg-secondary)', borderRadius: 4 }}>
@@ -574,7 +504,7 @@ function ImageAnalyzer({ onAnalyze, loading }: ImageAnalyzerProps) {
   );
 }
 
-function ProfileAnalyzer({ onAnalyze, loading }: ProfileAnalyzerProps) {
+function ProfileAnalyzer({ onAnalyze, loading }: any) {
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [followerCount, setFollowerCount] = useState('');

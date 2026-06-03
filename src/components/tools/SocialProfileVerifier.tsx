@@ -6,7 +6,6 @@ import { User, AlertTriangle, ShieldCheck, XCircle, Info, Download } from 'lucid
 import { analyzeSocialProfile, getProfileRiskLevel } from '../../utils/socialProfileVerifier';
 import { mapProfileAnalysisToAlert } from '../../mappers/profileToCautionAlert';
 import { useCautionStore } from '../../state/cautionStore';
-import { showToast } from '../common/Toast';
 
 const SocialProfileVerifier: React.FC = () => {
   const [profileData, setProfileData] = useState({
@@ -23,7 +22,6 @@ const SocialProfileVerifier: React.FC = () => {
   });
   const [result, setResult] = useState<any>(null);
   const [profileUrl, setProfileUrl] = useState('');
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const addAlert = useCautionStore((s) => s.addAlert);
 
@@ -78,8 +76,6 @@ const SocialProfileVerifier: React.FC = () => {
   };
 
   const handleAnalyze = () => {
-    setIsAnalyzing(true);
-    setTimeout(() => {
     const analysis = analyzeSocialProfile({
       username: profileData.username || undefined,
       displayName: profileData.displayName || undefined,
@@ -94,23 +90,17 @@ const SocialProfileVerifier: React.FC = () => {
     });
 
     setResult(analysis);
-    setIsAnalyzing(false);
-    showToast(
-      analysis.isSuspicious ? `Profile flagged: ${analysis.riskScore}% risk` : 'Analysis complete — profile looks OK',
-      analysis.isSuspicious ? 'warning' : 'success'
-    );
 
     // Create alert if suspicious
     if (analysis.isSuspicious) {
-      const alert = mapProfileAnalysisToAlert(analysis, {
+      const alert = mapProfileAnalysisToAlert(analysis, { 
         id: `profile-${Date.now()}`,
-        username: profileData.username
+        username: profileData.username 
       });
       if (alert) {
         addAlert(alert);
       }
     }
-    }, 300);
   };
 
   const handleClear = () => {
@@ -346,15 +336,15 @@ const SocialProfileVerifier: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3 pt-4">
           <button
             onClick={handleAnalyze}
-            disabled={(!profileData.username && !profileData.displayName) || isAnalyzing}
+            disabled={!profileData.username && !profileData.displayName}
             className={`flex-1 inline-flex items-center justify-center px-6 py-3 rounded-lg text-base font-medium transition-colors ${
-              (!profileData.username && !profileData.displayName) || isAnalyzing
+              !profileData.username && !profileData.displayName
                 ? 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-cyan-600 to-teal-600 text-white hover:from-cyan-500 hover:to-teal-500 shadow-lg hover:shadow-cyan-500/30 transition-all duration-200 hover:scale-[1.02]'
             }`}
           >
-            {isAnalyzing ? <span className="spinner" style={{ marginRight: 8 }} /> : <User className="h-4 w-4 mr-2" />}
-            {isAnalyzing ? 'Analyzing...' : 'Analyze Profile'}
+            <User className="h-4 w-4 mr-2" />
+            Analyze Profile
           </button>
 
           <button
@@ -375,7 +365,6 @@ const SocialProfileVerifier: React.FC = () => {
       </div>
 
       {/* Results */}
-      <div aria-live="polite" aria-atomic="true">
       {result && (
         <div className={`border-2 rounded-xl p-6 ${
           result.isSuspicious
@@ -458,7 +447,6 @@ const SocialProfileVerifier: React.FC = () => {
           </div>
         </div>
       )}
-      </div>
 
       {/* Educational Footer */}
       <div className="mt-8 p-6 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border border-cyan-200 dark:border-cyan-800 rounded-xl">

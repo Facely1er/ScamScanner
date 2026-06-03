@@ -11,24 +11,14 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
-    try {
-      if (typeof window === 'undefined') return 'dark';
-      const stored = window.localStorage.getItem('theme');
-      if (stored === 'light' || stored === 'dark') return stored;
-      const mq = window.matchMedia?.('(prefers-color-scheme: light)');
-      return mq?.matches ? 'light' : 'dark';
-    } catch {
-      return 'dark';
-    }
+    const stored = localStorage.getItem('theme');
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   });
 
   useEffect(() => {
-    try {
-      document.documentElement.setAttribute('data-theme', theme);
-      if (typeof window !== 'undefined') window.localStorage.setItem('theme', theme);
-    } catch {
-      // ignore storage errors (e.g. private mode, quota)
-    }
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {

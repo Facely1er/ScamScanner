@@ -126,10 +126,8 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: 16,
-          marginTop: 24,
-        }}
-        className="scan-context-origins"
-        >
+          marginTop: 24
+        }}>
           {origins.map((origin) => (
             <button
               key={origin.id}
@@ -140,11 +138,8 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
                 border: selectedOrigin === origin.id ? `2px solid ${origin.color}` : '1px solid var(--border)',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                textAlign: 'center',
-                backgroundColor: 'var(--bg)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
+                textAlign: 'left',
+                backgroundColor: 'var(--bg)'
               }}
             >
               <div style={{

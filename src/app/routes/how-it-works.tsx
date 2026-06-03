@@ -2,90 +2,94 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Shield, Search, Brain, FileCheck, Lock, Eye, Zap,
-  ArrowRight, MessageSquare,
+  ArrowRight, CheckCircle, AlertTriangle, MessageSquare,
   Mail, Image as ImageIcon, User
 } from 'lucide-react';
-import { useLocale } from '../../contexts/LocaleContext';
 
 export default function HowItWorks() {
-  const { t } = useLocale();
-
   return (
-    <div className="grid loose">
+    <div className="grid" style={{ gap: 20 }}>
       <section className="card">
         <div className="kicker">
-          <Shield size={16} /> {t('howItWorks.kicker')}
+          <Shield size={16} /> Understanding Cyberstition
         </div>
-        <h1 className="h1">{t('howItWorks.title')}</h1>
-        <p className="p">{t('howItWorks.intro')}</p>
+        <h1 className="h1">How It Works</h1>
+        <p className="p">
+          Cyberstition helps you detect online scams and manipulation attempts through multi-layered analysis
+          and pattern recognition. Here's how our system protects you.
+        </p>
       </section>
 
       <section className="card">
-        <h2 className="h2">{t('howItWorks.processTitle')}</h2>
+        <h2 className="h2">Three-Step Analysis Process</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 24 }}>
           <ProcessStep
             number={1}
             icon={<Search size={32} />}
-            title={t('howItWorks.step1Title')}
-            description={t('howItWorks.step1Desc')}
+            title="Provide Context"
+            description="Tell us about the suspicious content. Where did you receive it? Who sent it? What are they asking for? This context helps us understand the situation better."
             color="#3b82f6"
           />
           <ProcessStep
             number={2}
             icon={<Brain size={32} />}
-            title={t('howItWorks.step2Title')}
-            description={t('howItWorks.step2Desc')}
+            title="Add Evidence"
+            description="Submit different types of evidence for analysis: message text, email headers, images, or profile information. The more evidence you provide, the more accurate our assessment."
             color="#8b5cf6"
           />
           <ProcessStep
             number={3}
             icon={<FileCheck size={32} />}
-            title={t('howItWorks.step3Title')}
-            description={t('howItWorks.step3Desc')}
+            title="Review Results"
+            description="Get a comprehensive risk assessment with detailed findings, pattern matches, and actionable recommendations on what to do next."
             color="#10b981"
           />
         </div>
       </section>
 
       <section className="card">
-        <h2 className="h2">{t('howItWorks.toolsTitle')}</h2>
-        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>{t('howItWorks.toolsIntro')}</p>
+        <h2 className="h2">Analysis Tools</h2>
+        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>
+          We use four specialized analyzers to examine different aspects of suspicious content:
+        </p>
         <div style={{ display: 'grid', gap: 16 }}>
           <ToolCard
             icon={<MessageSquare size={24} />}
-            title={t('howItWorks.toolMessageTitle')}
-            description={t('howItWorks.toolMessageDesc')}
+            title="Message Analysis"
+            description="Scans message text for urgency tactics, manipulation patterns, suspicious requests, and common scam phrases used to pressure victims."
             color="#3b82f6"
           />
           <ToolCard
             icon={<Mail size={24} />}
-            title={t('howItWorks.toolEmailTitle')}
-            description={t('howItWorks.toolEmailDesc')}
+            title="Email Header Analysis"
+            description="Examines email routing paths, sender authentication, and technical headers to detect spoofing, phishing attempts, and impersonation."
             color="#8b5cf6"
           />
           <ToolCard
             icon={<ImageIcon size={24} />}
-            title={t('howItWorks.toolImageTitle')}
-            description={t('howItWorks.toolImageDesc')}
+            title="Image Metadata Analysis"
+            description="Inspects image metadata, editing history, and properties to identify manipulated images, fake documents, and stolen photos."
             color="#10b981"
           />
           <ToolCard
             icon={<User size={24} />}
-            title={t('howItWorks.toolProfileTitle')}
-            description={t('howItWorks.toolProfileDesc')}
+            title="Profile Verification"
+            description="Analyzes social media profiles for fake account indicators like suspicious follower ratios, account age, posting patterns, and authenticity markers."
             color="#f59e0b"
           />
         </div>
       </section>
 
       <section className="card">
-        <h2 className="h2">{t('howItWorks.patternsTitle')}</h2>
-        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>{t('howItWorks.patternsIntro')}</p>
+        <h2 className="h2">Pattern Recognition System</h2>
+        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>
+          Our system identifies known scam patterns across multiple threat categories:
+        </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
-          <PatternCard title={t('howItWorks.patternPhishing')} items={['Fake login pages', 'Credential harvesting', 'Account verification scams']} />
-          <PatternCard title={t('howItWorks.patternRomance')} items={['Emotional manipulation', 'Investment schemes', 'Emergency fund requests']} />
-          <PatternCard title={t('howItWorks.patternInvestment')} items={['Guaranteed returns', 'Pressure tactics', 'Fake testimonials']} />
-          <PatternCard title={t('howItWorks.patternImpersonation')} items={['Fake authority figures', 'Brand impersonation', 'Stolen identities']} />
+          <PatternCard title="Phishing" items={['Fake login pages', 'Credential harvesting', 'Account verification scams']} />
+          <PatternCard title="Romance Scams" items={['Emotional manipulation', 'Investment schemes', 'Emergency fund requests']} />
+          <PatternCard title="Investment Fraud" items={['Guaranteed returns', 'Pressure tactics', 'Fake testimonials']} />
+          <PatternCard title="Impersonation" items={['Fake authority figures', 'Brand impersonation', 'Stolen identities']} />
         </div>
       </section>
 
@@ -103,58 +107,64 @@ export default function HowItWorks() {
             <Lock size={32} />
           </div>
           <div style={{ flex: 1 }}>
-            <h3 className="h3" style={{ margin: 0, marginBottom: 8 }}>{t('howItWorks.privacyTitle')}</h3>
-            <p className="p" style={{ margin: 0 }}>{t('howItWorks.privacyDesc')}</p>
+            <h3 className="h3" style={{ margin: 0, marginBottom: 8 }}>Privacy-First Design</h3>
+            <p className="p" style={{ margin: 0 }}>
+              All analysis happens locally in your browser. Your data never leaves your device unless you explicitly choose to save sessions. We don't track, collect, or store your sensitive information.
+            </p>
           </div>
         </div>
       </section>
 
       <section className="card">
-        <h2 className="h2">{t('howItWorks.riskTitle')}</h2>
-        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>{t('howItWorks.riskIntro')}</p>
+        <h2 className="h2">Risk Assessment</h2>
+        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>
+          Each analysis produces a comprehensive risk score based on multiple factors:
+        </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <RiskLevel
-            level={t('howItWorks.riskLow')}
+            level="Low Risk"
             score="0-39"
             color="rgb(34 197 94)"
-            description={t('howItWorks.riskLowDesc')}
+            description="Limited risk indicators found. Content appears legitimate but always verify through trusted channels."
           />
           <RiskLevel
-            level={t('howItWorks.riskMedium')}
+            level="Medium Risk"
             score="40-69"
             color="rgb(251 146 60)"
-            description={t('howItWorks.riskMediumDesc')}
+            description="Concerning patterns detected. Proceed with caution and verify sender identity through independent channels."
           />
           <RiskLevel
-            level={t('howItWorks.riskHigh')}
+            level="High Risk"
             score="70-100"
             color="rgb(239 68 68)"
-            description={t('howItWorks.riskHighDesc')}
+            description="Strong scam indicators detected. Do not proceed with requested actions. Block and report the sender."
           />
         </div>
       </section>
 
       <section className="card">
-        <h2 className="h2">{t('howItWorks.featuresTitle')}</h2>
+        <h2 className="h2">Key Features</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginTop: 20 }}>
-          <FeatureCard icon={<Eye size={20} />} title={t('howItWorks.featureMultiSignal')} description={t('howItWorks.featureMultiSignalDesc')} />
-          <FeatureCard icon={<Brain size={20} />} title={t('howItWorks.featurePattern')} description={t('howItWorks.featurePatternDesc')} />
-          <FeatureCard icon={<Zap size={20} />} title={t('howItWorks.featureCrossRef')} description={t('howItWorks.featureCrossRefDesc')} />
-          <FeatureCard icon={<Shield size={20} />} title={t('howItWorks.featureContext')} description={t('howItWorks.featureContextDesc')} />
-          <FeatureCard icon={<Lock size={20} />} title={t('howItWorks.featurePrivate')} description={t('howItWorks.featurePrivateDesc')} />
-          <FeatureCard icon={<FileCheck size={20} />} title={t('howItWorks.featureReports')} description={t('howItWorks.featureReportsDesc')} />
+          <FeatureCard icon={<Eye size={20} />} title="Multi-Signal Detection" description="Analyzes multiple indicators simultaneously" />
+          <FeatureCard icon={<Brain size={20} />} title="Pattern Matching" description="Identifies known scam patterns" />
+          <FeatureCard icon={<Zap size={20} />} title="Cross-Reference" description="Correlates evidence across sources" />
+          <FeatureCard icon={<Shield size={20} />} title="Context-Aware" description="Adapts analysis to situation" />
+          <FeatureCard icon={<Lock size={20} />} title="Private & Secure" description="All data stays on your device" />
+          <FeatureCard icon={<FileCheck size={20} />} title="Detailed Reports" description="Comprehensive findings & recommendations" />
         </div>
       </section>
 
       <section className="card" style={{ textAlign: 'center' }}>
-        <h2 className="h2">{t('howItWorks.ctaTitle')}</h2>
-        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>{t('howItWorks.ctaDesc')}</p>
+        <h2 className="h2">Ready to Get Started?</h2>
+        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>
+          Start analyzing suspicious content now with our guided scan workflow.
+        </p>
         <Link
           to="/scan"
           className="btn primary"
           style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
         >
-          {t('howItWorks.ctaButton')} <ArrowRight size={16} />
+          Start Analysis <ArrowRight size={16} />
         </Link>
       </section>
     </div>

@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, User, Image as ImageIcon, Mail, Video, FileText, Download, Shield, WifiOff, Target, Search, Link2, BarChart3, Brain, FileCheck } from 'lucide-react';
+import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Download, Shield } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 import { IS_WEB_BUILD } from '../../config/env';
-import { getStoreUrlByDevice } from '../../config/app';
-import { useLocale } from '../../contexts/LocaleContext';
+import { priceLabel } from '../config/product';
 
 export default function Home() {
-  const { t } = useLocale();
   const handleGetApp = () => {
-    window.open(getStoreUrlByDevice(), '_blank');
+    // TODO: Replace with actual Play Store URL
+    window.open('https://play.google.com/store/apps', '_blank');
   };
 
   // Web build: Landing page only
@@ -18,39 +17,45 @@ export default function Home() {
     return (
       <div className="grid">
         <section className="card">
-          <h1 className="h1">{t('home.heroTitle')}</h1>
-          <p className="p">{t('home.heroSubtitle')}</p>
+          <h1 className="h1">Question what looks real online.</h1>
+          <p className="p">
+            Identify scams, fake profiles, manipulated images, and suspicious emails using on-device analysis. 
+            All processing happens locally—no data collection, no tracking.
+          </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-            <Link className="btn" to="/how-it-works">{t('home.howItWorksLink')}</Link>
+            <Link className="btn" to="/about">How it works</Link>
           </div>
         </section>
 
         <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
           <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Shield size={16} /> {t('home.availableToolsKicker')}
+            <Shield size={16} /> Available Tools
           </div>
-          <p className="p" style={{ marginTop: 8 }}>{t('home.availableToolsDesc')}</p>
+          <p className="p" style={{ marginTop: 8 }}>
+            All tools are available in the app after purchase. Download to get started.
+          </p>
         </section>
 
         <div className="grid cols-2">
-          <ToolCard title={t('home.toolMessageDetective')} desc={t('home.toolMessageDetectiveDesc')} icon={<MessageSquare size={18} />} />
-          <ToolCard title={t('home.toolProfileChecker')} desc={t('home.toolProfileCheckerDesc')} icon={<User size={18} />} />
-          <ToolCard title={t('home.toolImageInspector')} desc={t('home.toolImageInspectorDesc')} icon={<ImageIcon size={18} />} />
-          <ToolCard title={t('home.toolEmailAnalyzer')} desc={t('home.toolEmailAnalyzerDesc')} icon={<Mail size={18} />} />
-          <ToolCard title={t('home.toolVideoAnalyzer')} desc={t('home.toolVideoAnalyzerDesc')} icon={<Video size={18} />} />
+          <ToolCard title="Message Detective" desc="Detect scam, phishing, and AI-generated message patterns." icon={<MessageSquare size={18} />} />
+          <ToolCard title="Profile Checker" desc="Verify social profile authenticity and identify deception signals." icon={<User size={18} />} />
+          <ToolCard title="Image Inspector" desc="Inspect metadata and detect manipulation indicators in images." icon={<ImageIcon size={18} />} />
+          <ToolCard title="Email Analyzer" desc="Analyze email headers for spoofing and routing anomalies." icon={<Mail size={18} />} />
         </div>
 
         <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
           <div className="kicker" style={{ color: 'var(--text)' }}>
-            <Download size={16} /> {t('home.getStartedKicker')}
+            <Download size={16} /> Get Started
           </div>
-          <p className="p" style={{ marginTop: 8 }}>{t('home.getStartedDesc')}</p>
+          <p className="p" style={{ marginTop: 8 }}>
+            Purchase and download the app to access all analysis tools. One-time payment, no subscription required.
+          </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
             <button onClick={handleGetApp} className="btn primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
               <Download size={16} />
-              {t('home.getTheApp')}
+              Get the app
             </button>
-            <Link className="btn" to="/pricing">{t('home.viewPricing')}</Link>
+            <Link className="btn" to="/pricing">View Pricing</Link>
           </div>
         </section>
 
@@ -59,76 +64,33 @@ export default function Home() {
     );
   }
 
-  // App build: Full functionality — value prop (Question...) is the top section; Recommended is below How It Works
+  // App build: Full functionality
   return (
-    <div className="grid loose">
-      <section id="home-top" className="card" style={{ marginTop: 0 }}>
-        <h1 className="h1">{t('home.questionTitle')}</h1>
-        <p className="p">{t('home.questionSubtitle')}</p>
-      </section>
-
-      <section className="card">
-        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Shield size={16} /> {t('howItWorks.kicker')}
-        </div>
-        <h2 className="h2" style={{ marginTop: 8 }}>{t('howItWorks.title')}</h2>
-        <p className="p">{t('howItWorks.intro')}</p>
-      </section>
-
-      <section className="card">
-        <h2 className="h2">{t('howItWorks.processTitle')}</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 24 }}>
-          <HowItWorksStep
-            number={1}
-            icon={<Search size={32} />}
-            title={t('howItWorks.step1Title')}
-            description={t('howItWorks.step1Desc')}
-            color="#3b82f6"
-          />
-          <HowItWorksStep
-            number={2}
-            icon={<Brain size={32} />}
-            title={t('howItWorks.step2Title')}
-            description={t('howItWorks.step2Desc')}
-            color="#8b5cf6"
-          />
-          <HowItWorksStep
-            number={3}
-            icon={<FileCheck size={32} />}
-            title={t('howItWorks.step3Title')}
-            description={t('howItWorks.step3Desc')}
-            color="#10b981"
-          />
-        </div>
-      </section>
-
+    <div className="grid" style={{ gap: 24 }}>
       <section className="card" style={{
         background: 'linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 100%)',
         border: '2px solid var(--primary)',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
           <div style={{
-            padding: 8,
+            padding: 12,
             borderRadius: 12,
             backgroundColor: 'var(--primary)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            width: 52,
-            height: 52
+            justifyContent: 'center'
           }}>
-            <img 
-              src="/cyberstition_logo.png" 
-              alt={t('product.brandName')} 
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
-            />
+            <Shield size={28} color="white" />
           </div>
           <div>
-            <h2 className="h2" style={{ margin: 0 }}>{t('home.guidedScanTitle')}</h2>
+            <div className="kicker" style={{ margin: 0, color: 'var(--primary)' }}>Recommended</div>
+            <h2 className="h2" style={{ margin: 0, marginTop: 4 }}>Guided Scam Scanner</h2>
           </div>
         </div>
-        <p className="p">{t('home.guidedScanIntro')}</p>
+        <p className="p">
+          Our intelligent analysis system guides you through comprehensive scam detection. Add evidence piece by piece while the system detects patterns, finds inconsistencies, and builds a confidence-rated risk assessment.
+        </p>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -141,131 +103,159 @@ export default function Home() {
         }}>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Target size={18} style={{ color: 'var(--primary)' }} /> {t('home.contextAware')}
+              <span style={{ fontSize: 20 }}>🎯</span> Context-Aware
             </div>
-            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.contextAwareDesc')}</div>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+              Analyzes based on how you received it
+            </div>
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Search size={18} style={{ color: 'var(--primary)' }} /> {t('home.patternDetection')}
+              <span style={{ fontSize: 20 }}>🔍</span> Pattern Detection
             </div>
-            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.patternDetectionDesc')}</div>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+              Identifies common scam tactics
+            </div>
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Link2 size={18} style={{ color: 'var(--primary)' }} /> {t('home.crossSignals')}
+              <span style={{ fontSize: 20 }}>🔗</span> Cross-Signals
             </div>
-            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.crossSignalsDesc')}</div>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+              Finds inconsistencies across evidence
+            </div>
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <BarChart3 size={18} style={{ color: 'var(--primary)' }} /> {t('home.confidenceScore')}
+              <span style={{ fontSize: 20 }}>📊</span> Confidence Score
             </div>
-            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{t('home.confidenceScoreDesc')}</div>
+            <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+              Shows reliability of assessment
+            </div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           <Link className="btn primary" to="/scan" style={{ fontSize: '1.05em', padding: '12px 24px' }}>
-            {t('home.startGuidedScan')}
+            Start Guided Scan
           </Link>
-          <Link className="btn" to="/how-it-works">{t('home.howItWorksLink')}</Link>
+          <Link className="btn" to="/about">How it works</Link>
         </div>
       </section>
 
-      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-        <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <img src="/cyberstition_logo.png" alt="Cyberstition™" style={{ width: 40, height: 40, objectFit: 'contain' }} />
-          {t('home.whyCyberstition')}
-        </h2>
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <Shield size={20} style={{ color: 'var(--primary)' }} />
-              <h3 className="h3" style={{ margin: 0 }}>{t('home.privateTitle')}</h3>
+      <section className="card">
+        <h1 className="h1">Question what looks real online.</h1>
+        <p className="p">
+          Cyberstition helps you identify phishing, fraud, and deception through intelligent analysis. All processing happens locally in your browser—no data collection, no tracking, complete privacy.
+        </p>
+      </section>
+
+      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Shield size={16} /> How Guided Scans Work
+        </div>
+        <div style={{ marginTop: 16 }}>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
+            <div style={{
+              minWidth: 32,
+              height: 32,
+              borderRadius: '50%',
+              backgroundColor: 'var(--primary)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 600
+            }}>1</div>
+            <div>
+              <div className="small" style={{ fontWeight: 600 }}>Provide Context</div>
+              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+                Tell us where you received it and what they're asking
+              </div>
             </div>
-            <p className="small">{t('home.privateDesc')}</p>
           </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <Download size={20} style={{ color: 'var(--primary)' }} />
-              <h3 className="h3" style={{ margin: 0 }}>{t('home.oneTimeTitle')}</h3>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
+            <div style={{
+              minWidth: 32,
+              height: 32,
+              borderRadius: '50%',
+              backgroundColor: 'var(--primary)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 600
+            }}>2</div>
+            <div>
+              <div className="small" style={{ fontWeight: 600 }}>Add Evidence</div>
+              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+                Analyze messages, profiles, emails, or images—system guides you
+              </div>
             </div>
-            <p className="small">{t('home.oneTimeDesc')}</p>
           </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <User size={20} style={{ color: 'var(--primary)' }} />
-              <h3 className="h3" style={{ margin: 0 }}>{t('home.noAccountTitle')}</h3>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
+            <div style={{
+              minWidth: 32,
+              height: 32,
+              borderRadius: '50%',
+              backgroundColor: 'var(--primary)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 600
+            }}>3</div>
+            <div>
+              <div className="small" style={{ fontWeight: 600 }}>Pattern Detection</div>
+              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+                System identifies threat patterns and cross-references signals
+              </div>
             </div>
-            <p className="small">{t('home.noAccountDesc')}</p>
           </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <WifiOff size={20} style={{ color: 'var(--primary)' }} />
-              <h3 className="h3" style={{ margin: 0 }}>{t('home.worksOfflineTitle')}</h3>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'start' }}>
+            <div style={{
+              minWidth: 32,
+              height: 32,
+              borderRadius: '50%',
+              backgroundColor: 'var(--primary)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 600
+            }}>4</div>
+            <div>
+              <div className="small" style={{ fontWeight: 600 }}>Get Assessment</div>
+              <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
+                Receive confidence-rated risk score with clear recommendations
+              </div>
             </div>
-            <p className="small">{t('home.worksOfflineDesc')}</p>
           </div>
         </div>
       </section>
 
       <div style={{ marginTop: 8 }}>
-        <h2 className="h2" style={{ marginBottom: 16 }}>{t('home.orUseIndividualTools')}</h2>
+        <h2 className="h2" style={{ marginBottom: 16 }}>Or Use Individual Tools</h2>
         <div className="grid cols-2">
-          <ToolCard
-            to="/tools?tool=message"
-            title={t('home.toolMessageDetective')}
-            desc={t('home.messageDetectiveExample')}
-            example='Example: "Urgent! Your account will be suspended in 24 hours. Click here now!"'
-            icon={<MessageSquare size={18} />}
-            color="#3b82f6"
-          />
-          <ToolCard
-            to="/tools?tool=profile"
-            title={t('home.toolProfileChecker')}
-            desc={t('home.profileCheckerExample')}
-            example={t('home.profileCheckerExample')}
-            icon={<User size={18} />}
-            color="#10b981"
-          />
-          <ToolCard
-            to="/tools?tool=image"
-            title={t('home.toolImageInspector')}
-            desc={t('home.imageInspectorExample')}
-            example={t('home.imageInspectorExample')}
-            icon={<ImageIcon size={18} />}
-            color="#f59e0b"
-          />
-          <ToolCard
-            to="/tools?tool=email"
-            title={t('home.toolEmailAnalyzer')}
-            desc={t('home.emailAnalyzerExample')}
-            example={t('home.emailAnalyzerExample')}
-            icon={<Mail size={18} />}
-            color="#ef4444"
-          />
-          <ToolCard
-            to="/tools?tool=video"
-            title={t('home.toolVideoAnalyzer')}
-            desc={t('home.videoAnalyzerExample')}
-            example={t('home.videoAnalyzerExample')}
-            icon={<Video size={18} />}
-            color="#ec4899"
-          />
+          <ToolCard to="/messages" title="Message Detective" desc="Quick analysis of message text for scam patterns." icon={<MessageSquare size={18} />} />
+          <ToolCard to="/profiles" title="Profile Checker" desc="Verify social profile authenticity signals." icon={<User size={18} />} />
+          <ToolCard to="/images" title="Image Inspector" desc="Inspect image metadata and properties." icon={<ImageIcon size={18} />} />
+          <ToolCard to="/email" title="Email Analyzer" desc="Check email headers for spoofing indicators." icon={<Mail size={18} />} />
         </div>
         <p className="small" style={{ marginTop: 12, opacity: 0.7, textAlign: 'center' }}>
-          {t('home.individualToolsNote')}
+          Individual tools provide single-signal analysis. For comprehensive assessment, use Guided Scan.
         </p>
       </div>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
         <div className="kicker" style={{ color: 'var(--text)' }}>
-          <FileText size={16} /> {t('home.yourHistoryKicker')}
+          <FileText size={16} /> Your Analysis History
         </div>
-        <p className="p" style={{ marginTop: 8 }}>{t('home.yourHistoryDesc')}</p>
+        <p className="p" style={{ marginTop: 8 }}>
+          All scan sessions and individual reports are saved to your dashboard. Review complete findings, pattern matches, confidence scores, and recommendations anytime.
+        </p>
         <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-          <Link className="btn primary" to="/dashboard">{t('home.viewDashboard')}</Link>
-          <Link className="btn" to="/account">{t('home.preferences')}</Link>
+          <Link className="btn primary" to="/dashboard">View Dashboard</Link>
+          <Link className="btn" to="/account">Preferences</Link>
         </div>
       </section>
 
@@ -274,145 +264,28 @@ export default function Home() {
   );
 }
 
-function HowItWorksStep({
-  number,
-  icon,
-  title,
-  description,
-  color,
-}: {
-  number: number;
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  color: string;
-}) {
-  return (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'start' }}>
-      <div style={{
-        minWidth: 56,
-        height: 56,
-        borderRadius: 12,
-        backgroundColor: `${color}15`,
-        color: color,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-      }}>
-        {icon}
-        <div style={{
-          position: 'absolute',
-          top: -8,
-          right: -8,
-          width: 28,
-          height: 28,
-          borderRadius: '50%',
-          backgroundColor: color,
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '0.9rem',
-          fontWeight: 600,
-        }}>
-          {number}
-        </div>
-      </div>
-      <div style={{ flex: 1 }}>
-        <h3 className="h3" style={{ margin: 0, marginBottom: 6 }}>{title}</h3>
-        <p className="p" style={{ margin: 0, opacity: 0.85 }}>{description}</p>
-      </div>
-    </div>
-  );
-}
-
-function ToolCard({ to, title, desc, icon, example, color = 'var(--primary)' }: { 
-  to?: string; 
-  title: string; 
-  desc: string; 
-  icon: React.ReactNode;
-  example?: string;
-  color?: string;
-}) {
-  const { t } = useLocale();
+function ToolCard({ to, title, desc, icon }: { to?: string; title: string; desc: string; icon: React.ReactNode }) {
   if (IS_WEB_BUILD) {
     return (
       <div className="card" style={{ opacity: 0.8 }}>
-        <div style={{ display: 'flex', alignItems: 'start', gap: 12 }}>
-          <div style={{ 
-            width: 48, 
-            height: 48, 
-            borderRadius: 12, 
-            background: `${color}20`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0
-          }}>
-            {React.cloneElement(icon as React.ReactElement, { size: 24, color })}
-          </div>
-          <div style={{ flex: 1 }}>
-            <div className="kicker" style={{ justifyContent: 'space-between', marginBottom: 4 }}>
-              <span>{title}</span>
-              <span className="badge">{t('home.inAppBadge')}</span>
-            </div>
-            <p className="p" style={{ marginTop: 8, marginBottom: 0 }}>{desc}</p>
-            {example && (
-              <p className="text-xs" style={{ 
-                fontStyle: 'italic', 
-                color: 'var(--text-muted)',
-                padding: 8,
-                background: 'var(--bg-secondary)',
-                borderRadius: 6,
-                marginTop: 8
-              }}>
-                {example}
-              </p>
-            )}
-            <div style={{ marginTop: 12 }} className="small">{t('home.availableAfterPurchase')}</div>
-          </div>
+        <div className="kicker" style={{ justifyContent: 'space-between' }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{icon} {title}</span>
+          <span className="badge">In App</span>
         </div>
+        <p className="p" style={{ marginTop: 10 }}>{desc}</p>
+        <div style={{ marginTop: 12 }} className="small">Available after purchase</div>
       </div>
     );
   }
 
   return (
     <Link to={to!} className="card" style={{ display: 'block' }}>
-      <div style={{ display: 'flex', alignItems: 'start', gap: 12 }}>
-        <div style={{ 
-          width: 48, 
-          height: 48, 
-          borderRadius: 12, 
-          background: `${color}20`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0
-        }}>
-          {React.cloneElement(icon as React.ReactElement, { size: 24, color })}
-        </div>
-        <div style={{ flex: 1 }}>
-          <div className="kicker" style={{ justifyContent: 'space-between', marginBottom: 4 }}>
-            <span>{title}</span>
-            <span className="badge">{t('home.signalsBadge')}</span>
-          </div>
-          <p className="p" style={{ marginTop: 8, marginBottom: 0 }}>{desc}</p>
-          {example && (
-            <p className="text-xs" style={{ 
-              fontStyle: 'italic', 
-              color: 'var(--text-muted)',
-              padding: 8,
-              background: 'var(--bg-secondary)',
-              borderRadius: 6,
-              marginTop: 8
-            }}>
-              {example}
-            </p>
-          )}
-          <div style={{ marginTop: 12 }} className="small">{t('home.highLevelIndicators')}</div>
-        </div>
+      <div className="kicker" style={{ justifyContent: 'space-between' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{icon} {title}</span>
+        <span className="badge">Signals</span>
       </div>
+      <p className="p" style={{ marginTop: 10 }}>{desc}</p>
+      <div style={{ marginTop: 12 }} className="small">High-level indicators only. Always verify before acting.</div>
     </Link>
   );
 }

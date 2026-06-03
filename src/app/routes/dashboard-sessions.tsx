@@ -53,7 +53,7 @@ export default function DashboardSessions() {
   }
 
   return (
-    <div className="grid">
+    <div className="grid" style={{ gap: 14 }}>
       <section className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <div>
@@ -231,7 +231,7 @@ function SessionDetailView({ session, onBack }: any) {
   };
 
   return (
-    <div className="grid">
+    <div className="grid" style={{ gap: 14 }}>
       <section className="card">
         <button onClick={onBack} className="btn" style={{ marginBottom: 12 }}>
           ← Back to Sessions

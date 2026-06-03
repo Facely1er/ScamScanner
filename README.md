@@ -1,20 +1,6 @@
 # Cyberstition
 
-A privacy-first scam detection guide that helps users identify phishing, fraud, and deception through context-aware, guided analysis.
-
-## Privacy Model
-
-**FREE TIER** - 100% local processing, zero uploads:
-- All basic analysis runs on your device
-- Messages, profiles, emails, image/video metadata
-- Complete privacy guaranteed
-
-**PREMIUM TIER** - Optional cloud AI with explicit consent:
-- Advanced deepfake video detection
-- Requires user opt-in via consent dialog
-- Data encrypted and deleted within 24 hours
-
-See [PRIVACY_TRANSPARENCY.md](./PRIVACY_TRANSPARENCY.md) for full details.
+A privacy-first scam detection guide that helps users identify phishing, fraud, and deception through context-aware, guided analysis. All processing happens locally in your browser—no data collection, no server uploads.
 
 ## Features
 
@@ -30,7 +16,6 @@ See [PRIVACY_TRANSPARENCY.md](./PRIVACY_TRANSPARENCY.md) for full details.
 - **Profile Verification**: Assess social profile authenticity and identify deception signals
 - **Image Inspection**: Reveal hidden metadata and manipulation indicators
 - **Email Header Analysis**: Check for email spoofing and routing anomalies
-- **Video Analysis**: Inspect video metadata, format, and file properties locally
 
 ### Intelligence Features
 - Pre-loaded threat pattern library for phishing, romance scams, investment fraud, and more
@@ -40,23 +25,10 @@ See [PRIVACY_TRANSPARENCY.md](./PRIVACY_TRANSPARENCY.md) for full details.
 
 ## Privacy & Security
 
-### Free Tier (100% Local)
-- ✅ All basic analysis runs on-device in your browser
-- ✅ Messages, profiles, emails, image/video metadata
-- ✅ No data collection or tracking
-- ✅ No server uploads
-- ✅ Zero external dependencies
-
-### Premium Tier (Optional Cloud AI)
-- ⚠️ Deepfake video detection requires upload
-- ✅ Explicit consent required via dialog
-- ✅ Videos encrypted in transit
-- ✅ Automatically deleted within 24 hours
-- ✅ Never used for AI training
-
-**Privacy Badges**: Look for 🟢 "100% Local" and 🟡 "Cloud AI" indicators in the app.
-
-See [PRIVACY_TRANSPARENCY.md](./PRIVACY_TRANSPARENCY.md) for complete details.
+- All analysis runs on-device in your browser
+- No data collection or tracking
+- No server uploads or account monitoring
+- Results are indicators only—always verify independently
 
 ## How It Works
 
@@ -85,77 +57,9 @@ You can also use the individual analysis tools directly:
 
 ## Development
 
-### Prerequisites
-- Node.js 18+ and npm
-- (Optional) Deepfake detection API key from [TruthScan](https://truthscan.com)
-
-### Setup
-
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Configure environment** (optional for deepfake detection):
-   ```bash
-   cp .env.example .env
-   # Edit .env and add your API key
-   ```
-
-3. **Start development server**:
-   ```bash
-   # Web build (basic features)
-   npm run dev
-
-   # App build (full features including deepfake detection)
-   npm run dev:app
-   ```
-
-4. **Build for production**:
-   ```bash
-   # Web build
-   npm run build:web
-
-   # App build (with deepfake support)
-   npm run build:app
-   ```
-
-### Mobile App Development
-
-For Android:
-```bash
-npm run android:init      # First time only
-npm run android:sync      # Sync web assets to Android
-npm run android:open      # Open in Android Studio
-npm run android:run       # Build and run on device
-```
-
-For iOS:
-```bash
-npm run ios:init          # First time only
-npm run ios:sync          # Sync web assets to iOS
-npm run ios:open          # Open in Xcode
-npm run ios:run           # Build and run on device
-```
-
-### Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# Build target: 'web' or 'app'
-VITE_BUILD_TARGET=app
-
-# Deepfake Detection (Premium Feature)
-VITE_ENABLE_DEEPFAKE=true
-VITE_DEEPFAKE_PROVIDER=truthscan
-VITE_DEEPFAKE_API_KEY=your_api_key_here
-```
-
-**Note**: Deepfake detection requires:
-- `VITE_BUILD_TARGET=app` (only available in app builds)
-- A valid API key from a supported provider
-- Without an API key, basic video metadata analysis still works
+1. Install dependencies: `npm install`
+2. Start development server: `npm run dev`
+3. Build for production: `npm run build`
 
 ## Technology Stack
 
