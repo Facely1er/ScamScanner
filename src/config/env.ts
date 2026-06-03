@@ -1,9 +1,8 @@
 /**
- * Environment configuration for build targets
- * Determines if this is a web build (landing page) or app build (full functionality)
+ * Build configuration.
+ * Feature gating is disabled, so all builds run in fully functional app mode.
  */
 
-export const BUILD_TARGET = import.meta.env.VITE_BUILD_TARGET || 'web';
-export const IS_WEB_BUILD = BUILD_TARGET === 'web';
-export const IS_APP_BUILD = BUILD_TARGET === 'app';
-
+export const BUILD_TARGET = 'app';
+export const IS_WEB_BUILD = false;
+export const IS_APP_BUILD = true;

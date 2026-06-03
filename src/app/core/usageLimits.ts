@@ -1,19 +1,8 @@
 /**
- * Usage limits enforcement
- * For web builds: Always locked (landing page only)
- * For app builds: Always unlocked (users paid to download)
+ * Usage limits compatibility module.
+ * Feature gating is disabled, so tools are always available.
  */
 
-import { IS_APP_BUILD, IS_WEB_BUILD } from '../../config/env';
-
-type UsageRecord = {
-  used: number;
-  resetAt: number; // epoch ms
-  toolId: string;
-};
-
-const STORAGE_PREFIX = 'cyberstition_usage_';
-const UNLOCK_KEY = 'cyberstition_unlocked';
 const USAGE_EVENT = 'cyberstition:usage';
 
 // Tool IDs mapping
@@ -25,41 +14,21 @@ export const TOOL_IDS = {
 } as const;
 
 /**
- * Check if user has unlocked premium access
- * Web builds: Always locked (landing page only)
- * App builds: Always unlocked (users paid to download)
+ * Feature gating disabled: always unlocked.
  */
 export function isUnlocked(): boolean {
-  if (typeof window === 'undefined') return false;
-  
-  // Web builds are always locked - no tool access
-  if (IS_WEB_BUILD) {
-    return false;
-  }
-  
-  // App builds are always unlocked - users paid to download
-  if (IS_APP_BUILD) {
-    // TODO: In production, verify Play Store purchase status here
-    return true;
-  }
-  
-  // Fallback: check localStorage (for development/testing)
-  const unlocked = window.localStorage.getItem(UNLOCK_KEY);
-  return unlocked === 'true';
+  return true;
 }
 
 /**
- * Set unlock status (called after successful purchase)
+ * Kept for compatibility; unlock state is always on.
  */
 export function setUnlocked(unlocked: boolean): void {
+  void unlocked;
   if (typeof window === 'undefined') return;
-  window.localStorage.setItem(UNLOCK_KEY, unlocked ? 'true' : 'false');
   window.dispatchEvent(new CustomEvent(USAGE_EVENT));
 }
 
-/**
- * Get next midnight in local time (24h from last reset)
- */
 function getNextMidnightMs(now = new Date()): number {
   const tomorrow = new Date(now);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -68,51 +37,7 @@ function getNextMidnightMs(now = new Date()): number {
 }
 
 /**
- * Load usage record for a tool
- */
-function loadRecord(toolId: string): UsageRecord {
-  const key = STORAGE_PREFIX + toolId;
-  const raw = typeof window !== 'undefined' ? window.localStorage.getItem(key) : null;
-  
-  if (!raw) {
-    return { used: 0, resetAt: getNextMidnightMs(), toolId };
-  }
-  
-  try {
-    const parsed = JSON.parse(raw) as UsageRecord;
-    if (typeof parsed.used !== 'number' || typeof parsed.resetAt !== 'number') {
-      return { used: 0, resetAt: getNextMidnightMs(), toolId };
-    }
-    return { ...parsed, toolId };
-  } catch {
-    return { used: 0, resetAt: getNextMidnightMs(), toolId };
-  }
-}
-
-/**
- * Save usage record
- */
-function saveRecord(record: UsageRecord): void {
-  const key = STORAGE_PREFIX + record.toolId;
-  window.localStorage.setItem(key, JSON.stringify(record));
-  window.dispatchEvent(new CustomEvent(USAGE_EVENT, { detail: { toolId: record.toolId } }));
-}
-
-/**
- * Normalize record (reset if past reset time)
- */
-function normalizeRecord(record: UsageRecord): UsageRecord {
-  const nowMs = Date.now();
-  if (nowMs >= record.resetAt) {
-    return { used: 0, resetAt: getNextMidnightMs(new Date(nowMs)), toolId: record.toolId };
-  }
-  return record;
-}
-
-/**
- * Get usage status for a tool
- * Web builds: Always locked
- * App builds: Always unlocked
+ * Get usage status for a tool (always unlocked).
  */
 export function getUsageStatus(toolId: string): {
   toolId: string;
@@ -122,37 +47,21 @@ export function getUsageStatus(toolId: string): {
   resetAt: number;
   isUnlocked: boolean;
 } {
-  const unlocked = isUnlocked();
-  
-  // App builds are always unlocked
-  if (unlocked) {
-    return {
-      toolId,
-      used: 0,
-      remaining: Infinity,
-      limitReached: false,
-      resetAt: getNextMidnightMs(),
-      isUnlocked: true,
-    };
-  }
-
-  // Web builds are always locked (no tool access)
   return {
     toolId,
     used: 0,
-    remaining: 0,
-    limitReached: true,
+    remaining: Infinity,
+    limitReached: false,
     resetAt: getNextMidnightMs(),
-    isUnlocked: false,
+    isUnlocked: true,
   };
 }
 
 /**
- * Check if tool can be used
- * Web builds: Always false (no tool access)
- * App builds: Always true (users paid to download)
+ * Check if tool can be used (always true).
  */
 export function canUseTool(toolId: string): boolean {
+  void toolId;
   return isUnlocked();
 }
 
@@ -161,19 +70,7 @@ export function canUseTool(toolId: string): boolean {
  * Returns true if allowed, false if limit reached
  */
 export function consumeFreeUse(toolId: string): boolean {
-  if (isUnlocked()) {
-    return true; // Unlimited for unlocked users
-  }
-
-  const status = getUsageStatus(toolId);
-  if (status.limitReached) {
-    return false;
-  }
-
-  const record = normalizeRecord(loadRecord(toolId));
-  record.used += 1;
-  saveRecord(record);
-  
+  void toolId;
   return true;
 }
 
@@ -192,4 +89,3 @@ export function subscribeToUsageChanges(handler: () => void): () => void {
     window.removeEventListener('storage', listener);
   };
 }
-

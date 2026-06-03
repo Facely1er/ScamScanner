@@ -1,5 +1,4 @@
 import React from 'react';
-import { Download } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
 import { priceLabel } from '../config/product';
 
@@ -22,26 +21,17 @@ export default function About() {
       </section>
 
       <section className="card">
-        <h2 className="h2">Pricing</h2>
+        <h2 className="h2">Access</h2>
         <p className="p">
-          Cyberstition is available as a paid app. Purchase once to unlock all features.
+          Cyberstition is fully available in the web app with no account and no subscription.
         </p>
         <ul className="small" style={{ marginTop: 12, paddingLeft: 20 }}>
-          <li>One-time purchase — {priceLabel}</li>
+          <li>All core analysis tools are available by default</li>
+          <li>Optional one-time support pricing — {priceLabel}</li>
           <li>No subscription</li>
           <li>No account required</li>
           <li>Local-only analysis</li>
         </ul>
-        <div style={{ marginTop: 16 }}>
-          <button
-            onClick={() => window.open('https://play.google.com/store/apps', '_blank')}
-            className="btn primary"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
-          >
-            <Download size={16} />
-            Get the app
-          </button>
-        </div>
       </section>
 
       <section className="card">
@@ -50,7 +40,7 @@ export default function About() {
           <div style={{ marginBottom: 20 }}>
             <h3 className="h3">How do I purchase the app?</h3>
             <p className="small" style={{ opacity: 0.9 }}>
-              Download from the Play Store. One-time purchase of {priceLabel}, no subscription required.
+              You can use the full web app immediately. Optional one-time support pricing is {priceLabel} on the pricing page.
             </p>
           </div>
           
@@ -73,7 +63,7 @@ export default function About() {
           <div style={{ marginBottom: 20 }}>
             <h3 className="h3">Does it work offline?</h3>
             <p className="small" style={{ opacity: 0.9 }}>
-              Yes! All analysis happens on your device. Once the app is loaded, you can use all tools without an internet connection. 
+              Yes! All analysis happens on your device. Once the web app is loaded, you can use all tools without an internet connection. 
               No data is sent to external servers.
             </p>
           </div>
@@ -82,7 +72,7 @@ export default function About() {
             <h3 className="h3">What browsers/devices are supported?</h3>
             <p className="small" style={{ opacity: 0.9 }}>
               Cyberstition works in modern browsers (Chrome, Firefox, Safari, Edge) on desktop and mobile devices. 
-              The app version is available on Android via the Play Store.
+              For best results, keep your browser updated.
             </p>
           </div>
 
@@ -97,7 +87,7 @@ export default function About() {
           <div style={{ marginBottom: 20 }}>
             <h3 className="h3">Can I get a refund?</h3>
             <p className="small" style={{ opacity: 0.9 }}>
-              Refund policies are handled through the Play Store. Please refer to Google's refund policy for app purchases.
+              If you choose optional one-time support, refund terms are provided at checkout.
             </p>
           </div>
         </div>

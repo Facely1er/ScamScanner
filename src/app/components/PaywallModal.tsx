@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Download } from 'lucide-react';
-import { priceLabel } from '../config/product';
+import { X, ArrowRight } from 'lucide-react';
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -14,10 +13,9 @@ export default function PaywallModal({ isOpen, onClose, toolName }: PaywallModal
 
   if (!isOpen) return null;
 
-  const handleUnlock = () => {
+  const handleContinue = () => {
     onClose();
-    // TODO: Replace with actual Play Store URL
-    window.open('https://play.google.com/store/apps', '_blank');
+    navigate('/tools');
   };
 
   return (
@@ -68,28 +66,27 @@ export default function PaywallModal({ isOpen, onClose, toolName }: PaywallModal
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <Download size={24} style={{ color: 'var(--primary)' }} />
-          <h2 style={{ fontSize: 22, fontWeight: 600, margin: 0 }}>Get the App</h2>
+          <ArrowRight size={24} style={{ color: 'var(--primary)' }} />
+          <h2 style={{ fontSize: 22, fontWeight: 600, margin: 0 }}>Continue</h2>
         </div>
 
         <p className="p" style={{ marginBottom: 24 }}>
           {toolName 
-            ? `${toolName} is available in the app. Purchase and download to access all tools.`
-            : "This feature is available in the app. Purchase and download to access all tools."}
+            ? `${toolName} is available now. Open tools to continue your analysis.`
+            : "This feature is available now. Open tools to continue your analysis."}
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <button
-            onClick={handleUnlock}
+            onClick={handleContinue}
             className="btn primary"
             style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
           >
-            <Download size={16} />
-            Get the app — {priceLabel}
+            <ArrowRight size={16} />
+            Open Tools
           </button>
         </div>
       </div>
     </div>
   );
 }
-
