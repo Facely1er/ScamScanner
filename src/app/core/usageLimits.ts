@@ -23,8 +23,7 @@ export function isUnlocked(): boolean {
 /**
  * Kept for compatibility; unlock state is always on.
  */
-export function setUnlocked(unlocked: boolean): void {
-  void unlocked;
+export function setUnlocked(_unlocked: boolean): void {
   if (typeof window === 'undefined') return;
   window.dispatchEvent(new CustomEvent(USAGE_EVENT));
 }
@@ -60,17 +59,15 @@ export function getUsageStatus(toolId: string): {
 /**
  * Check if tool can be used (always true).
  */
-export function canUseTool(toolId: string): boolean {
-  void toolId;
+export function canUseTool(_toolId: string): boolean {
   return isUnlocked();
 }
 
 /**
  * Consume one free use for a tool
- * Returns true if allowed, false if limit reached
+ * Compatibility behavior: always returns true.
  */
-export function consumeFreeUse(toolId: string): boolean {
-  void toolId;
+export function consumeFreeUse(_toolId: string): boolean {
   return true;
 }
 
