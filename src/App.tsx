@@ -16,6 +16,9 @@ import Terms from './app/routes/terms';
 import More from './app/routes/more';
 import Dashboard from './app/routes/dashboard';
 import Account from './app/routes/account';
+import Login from './app/routes/login';
+import Signup from './app/routes/signup';
+import DashboardSessions from './app/routes/dashboard-sessions';
 import NotFound from './app/routes/not-found';
 
 export default function App() {
@@ -36,6 +39,8 @@ function WebRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </WebShell>
@@ -56,7 +61,10 @@ function AppRoutes() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/more" element={<More />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/sessions" element={<DashboardSessions />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/messages" element={<Navigate to="/tools" replace />} />
         <Route path="/profiles" element={<Navigate to="/tools" replace />} />
         <Route path="/images" element={<Navigate to="/tools" replace />} />

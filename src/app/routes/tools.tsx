@@ -68,62 +68,50 @@ export default function Tools() {
   };
 
   return (
-    <div className="grid" style={{ gap: 20 }}>
+    <div className="grid gap-20">
       <section className="card">
         <h1 className="h1">Analysis Tools</h1>
         <p className="p">
           Use these specialized tools to analyze different types of suspicious content. Each tool focuses on specific indicators and patterns.
         </p>
-        <div style={{
-          marginTop: 12,
-          padding: 12,
-          backgroundColor: 'var(--bg-secondary)',
-          borderRadius: 6,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          flexWrap: 'wrap'
-        }}>
-          <span className="small" style={{ fontWeight: 600, opacity: 0.7 }}>Keyboard shortcuts:</span>
-          <span className="small" style={{ opacity: 0.6 }}>1-4 to toggle tools • Esc to close</span>
+        <div className="kbd-bar">
+          <span className="small font-semibold opacity-7">Keyboard shortcuts:</span>
+          <span className="small opacity-6">1-4 to toggle tools • Esc to close</span>
         </div>
       </section>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div className="tool-list">
         {tools.map((tool) => (
           <div key={tool.id}>
             <button
               onClick={() => toggleTool(tool.id)}
-              className="card"
+              className="card w-full text-left cursor-pointer"
               style={{
-                width: '100%',
                 padding: 20,
                 border: activeTool === tool.id ? `2px solid ${tool.color}` : '1px solid var(--border)',
-                cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                textAlign: 'left',
-                backgroundColor: activeTool === tool.id ? `${tool.color}08` : 'var(--bg)'
+                backgroundColor: activeTool === tool.id ? `${tool.color}08` : 'var(--bg)',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
-                  <div style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: 12,
-                    backgroundColor: `${tool.color}15`,
-                    color: tool.color,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
+              <div className="d-flex justify-between items-center gap-16">
+                <div className="d-flex items-center gap-16 flex-1">
+                  <div
+                    className="d-flex items-center justify-center"
+                    style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: 12,
+                      backgroundColor: `${tool.color}15`,
+                      color: tool.color,
+                    }}
+                  >
                     {tool.icon}
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div className="small" style={{ fontWeight: 600, marginBottom: 4 }}>
+                  <div className="flex-1">
+                    <div className="small font-semibold mb-4">
                       {tool.title}
                     </div>
-                    <div className="small" style={{ opacity: 0.8, fontSize: '0.85rem' }}>
+                    <div className="small opacity-8" style={{ fontSize: '0.85rem' }}>
                       {tool.description}
                     </div>
                   </div>
@@ -135,13 +123,10 @@ export default function Tools() {
             </button>
 
             {activeTool === tool.id && (
-              <div style={{
-                marginTop: 16,
-                padding: 24,
-                backgroundColor: 'var(--bg-secondary)',
-                borderRadius: 8,
-                border: `2px solid ${tool.color}`
-              }}>
+              <div
+                className="tool-panel"
+                style={{ border: `2px solid ${tool.color}` }}
+              >
                 {tool.id === 'message' && <AICheckMessagePanel />}
                 {tool.id === 'email' && <EmailHeaderAnalyzer />}
                 {tool.id === 'image' && <ImageMetadataAnalyzer />}
@@ -152,9 +137,9 @@ export default function Tools() {
         ))}
       </div>
 
-      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-        <div className="kicker" style={{ marginBottom: 8 }}>Pro Tip</div>
-        <p className="p" style={{ margin: 0 }}>
+      <section className="card card-secondary">
+        <div className="kicker mb-8">Pro Tip</div>
+        <p className="p m-0">
           For the most comprehensive analysis, use the <strong>Guided Scan</strong> workflow. It automatically
           recommends which tools to use based on your situation and combines results for better accuracy.
         </p>

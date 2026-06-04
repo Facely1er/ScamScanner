@@ -26,32 +26,20 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div style={{ 
-          padding: '40px 20px', 
-          maxWidth: '600px', 
-          margin: '0 auto',
-          textAlign: 'center'
-        }}>
-          <h1 style={{ color: 'var(--error)', marginBottom: '16px' }}>Something went wrong</h1>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
+        <div className="error-boundary-wrap">
+          <h1 className="text-error mb-16">Something went wrong</h1>
+          <p className="text-secondary-color mb-24">
             {this.state.error?.message || 'An unexpected error occurred'}
           </p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="btn primary"
           >
             Reload Page
           </button>
-          <details style={{ marginTop: '24px', textAlign: 'left' }}>
-            <summary style={{ cursor: 'pointer', marginBottom: '12px' }}>Error Details</summary>
-            <pre style={{ 
-              background: 'var(--bg-secondary)', 
-              padding: '16px', 
-              borderRadius: '8px',
-              overflow: 'auto',
-              fontSize: '12px',
-              color: 'var(--text-secondary)'
-            }}>
+          <details className="mt-24 text-left">
+            <summary className="cursor-pointer mb-12">Error Details</summary>
+            <pre className="error-boundary-pre">
               {this.state.error?.stack}
             </pre>
           </details>
@@ -62,4 +50,3 @@ export class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
-

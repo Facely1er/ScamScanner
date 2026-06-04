@@ -29,40 +29,34 @@ export default function Signup() {
       setError(error.message);
       setLoading(false);
     } else {
-      // Redirect to home after signup (though signup shouldn't be accessible)
       navigate('/');
     }
   };
 
   return (
-    <div className="grid" style={{ maxWidth: 480, margin: '0 auto', gap: 14 }}>
+    <div className="grid container-sm" style={{ gap: 14 }}>
       <section className="card">
-        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="kicker d-flex items-center gap-8">
           <UserPlus size={16} /> Create Account
         </div>
-        <h1 className="h1" style={{ marginTop: 10 }}>Get started</h1>
+        <h1 className="h1 mt-10">Get started</h1>
         <p className="p">Create an account to save reports and manage your analysis history.</p>
 
-        <div className="card" style={{ padding: 12, marginTop: 16, backgroundColor: 'rgb(240 253 244)', border: '1px solid rgb(34 197 94)' }}>
-          <div className="small" style={{ color: 'rgb(21 128 61)' }}>
+        <div className="card p-12 mt-16 notice-success">
+          <div className="small text-green">
             Your account is stored locally on this device only. No data is sent to any server.
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ marginTop: 24 }}>
+        <form onSubmit={handleSubmit} className="mt-24">
           {error && (
-            <div className="card" style={{
-              padding: 12,
-              marginBottom: 14,
-              border: '1px solid rgb(239 68 68)',
-              backgroundColor: 'rgb(254 242 242)'
-            }}>
-              <div className="small" style={{ color: 'rgb(153 27 27)' }}>{error}</div>
+            <div className="card p-12 mb-14 notice-error">
+              <div className="small text-red">{error}</div>
             </div>
           )}
 
-          <div style={{ marginBottom: 14 }}>
-            <label htmlFor="fullName" className="small" style={{ display: 'block', marginBottom: 6 }}>
+          <div className="mb-14">
+            <label htmlFor="fullName" className="small d-block mb-6">
               Full Name
             </label>
             <input
@@ -71,19 +65,13 @@ export default function Signup() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
-              style={{
-                width: '100%',
-                padding: '10px 12px',
-                border: '1px solid #e0e0e0',
-                borderRadius: 6,
-                fontSize: 15,
-              }}
+              className="input"
               placeholder="John Doe"
             />
           </div>
 
-          <div style={{ marginBottom: 14 }}>
-            <label htmlFor="email" className="small" style={{ display: 'block', marginBottom: 6 }}>
+          <div className="mb-14">
+            <label htmlFor="email" className="small d-block mb-6">
               Email Address
             </label>
             <input
@@ -97,8 +85,8 @@ export default function Signup() {
             />
           </div>
 
-          <div style={{ marginBottom: 20 }}>
-            <label htmlFor="password" className="small" style={{ display: 'block', marginBottom: 6 }}>
+          <div className="mb-20">
+            <label htmlFor="password" className="small d-block mb-6">
               Password
             </label>
             <input
@@ -115,15 +103,14 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="btn primary"
-            style={{ width: '100%' }}
+            className="btn primary w-full"
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
 
-        <div className="small" style={{ textAlign: 'center', marginTop: 16 }}>
-          Already have an account? <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 500 }}>Sign in</Link>
+        <div className="small text-center mt-16">
+          Already have an account? <Link to="/login" className="text-link font-medium">Sign in</Link>
         </div>
       </section>
     </div>

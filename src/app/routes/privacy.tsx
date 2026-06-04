@@ -6,13 +6,13 @@ const CONTACT_EMAIL = 'support@cyberstition.com';
 
 export default function Privacy() {
   return (
-    <div className="grid" style={{ maxWidth: 720, margin: '0 auto' }}>
+    <div className="grid container-lg">
       <section className="card">
-        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="kicker d-flex items-center gap-8">
           <Shield size={16} /> Legal
         </div>
         <h1 className="h1">Privacy Policy</h1>
-        <p className="p" style={{ opacity: 0.7 }}>Last updated: {LAST_UPDATED}</p>
+        <p className="p opacity-7">Last updated: {LAST_UPDATED}</p>
       </section>
 
       <section className="card">
@@ -25,8 +25,8 @@ export default function Privacy() {
 
       <section className="card">
         <h2 className="h2">Data We Do Not Collect</h2>
-        <p className="p" style={{ marginBottom: 12 }}>We do not collect or transmit:</p>
-        <ul className="small" style={{ paddingLeft: 20, lineHeight: 1.9 }}>
+        <p className="p mb-12">We do not collect or transmit:</p>
+        <ul className="small pl-5 line-height-loose">
           <li>Messages, emails, or content you submit for analysis</li>
           <li>Images or files you upload</li>
           <li>Profile information you enter</li>
@@ -42,13 +42,13 @@ export default function Privacy() {
           Cyberstition stores the following data locally in your browser using localStorage.
           This data never leaves your device:
         </p>
-        <ul className="small" style={{ paddingLeft: 20, lineHeight: 1.9, marginTop: 10 }}>
+        <ul className="small pl-5 line-height-loose mt-10">
           <li>Investigation session history and results</li>
           <li>Report credits balance and redeemed license keys</li>
           <li>App preferences (theme, analysis settings)</li>
           <li>Monthly investigation usage counter</li>
         </ul>
-        <p className="p" style={{ marginTop: 12 }}>
+        <p className="p mt-12">
           You can clear all stored data at any time by clearing your browser's site data for this domain.
         </p>
       </section>
@@ -60,7 +60,7 @@ export default function Privacy() {
           you interact directly with those platforms and are subject to their respective
           privacy policies. Cyberstition does not receive or store your payment details.
         </p>
-        <p className="p" style={{ marginTop: 10 }}>
+        <p className="p mt-10">
           After purchase, a license key is delivered to you by email. The key is redeemed
           locally in the app. No account creation is required.
         </p>
@@ -104,7 +104,7 @@ export default function Privacy() {
         <h2 className="h2">Contact</h2>
         <p className="p">
           Questions about this policy? Email us at{' '}
-          <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--primary)' }}>{CONTACT_EMAIL}</a>.
+          <a href={`mailto:${CONTACT_EMAIL}`} className="text-link">{CONTACT_EMAIL}</a>.
         </p>
       </section>
     </div>

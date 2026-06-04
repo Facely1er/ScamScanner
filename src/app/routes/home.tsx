@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Shield, Crosshair, ScanSearch, GitMerge, BarChart2 } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
-import NextSteps from '../../components/common/NextSteps';
 
 export default function Home() {
   return (

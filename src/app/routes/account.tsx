@@ -14,20 +14,20 @@ export default function Preferences() {
   return (
     <div className="grid" style={{ gap: 14 }}>
       <section className="card">
-        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="kicker d-flex items-center gap-8">
           <Settings size={16} /> Preferences
         </div>
         <h1 className="h1">Preferences</h1>
         <p className="p">Configure your analysis preferences and settings.</p>
       </section>
 
-      <div className="card" style={{ padding: 16, backgroundColor: 'rgb(240 253 244)', border: '1px solid rgb(34 197 94)' }}>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-          <Shield size={20} style={{ color: 'rgb(21 128 61)', marginTop: 2 }} />
+      <div className="card p-16 notice-success">
+        <div className="info-row">
+          <Shield size={20} className="text-green mt-2 flex-shrink-0" />
           <div>
-            <div style={{ fontWeight: 600, marginBottom: 4, color: 'rgb(21 128 61)' }}>Privacy First</div>
-            <div className="small" style={{ color: 'rgb(21 128 61)' }}>
-              All data is stored locally on your device. No information is collected or transmitted to external servers. 
+            <div className="font-semibold mb-4 text-green">Privacy First</div>
+            <div className="small text-green">
+              All data is stored locally on your device. No information is collected or transmitted to external servers.
               Your privacy and security remain under your control.
             </div>
           </div>
@@ -35,28 +35,28 @@ export default function Preferences() {
       </div>
 
       <section className="card">
-        <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <h2 className="h2 heading-with-icon">
           <Settings size={20} /> Analysis Preferences
         </h2>
-        <div className="small" style={{ marginBottom: 16, opacity: 0.8 }}>
+        <div className="small mb-16 opacity-8">
           All settings are stored locally on your device.
         </div>
 
-        <div className="grid" style={{ gap: 16 }}>
-          <div className="card" style={{ padding: 16 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Auto-save Reports</div>
-                <div className="small" style={{ opacity: 0.8 }}>
+        <div className="grid gap-16">
+          <div className="card p-16">
+            <div className="d-flex justify-between items-start">
+              <div className="flex-1">
+                <div className="font-semibold mb-4">Auto-save Reports</div>
+                <div className="small opacity-8">
                   Automatically save analysis reports to your dashboard.
                 </div>
               </div>
-              <label style={{ position: 'relative', display: 'inline-block', width: 48, height: 24 }}>
+              <label className="toggle-label">
                 <input
                   type="checkbox"
                   checked={preferences.saveReportsAutomatically}
                   onChange={(e) => handlePreferenceChange('saveReportsAutomatically', e.target.checked)}
-                  style={{ opacity: 0, width: 0, height: 0 }}
+                  className="toggle-input"
                 />
                 <span
                   style={{
@@ -74,7 +74,6 @@ export default function Preferences() {
                   <span
                     style={{
                       position: 'absolute',
-                      content: '',
                       height: 18,
                       width: 18,
                       left: preferences.saveReportsAutomatically ? 26 : 3,
@@ -89,20 +88,20 @@ export default function Preferences() {
             </div>
           </div>
 
-          <div className="card" style={{ padding: 16 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Show Risk Warnings</div>
-                <div className="small" style={{ opacity: 0.8 }}>
+          <div className="card p-16">
+            <div className="d-flex justify-between items-start">
+              <div className="flex-1">
+                <div className="font-semibold mb-4">Show Risk Warnings</div>
+                <div className="small opacity-8">
                   Display detailed warnings for high-risk content.
                 </div>
               </div>
-              <label style={{ position: 'relative', display: 'inline-block', width: 48, height: 24 }}>
+              <label className="toggle-label">
                 <input
                   type="checkbox"
                   checked={preferences.showRiskWarnings}
                   onChange={(e) => handlePreferenceChange('showRiskWarnings', e.target.checked)}
-                  style={{ opacity: 0, width: 0, height: 0 }}
+                  className="toggle-input"
                 />
                 <span
                   style={{
@@ -120,7 +119,6 @@ export default function Preferences() {
                   <span
                     style={{
                       position: 'absolute',
-                      content: '',
                       height: 18,
                       width: 18,
                       left: preferences.showRiskWarnings ? 26 : 3,
@@ -135,10 +133,10 @@ export default function Preferences() {
             </div>
           </div>
 
-          <div className="card" style={{ padding: 16 }}>
+          <div className="card p-16">
             <div>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Analysis History (Days)</div>
-              <div className="small" style={{ opacity: 0.8, marginBottom: 12 }}>
+              <div className="font-semibold mb-8">Analysis History (Days)</div>
+              <div className="small opacity-8 mb-12">
                 Retain analysis history for the selected number of days.
               </div>
               <select
@@ -158,16 +156,16 @@ export default function Preferences() {
       </section>
 
       <section className="card">
-        <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <h2 className="h2 heading-with-icon">
           <Download size={20} /> Access & Support
         </h2>
-        <div className="grid" style={{ gap: 12 }}>
-          <Link to="/pricing" className="card" style={{ padding: 16, display: 'block', textDecoration: 'none' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Download size={20} style={{ color: 'var(--primary)' }} />
+        <div className="grid gap-12">
+          <Link to="/pricing" className="card p-16 d-block" style={{ textDecoration: 'none' }}>
+            <div className="d-flex items-center gap-12">
+              <Download size={20} className="text-primary" />
               <div>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>View Access Details</div>
-                <div className="small" style={{ opacity: 0.8 }}>
+                <div className="font-semibold mb-4">View Access Details</div>
+                <div className="small opacity-8">
                   Full web access is available now. Optional support details are listed here.
                 </div>
               </div>
@@ -177,35 +175,35 @@ export default function Preferences() {
       </section>
 
       <section className="card">
-        <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <h2 className="h2 heading-with-icon">
           <Info size={20} /> About
         </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="d-flex flex-col gap-8">
           <div>
-            <div style={{ fontWeight: 600, marginBottom: 4 }}>{brandName}</div>
-            <div className="small" style={{ opacity: 0.8, marginBottom: 4 }}>{tagline}</div>
-            <div className="small" style={{ opacity: 0.6 }}>{publisher}</div>
+            <div className="font-semibold mb-4">{brandName}</div>
+            <div className="small opacity-8 mb-4">{tagline}</div>
+            <div className="small opacity-6">{publisher}</div>
           </div>
         </div>
       </section>
 
       <section className="card">
-        <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <h2 className="h2 heading-with-icon">
           <Shield size={20} /> Security & Privacy
         </h2>
 
-        <div className="grid" style={{ gap: 12 }}>
+        <div className="grid gap-12">
           <div>
-            <div className="small" style={{ marginBottom: 8, fontWeight: 600 }}>Local Storage Only</div>
-            <p className="small" style={{ opacity: 0.8 }}>
-              Reports, documents, and preferences are stored only in your browser's local storage. 
+            <div className="small mb-8 font-semibold">Local Storage Only</div>
+            <p className="small opacity-8">
+              Reports, documents, and preferences are stored only in your browser's local storage.
               No data is transmitted to any server. Clearing your browser data will remove all saved information.
             </p>
           </div>
 
           <div>
-            <div className="small" style={{ marginBottom: 8, fontWeight: 600 }}>Security Tips</div>
-            <ul className="small" style={{ paddingLeft: 20, opacity: 0.8 }}>
+            <div className="small mb-8 font-semibold">Security Tips</div>
+            <ul className="small pl-5 opacity-8">
               <li>Be cautious of phishing attempts</li>
               <li>Regularly review your saved reports</li>
               <li>Clear data when using shared devices</li>

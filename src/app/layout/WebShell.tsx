@@ -43,11 +43,10 @@ export default function WebShell({ children }: { children: React.ReactNode }) {
             </a>
             {/* Hamburger — visible only on mobile where topnav is hidden */}
             <button
-              className="btn mobile-menu-btn"
+              className="btn mobile-menu-btn d-none"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
-              style={{ display: 'none' }}
             >
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -58,31 +57,11 @@ export default function WebShell({ children }: { children: React.ReactNode }) {
       {/* Mobile nav drawer */}
       {menuOpen && (
         <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 200,
-            background: 'rgba(0,0,0,0.5)',
-          }}
+          className="mobile-nav-overlay"
           onClick={() => setMenuOpen(false)}
         >
           <nav
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              width: 260,
-              height: '100%',
-              background: 'var(--bg-secondary)',
-              borderLeft: '1px solid var(--border)',
-              padding: '80px 24px 32px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}
+            className="mobile-nav-drawer"
             aria-label="Mobile navigation"
             onClick={(e) => e.stopPropagation()}
           >
@@ -98,13 +77,12 @@ export default function WebShell({ children }: { children: React.ReactNode }) {
                 to={to}
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) => `navitem${isActive ? ' active' : ''}`}
-                style={{ fontSize: 15, padding: '10px 12px', borderRadius: 8 }}
               >
                 {label}
               </NavLink>
             ))}
-            <div style={{ marginTop: 16 }}>
-              <a href={appUrl} className="btn primary" style={{ width: '100%', justifyContent: 'center' }}>
+            <div className="mt-16">
+              <a href={appUrl} className="btn primary w-full justify-center">
                 Open App
               </a>
             </div>

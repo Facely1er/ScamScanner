@@ -93,10 +93,10 @@ export default function NextSteps({ entryPoint }: { entryPoint: EntryPoint }) {
 
   return (
     <section className="card next-steps">
-      <div className="kicker" style={{ color: 'var(--text)' }}>
+      <div className="kicker text-text">
         <Compass size={16} /> Recommended next steps
       </div>
-      <p className="small" style={{ marginTop: 6 }}>
+      <p className="small mt-6">
         Select the content source to prioritize the next verification step.
       </p>
       <div className="choice-group" role="group" aria-label="Content origin">
@@ -112,10 +112,10 @@ export default function NextSteps({ entryPoint }: { entryPoint: EntryPoint }) {
           </button>
         ))}
       </div>
-      <div className="small" style={{ marginTop: 8 }}>
+      <div className="small mt-8">
         {originSummary[origin]}
       </div>
-      <div className="link-list" style={{ marginTop: 14 }}>
+      <div className="link-list mt-14">
         {recommendations.map((toolKey) => {
           const tool = toolMeta[toolKey];
           const isHighlighted = highlightTool === toolKey;

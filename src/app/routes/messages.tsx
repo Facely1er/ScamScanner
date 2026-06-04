@@ -11,11 +11,11 @@ export default function Messages() {
   return (
     <div className="grid">
       {isWelcome && (
-        <section className="card section-spacing" style={{ backgroundColor: 'rgb(240 253 244)', border: '1px solid rgb(34 197 94)' }}>
-          <div className="kicker" style={{ color: 'rgb(21 128 61)' }}>
+        <section className="card section-spacing notice-success">
+          <div className="kicker text-green">
             👋 Welcome to Cyberstition!
           </div>
-          <p className="p" style={{ marginTop: 8, color: 'rgb(21 128 61)' }}>
+          <p className="p mt-8 text-green">
             Analyze a message to get started. After your first check, you'll see recommended next steps to verify other aspects of the content.
           </p>
         </section>

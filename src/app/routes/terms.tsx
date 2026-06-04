@@ -6,13 +6,13 @@ const CONTACT_EMAIL = 'support@cyberstition.com';
 
 export default function Terms() {
   return (
-    <div className="grid" style={{ maxWidth: 720, margin: '0 auto' }}>
+    <div className="grid container-lg">
       <section className="card">
-        <div className="kicker" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="kicker d-flex items-center gap-8">
           <FileText size={16} /> Legal
         </div>
         <h1 className="h1">Terms of Service</h1>
-        <p className="p" style={{ opacity: 0.7 }}>Last updated: {LAST_UPDATED}</p>
+        <p className="p opacity-7">Last updated: {LAST_UPDATED}</p>
       </section>
 
       <section className="card">
@@ -43,7 +43,7 @@ export default function Terms() {
 
       <section className="card">
         <h2 className="h2">Report Credits and License Keys</h2>
-        <ul className="small" style={{ paddingLeft: 20, lineHeight: 1.9 }}>
+        <ul className="small pl-5 line-height-loose">
           <li>Credits are purchased as one-time, non-subscription digital goods.</li>
           <li>License keys are redeemed locally on your device and tied to that device's storage.</li>
           <li>Keys cannot be transferred between devices automatically — contact support with your receipt if you need a reissue.</li>
@@ -54,8 +54,8 @@ export default function Terms() {
 
       <section className="card">
         <h2 className="h2">Acceptable Use</h2>
-        <p className="p" style={{ marginBottom: 10 }}>You agree not to use Cyberstition to:</p>
-        <ul className="small" style={{ paddingLeft: 20, lineHeight: 1.9 }}>
+        <p className="p mb-10">You agree not to use Cyberstition to:</p>
+        <ul className="small pl-5 line-height-loose">
           <li>Harass, stalk, or surveil another person without their consent</li>
           <li>Circumvent security or authentication systems</li>
           <li>Reverse-engineer the license key validation system for fraudulent use</li>
@@ -102,7 +102,7 @@ export default function Terms() {
         <h2 className="h2">Contact</h2>
         <p className="p">
           Questions?{' '}
-          <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--primary)' }}>{CONTACT_EMAIL}</a>
+          <a href={`mailto:${CONTACT_EMAIL}`} className="text-link">{CONTACT_EMAIL}</a>
         </p>
       </section>
     </div>

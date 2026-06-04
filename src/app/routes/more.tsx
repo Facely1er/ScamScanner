@@ -12,8 +12,8 @@ export default function More() {
       </section>
 
       <section className="card">
-        <div className="kicker" style={{ color: 'var(--text)' }}>Explore</div>
-        <div className="link-list" style={{ marginTop: 12 }}>
+        <div className="kicker text-text">Explore</div>
+        <div className="link-list mt-12">
           <MoreLink
             to="/"
             icon={<Home size={16} />}
@@ -42,8 +42,8 @@ export default function More() {
       </section>
 
       <section className="card">
-        <div className="kicker" style={{ color: 'var(--text)' }}>Manage</div>
-        <div className="link-list" style={{ marginTop: 12 }}>
+        <div className="kicker text-text">Manage</div>
+        <div className="link-list mt-12">
           <MoreLink
             to="/dashboard"
             icon={<LayoutGrid size={16} />}

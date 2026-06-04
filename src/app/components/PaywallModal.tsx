@@ -19,68 +19,35 @@ export default function PaywallModal({ isOpen, onClose, toolName }: PaywallModal
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        padding: 20,
-      }}
-      onClick={onClose}
-    >
+    <div className="modal-overlay" onClick={onClose}>
       <div
-        className="card"
-        style={{
-          maxWidth: 400,
-          width: '100%',
-          position: 'relative',
-          backgroundColor: 'var(--bg)',
-        }}
+        className="card bg-base relative"
+        style={{ maxWidth: 400, width: '100%' }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: 12,
-            right: 12,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 4,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--text-secondary)',
-          }}
+          className="close-btn"
           aria-label="Close"
         >
           <X size={20} />
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <ArrowRight size={24} style={{ color: 'var(--primary)' }} />
-          <h2 style={{ fontSize: 22, fontWeight: 600, margin: 0 }}>Continue</h2>
+        <div className="d-flex items-center gap-8 mb-16">
+          <ArrowRight size={24} className="text-primary" />
+          <h2 className="heading-with-icon m-0" style={{ fontSize: 22, fontWeight: 600 }}>Continue</h2>
         </div>
 
-        <p className="p" style={{ marginBottom: 24 }}>
-          {toolName 
+        <p className="p mb-24">
+          {toolName
             ? `${toolName} is available now. Open tools to continue your analysis.`
             : "This feature is available now. Open tools to continue your analysis."}
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="d-flex flex-col gap-10">
           <button
             onClick={handleContinue}
-            className="btn primary"
-            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+            className="btn primary w-full d-flex items-center justify-center gap-8"
           >
             <ArrowRight size={16} />
             Open Tools

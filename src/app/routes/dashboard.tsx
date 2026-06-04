@@ -14,7 +14,6 @@ interface Report {
   content: any;
 }
 
-
 export default function Dashboard() {
   const [allReports, setAllReports] = useLocalStorage<Report[]>('cyberstition_reports', []);
   const [loading, setLoading] = useState(false);
@@ -32,7 +31,7 @@ export default function Dashboard() {
       exportDate: new Date().toISOString(),
       version: '1.0'
     };
-    
+
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -47,7 +46,7 @@ export default function Dashboard() {
   const importData = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    
+
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
@@ -64,7 +63,6 @@ export default function Dashboard() {
       }
     };
     reader.readAsText(file);
-    // Reset input
     event.target.value = '';
   };
 
@@ -95,76 +93,57 @@ export default function Dashboard() {
   return (
     <div className="grid" style={{ gap: 14 }}>
       <section className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="d-flex justify-between items-center">
           <div>
             <div className="kicker"><FileText size={16} /> Dashboard</div>
             <h1 className="h1">Analysis History</h1>
             <p className="p">View and manage your saved reports and documents.</p>
           </div>
-          <div style={{ display: 'flex', gap: 12 }}>
-            <Link to="/" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div className="d-flex gap-12">
+            <Link to="/" className="btn d-flex gap-8 items-center">
               <Home size={16} /> Home
             </Link>
-            <Link to="/account" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <Link to="/account" className="btn d-flex gap-8 items-center">
               <Settings size={16} /> Preferences
             </Link>
             <button
               onClick={exportData}
-              className="btn"
-              style={{ display: 'flex', gap: 8, alignItems: 'center' }}
+              className="btn d-flex gap-8 items-center"
             >
               <Download size={16} /> Export
             </button>
-            <label className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center', cursor: 'pointer' }}>
+            <label className="btn d-flex gap-8 items-center cursor-pointer">
               <Upload size={16} /> Import
               <input
                 type="file"
                 accept=".json"
                 onChange={importData}
-                style={{ display: 'none' }}
+                className="d-none"
               />
             </label>
           </div>
         </div>
       </section>
 
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div style={{ display: 'flex', borderBottom: '1px solid #e0e0e0' }}>
+      <div className="card p-0 overflow-hidden">
+        <div className="tab-nav">
           <button
             onClick={() => setActiveTab('sessions')}
-            className={activeTab === 'sessions' ? 'tab-active' : 'tab'}
-            style={{
-              flex: 1,
-              padding: '12px 20px',
-              border: 'none',
-              background: activeTab === 'sessions' ? 'white' : 'transparent',
-              borderBottom: activeTab === 'sessions' ? '2px solid var(--primary)' : 'none',
-              fontWeight: activeTab === 'sessions' ? 600 : 400,
-              cursor: 'pointer',
-            }}
+            className={`tab-btn${activeTab === 'sessions' ? ' tab-active' : ''}`}
           >
             Scan Sessions ({sessions.length})
           </button>
           <button
             onClick={() => setActiveTab('reports')}
-            className={activeTab === 'reports' ? 'tab-active' : 'tab'}
-            style={{
-              flex: 1,
-              padding: '12px 20px',
-              border: 'none',
-              background: activeTab === 'reports' ? 'white' : 'transparent',
-              borderBottom: activeTab === 'reports' ? '2px solid var(--primary)' : 'none',
-              fontWeight: activeTab === 'reports' ? 600 : 400,
-              cursor: 'pointer',
-            }}
+            className={`tab-btn${activeTab === 'reports' ? ' tab-active' : ''}`}
           >
             Reports ({reports.length})
           </button>
         </div>
 
-        <div style={{ padding: 20 }}>
+        <div className="p-20">
           {loading ? (
-            <div style={{ textAlign: 'center', padding: 40 }}>
+            <div className="text-center p-40">
               <p className="p">Loading...</p>
             </div>
           ) : (
@@ -172,53 +151,46 @@ export default function Dashboard() {
               {activeTab === 'sessions' && (
                 <div>
                   {sessions.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: 40 }}>
-                      <Shield size={48} style={{ margin: '0 auto 16px', opacity: 0.3 }} />
+                    <div className="text-center p-40">
+                      <Shield size={48} className="mx-auto mb-16 opacity-3" />
                       <p className="p">No scan sessions yet.</p>
-                      <p className="small" style={{ marginTop: 8, marginBottom: 16 }}>
+                      <p className="small mt-8 mb-16">
                         Start a guided scan to analyze content with context-aware pattern detection.
                       </p>
                       <Link to="/scan" className="btn primary">Start Your First Scan</Link>
                     </div>
                   ) : (
-                    <div className="grid" style={{ gap: 12 }}>
+                    <div className="grid gap-12">
                       {sessions.slice().reverse().map((session) => (
                         <Link
                           key={session.id}
                           to={`/scan?session=${session.id}`}
-                          className="card"
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            padding: 16,
-                            textDecoration: 'none'
-                          }}
+                          className="card d-flex justify-between items-center p-16"
+                          style={{ textDecoration: 'none' }}
                         >
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                              <h3 className="h3" style={{ margin: 0 }}>
+                          <div className="flex-1">
+                            <div className="d-flex items-center gap-10">
+                              <h3 className="h3 m-0">
                                 {session.context.senderName || 'Unknown Sender'}
                               </h3>
                               <span
-                                className="badge"
+                                className="badge capitalize"
                                 style={{
                                   backgroundColor: getRiskColor(session.overallRiskLevel),
                                   color: 'white',
-                                  textTransform: 'capitalize',
                                 }}
                               >
                                 {session.overallRiskLevel} risk
                               </span>
                             </div>
-                            <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
-                              <span style={{ textTransform: 'capitalize' }}>
+                            <div className="small mt-4 d-flex gap-12">
+                              <span className="capitalize">
                                 {session.context.origin.replace('_', ' ')}
                               </span>
-                              <span style={{ opacity: 0.6 }}>
+                              <span className="opacity-6">
                                 {session.evidence.length} evidence • {session.patternMatches.length} patterns
                               </span>
-                              <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                              <span className="opacity-6 d-flex gap-4 items-center">
                                 <Clock size={12} /> {formatDate(new Date(session.updatedAt).toISOString())}
                               </span>
                             </div>
@@ -233,59 +205,48 @@ export default function Dashboard() {
               {activeTab === 'reports' && (
                 <div>
                   {reports.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: 40 }}>
-                      <FileText size={48} style={{ margin: '0 auto 16px', opacity: 0.3 }} />
+                    <div className="text-center p-40">
+                      <FileText size={48} className="mx-auto mb-16 opacity-3" />
                       <p className="p">No reports saved yet.</p>
-                      <p className="small" style={{ marginTop: 8, marginBottom: 16 }}>
+                      <p className="small mt-8 mb-16">
                         Use the analysis tools to create reports. They will appear here once saved.
                       </p>
-                      <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', marginTop: 20 }}>
+                      <div className="d-flex gap-10 justify-center flex-wrap mt-20">
                         <Link to="/scan" className="btn primary">Start a Guided Scan</Link>
                         <Link to="/tools" className="btn">Use Analysis Tools</Link>
                       </div>
                     </div>
                   ) : (
-                    <div className="grid" style={{ gap: 12 }}>
+                    <div className="grid gap-12">
                       {reports.map((report) => (
                         <div
                           key={report.id}
-                          className="card"
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            padding: 16,
-                          }}
+                          className="card d-flex justify-between items-center p-16"
                         >
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                              <h3 className="h3" style={{ margin: 0 }}>{report.title}</h3>
+                          <div className="flex-1">
+                            <div className="d-flex items-center gap-10">
+                              <h3 className="h3 m-0">{report.title}</h3>
                               <span
-                                className="badge"
+                                className="badge capitalize"
                                 style={{
                                   backgroundColor: getRiskColor(report.risk_level),
                                   color: 'white',
-                                  textTransform: 'capitalize',
                                 }}
                               >
                                 {report.risk_level} risk
                               </span>
                             </div>
-                            <div className="small" style={{ marginTop: 4, display: 'flex', gap: 12 }}>
-                              <span style={{ textTransform: 'capitalize' }}>{report.tool_type}</span>
-                              <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                            <div className="small mt-4 d-flex gap-12">
+                              <span className="capitalize">{report.tool_type}</span>
+                              <span className="opacity-6 d-flex gap-4 items-center">
                                 <Clock size={12} /> {formatDate(report.created_at)}
                               </span>
                             </div>
                           </div>
                           <button
                             onClick={() => deleteReport(report.id)}
-                            className="btn"
-                            style={{
-                              padding: 8,
-                              minWidth: 'auto',
-                              color: 'rgb(239 68 68)',
-                            }}
+                            className="btn p-8 min-w-auto"
+                            style={{ color: 'rgb(239 68 68)' }}
                           >
                             <Trash2 size={16} />
                           </button>
@@ -295,7 +256,6 @@ export default function Dashboard() {
                   )}
                 </div>
               )}
-
             </>
           )}
         </div>
