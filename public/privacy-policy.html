@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Privacy Policy – Cyberstition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Cyberstition Privacy Policy - Privacy-first scam detection with complete local processing.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/cyberstition_logo.png" />
+    <link rel="shortcut icon" type="image/png" href="/cyberstition_logo.png" />
+    <link rel="apple-touch-icon" href="/cyberstition_logo.png" />
+
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              cyberPrimary: "#9B7DD4",
+              cyberSecondary: "#7C5DC4",
+              cyberAccent: "#B89DE8",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body.light {
+        background-color: #f8fafc;
+        color: #0f172a;
+      }
+
+      body.light .bg-slate-900 {
+        background-color: #ffffff;
+      }
+
+      body.light .bg-slate-800 {
+        background-color: #f1f5f9;
+      }
+
+      body.light .text-slate-50 {
+        color: #0f172a;
+      }
+
+      body.light .text-slate-200 {
+        color: #1e293b;
+      }
+
+      body.light .text-slate-300 {
+        color: #475569;
+      }
+
+      body.light .text-slate-400 {
+        color: #64748b;
+      }
+
+      body.light .border-slate-800 {
+        border-color: #e2e8f0;
+      }
+
+      body.light .border-slate-700 {
+        border-color: #cbd5e1;
+      }
+
+      body.light .bg-slate-900\/80 {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+
+      body.light .bg-slate-800\/80 {
+        background-color: rgba(241, 245, 249, 0.8);
+      }
+
+      /* Smooth scroll offset for fixed header */
+      html {
+        scroll-padding-top: 80px;
+      }
+
+      /* Back to top button */
+      #back-to-top {
+        transition: opacity 0.3s, transform 0.3s;
+      }
+
+      #back-to-top.hidden {
+        opacity: 0;
+        transform: translateY(100px);
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body class="h-full bg-slate-900 text-slate-50 antialiased" id="body">
+    <div class="min-h-screen flex flex-col">
+      <!-- NAVBAR -->
+      <header class="relative z-20 border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0">
+        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <a href="/" class="flex items-center gap-3">
+            <img
+              src="/cyberstition_logo.png"
+              alt="Cyberstition logo"
+              class="h-12 w-12 rounded-full shadow"
+            />
+            <div class="leading-tight">
+              <div class="text-xl font-semibold tracking-wide text-slate-50">
+                Cyberstition
+              </div>
+            </div>
+          </a>
+          <div class="flex items-center gap-4">
+            <nav class="hidden gap-6 text-xs font-medium text-slate-300 sm:flex">
+              <a href="/" class="flex items-center gap-1.5 hover:text-cyberPrimary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Home
+              </a>
+            </nav>
+            <button
+              id="theme-toggle"
+              class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-cyberPrimary transition-colors"
+              aria-label="Toggle theme"
+            >
+              <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1">
+        <section class="border-t border-slate-800 bg-slate-900 py-12">
+          <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-slate-50 mb-4">Privacy Policy</h1>
+              <div class="text-sm text-slate-400 space-y-1">
+                <p class="flex gap-4">
+                  <span class="w-32 text-slate-400"><strong>Effective Date:</strong></span>
+                  <span class="text-slate-400">June 4, 2026</span>
+                </p>
+                <p class="flex gap-4">
+                  <span class="w-32 text-slate-400"><strong>Last Updated:</strong></span>
+                  <span class="text-slate-400">June 4, 2026</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="bg-slate-800 border border-slate-700 rounded-lg p-6 mb-8">
+              <h2 class="text-xl font-semibold text-slate-50 mb-4">Table of Contents</h2>
+              <nav class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                <a href="#section-1" class="text-cyberPrimary hover:text-cyberAccent transition-colors">1. Introduction</a>
+                <a href="#section-2" class="text-cyberPrimary hover:text-cyberAccent transition-colors">2. Privacy-First Architecture</a>
+                <a href="#section-3" class="text-cyberPrimary hover:text-cyberAccent transition-colors">3. Information We Do NOT Collect</a>
+                <a href="#section-4" class="text-cyberPrimary hover:text-cyberAccent transition-colors">4. Local Storage</a>
+                <a href="#section-5" class="text-cyberPrimary hover:text-cyberAccent transition-colors">5. Payment Processing</a>
+                <a href="#section-6" class="text-cyberPrimary hover:text-cyberAccent transition-colors">6. Cookies and Tracking</a>
+                <a href="#section-7" class="text-cyberPrimary hover:text-cyberAccent transition-colors">7. Third-Party Services</a>
+                <a href="#section-8" class="text-cyberPrimary hover:text-cyberAccent transition-colors">8. Data Security</a>
+                <a href="#section-9" class="text-cyberPrimary hover:text-cyberAccent transition-colors">9. Your Privacy Rights</a>
+                <a href="#section-10" class="text-cyberPrimary hover:text-cyberAccent transition-colors">10. International Users</a>
+                <a href="#section-11" class="text-cyberPrimary hover:text-cyberAccent transition-colors">11. Children's Privacy</a>
+                <a href="#section-12" class="text-cyberPrimary hover:text-cyberAccent transition-colors">12. Updates to This Policy</a>
+                <a href="#section-13" class="text-cyberPrimary hover:text-cyberAccent transition-colors">13. Contact Information</a>
+              </nav>
+            </div>
+
+            <div class="prose prose-invert prose-slate max-w-none text-slate-200 space-y-8">
+
+<div class="bg-slate-800/50 border-l-4 border-cyberPrimary p-6 rounded-r-lg mb-8">
+<p class="text-base text-slate-200 leading-relaxed m-0">Cyberstition ("we," "our," or "us") is committed to protecting your privacy through a Privacy-First Architecture that ensures all analysis happens locally on your device. This Privacy Policy explains our data practices when you use the Cyberstition scam detection application.</p>
+<p class="text-base text-slate-200 leading-relaxed mt-4 mb-0"><strong>The Bottom Line:</strong> We don't collect, store, or transmit your personal data or the content you analyze. Everything stays on your device.</p>
+</div>
+
+<h2 id="section-1" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">1. INTRODUCTION</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">1.1 What is Cyberstition?</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition is a privacy-first scam detection tool that helps you identify:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li><strong>Phishing and Fraud:</strong> Suspicious messages, emails, and social media contacts</li>
+<li><strong>Fake Profiles:</strong> Impersonation and deceptive social media accounts</li>
+<li><strong>Email Spoofing:</strong> Forged email headers and routing anomalies</li>
+<li><strong>Image Manipulation:</strong> Hidden metadata and manipulation indicators</li>
+<li><strong>Deepfakes:</strong> AI-generated content and synthetic media</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">1.2 Our Privacy Commitment</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition is built on a fundamental principle: <strong>your data belongs to you</strong>. All analysis runs entirely within your browser using client-side processing. We have no servers that store your content, no databases tracking your investigations, and no analytics monitoring your behavior.</p>
+
+<h2 id="section-2" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">2. PRIVACY-FIRST ARCHITECTURE</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">2.1 Client-Side Processing</h3>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<p class="font-bold text-slate-50 mb-3">How Cyberstition Works:</p>
+
+<p class="font-semibold text-slate-200 mt-3 mb-2">All Processing Happens in Your Browser:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li><strong>Message Analysis:</strong> Text processing, pattern detection, and AI detection algorithms run client-side</li>
+<li><strong>Profile Verification:</strong> Social profile analysis performed entirely in your browser</li>
+<li><strong>Email Analysis:</strong> Email header parsing and routing verification done locally</li>
+<li><strong>Image Inspection:</strong> Metadata extraction and manipulation detection run on-device</li>
+<li><strong>Pattern Matching:</strong> Pre-loaded threat pattern library matches locally without server calls</li>
+<li><strong>Risk Scoring:</strong> All confidence calculations and risk assessments computed client-side</li>
+</ul>
+
+<p class="text-slate-300 leading-relaxed mt-4 italic">Your content is never transmitted to our servers or any third-party service during analysis.</p>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">2.2 Offline-Capable</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition works completely offline once loaded. You can disconnect from the internet and continue using all analysis features. This proves that no data is being transmitted during your investigation sessions.</p>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">2.3 No Account Required</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition does not require account creation, login, or authentication to use core features. You can purchase report credits using a license key system that requires no personal information.</p>
+
+<h2 id="section-3" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">3. INFORMATION WE DO NOT COLLECT</h2>
+
+<div class="bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg my-6">
+<p class="font-bold text-slate-50 mb-3">Cyberstition explicitly does NOT collect, access, store, or transmit:</p>
+
+<p class="font-semibold text-slate-200 mt-4 mb-2">Content You Analyze:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Messages, emails, or text content submitted for analysis</li>
+<li>Social media profiles or usernames you investigate</li>
+<li>Email headers or routing information</li>
+<li>Images, photos, or files you upload</li>
+<li>Investigation results, risk scores, or findings</li>
+<li>Scan session details or evidence</li>
+</ul>
+
+<p class="font-semibold text-slate-200 mt-4 mb-2">Personal Information:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Name, email address, or contact information</li>
+<li>IP addresses or location data</li>
+<li>Device identifiers or fingerprints</li>
+<li>Browser information or user agent strings</li>
+<li>Browsing history or navigation patterns</li>
+</ul>
+
+<p class="font-semibold text-slate-200 mt-4 mb-2">Behavioral Data:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>App usage analytics or feature tracking</li>
+<li>Click streams or interaction patterns</li>
+<li>Session duration or frequency</li>
+<li>Error reports or crash logs</li>
+</ul>
+
+<p class="text-slate-300 italic mt-4">Due to our client-side architecture, this data is processed entirely in your browser. It never leaves your device.</p>
+</div>
+
+<h2 id="section-4" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">4. LOCAL STORAGE</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">4.1 What We Store Locally</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition stores the following data locally in your browser using localStorage and IndexedDB. This data <strong>never leaves your device</strong>:</p>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<p class="font-bold text-slate-50 mb-3">Local Storage Contents:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li><strong>Scan Sessions:</strong> Your investigation history, evidence, findings, and risk assessments</li>
+<li><strong>Report Credits:</strong> Your purchased credit balance and redeemed license keys</li>
+<li><strong>App Preferences:</strong> Theme selection, analysis settings, and UI preferences</li>
+<li><strong>Usage Counters:</strong> Monthly scan count for free tier limits (stored locally only)</li>
+<li><strong>Onboarding Status:</strong> Whether you've completed the initial tour</li>
+</ul>
+
+<p class="text-slate-300 leading-relaxed mt-4"><strong>Important:</strong> This data is stored only on your device. It is not synced to cloud services or transmitted to Cyberstition servers.</p>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">4.2 Clearing Your Data</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">You have complete control over your local data:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li><strong>Clear Browser Data:</strong> Use your browser's "Clear Site Data" or "Clear Cookies and Site Data" to permanently delete all Cyberstition data</li>
+<li><strong>Delete Individual Scans:</strong> Remove specific scan sessions from your dashboard</li>
+<li><strong>No Recovery:</strong> Once deleted from your device, data cannot be recovered (we don't have copies)</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">4.3 Data Portability</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">All your scan data is stored in standard formats (JSON) in browser localStorage. You can export this data at any time using browser developer tools or a localStorage export extension.</p>
+
+<h2 id="section-5" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">5. PAYMENT PROCESSING</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">5.1 Payment Processors</h3>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<p class="text-slate-300 mb-3">Credit pack purchases are processed by third-party payment providers:</p>
+
+<p class="font-bold text-slate-50 mt-4 mb-2">Stripe, Inc.:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Industry-standard payment processing</li>
+<li>Subject to <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" class="text-cyberPrimary hover:text-cyberAccent underline">Stripe's Privacy Policy</a></li>
+<li>PCI DSS compliant</li>
+</ul>
+
+<p class="font-bold text-slate-50 mt-4 mb-2">Gumroad:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Digital product payment platform</li>
+<li>Subject to <a href="https://gumroad.com/privacy" target="_blank" rel="noopener noreferrer" class="text-cyberPrimary hover:text-cyberAccent underline">Gumroad's Privacy Policy</a></li>
+<li>Handles license key delivery via email</li>
+</ul>
+
+<p class="text-slate-300 mt-4"><strong>What Cyberstition Does NOT Receive:</strong></p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Credit card numbers or payment details</li>
+<li>Billing addresses or personal information</li>
+<li>Purchase history or transaction details</li>
+<li>Email addresses (handled by payment processor only)</li>
+</ul>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">5.2 License Key System</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">After purchase, you receive a license key via email from the payment processor. You redeem this key locally in the Cyberstition app. The redemption process:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li>Validates the key format client-side</li>
+<li>Stores the redeemed key in localStorage</li>
+<li>Credits are managed entirely locally</li>
+<li><strong>No server validation or tracking</strong></li>
+</ul>
+
+<h2 id="section-6" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">6. COOKIES AND TRACKING</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">6.1 No Cookies</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition does not use cookies of any kind. We don't need them because:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li>No user authentication or sessions</li>
+<li>No server-side tracking</li>
+<li>All data stored in localStorage, not cookies</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">6.2 No Analytics or Tracking</h3>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<p class="font-bold text-slate-50 mb-3">Cyberstition does NOT use:</p>
+
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li><strong>Google Analytics</strong> or similar analytics platforms</li>
+<li><strong>Tracking pixels</strong> or web beacons</li>
+<li><strong>Fingerprinting</strong> or device identification</li>
+<li><strong>Third-party scripts</strong> from advertising networks</li>
+<li><strong>Session replay</strong> or user recording tools</li>
+<li><strong>A/B testing</strong> or conversion tracking</li>
+<li><strong>Social media widgets</strong> or share buttons with tracking</li>
+</ul>
+
+<p class="text-slate-300 italic mt-4">We have no visibility into your app usage, behavior, or patterns. We cannot track which features you use, how often you use them, or what results you get.</p>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">6.3 No Advertising</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition is funded by credit pack purchases, not advertising. We display no ads and never engage in behavioral targeting or data monetization.</p>
+
+<h2 id="section-7" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">7. THIRD-PARTY SERVICES</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">7.1 No External API Calls During Analysis</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition makes <strong>zero external API calls</strong> during scam analysis. All processing happens within your browser using pre-loaded algorithms and pattern libraries.</p>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">7.2 External Connections</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">The only external connections occur when:</p>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<p class="font-bold text-slate-50 mb-2">1. Payment Links:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300 mb-3">
+<li>Clicking "Purchase Credits" opens Stripe or Gumroad in a new tab</li>
+<li>You interact directly with their platforms</li>
+<li>Subject to their privacy policies, not ours</li>
+</ul>
+
+<p class="font-bold text-slate-50 mb-2">2. Hosting Infrastructure:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Cyberstition is hosted on Vercel or similar CDN</li>
+<li>Standard web hosting logs (IP address, timestamp, accessed files)</li>
+<li>Logs retained for 7 days for security monitoring only</li>
+<li>No personally identifiable information linked to logs</li>
+</ul>
+</div>
+
+<h2 id="section-8" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">8. DATA SECURITY</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">8.1 Security by Design</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition's privacy-first architecture provides inherent security benefits:</p>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<p class="font-bold text-slate-50 mb-3">Security Features:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li><strong>No Server Storage:</strong> We can't lose data we never collect</li>
+<li><strong>No Data Breaches:</strong> There's no central database to breach</li>
+<li><strong>Client-Side Only:</strong> Data exists only on your device, under your control</li>
+<li><strong>HTTPS:</strong> All web traffic encrypted with TLS 1.3</li>
+<li><strong>Content Security Policy:</strong> Prevents XSS and injection attacks</li>
+<li><strong>Subresource Integrity:</strong> Ensures script integrity</li>
+</ul>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">8.2 Browser Security</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Your data security depends on your device and browser security:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li><strong>Browser LocalStorage:</strong> Protected by browser same-origin policy</li>
+<li><strong>Device Security:</strong> Keep your device password-protected and updated</li>
+<li><strong>Browser Updates:</strong> Use the latest browser version for security patches</li>
+<li><strong>Incognito/Private Mode:</strong> Data cleared when closing private browsing session</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">8.3 Vulnerabilities</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">If you discover a security vulnerability in Cyberstition, please report it responsibly:</p>
+
+<p class="text-slate-300">Email: <a href="mailto:security@cyberstition.com" class="text-cyberPrimary hover:text-cyberAccent">security@cyberstition.com</a></p>
+
+<h2 id="section-9" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">9. YOUR PRIVACY RIGHTS</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">9.1 Universal Rights</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Since Cyberstition doesn't collect personal data, traditional privacy rights like access, deletion, and portability are inherently satisfied:</p>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<div class="border-l-4 border-cyberPrimary pl-4 mb-4">
+<p class="font-bold text-slate-50 mb-2">Right to Access:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>All your data is stored locally in your browser</li>
+<li>You already have complete access to it</li>
+<li>Use browser developer tools to inspect localStorage</li>
+</ul>
+</div>
+
+<div class="border-l-4 border-cyberPrimary pl-4 mb-4">
+<p class="font-bold text-slate-50 mb-2">Right to Deletion:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Clear your browser data anytime</li>
+<li>Delete individual scans from the dashboard</li>
+<li>No need to contact us (we don't have your data)</li>
+</ul>
+</div>
+
+<div class="border-l-4 border-cyberPrimary pl-4 mb-4">
+<p class="font-bold text-slate-50 mb-2">Right to Portability:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Export localStorage data as JSON</li>
+<li>Copy to another browser or device manually</li>
+<li>Data is yours to transfer freely</li>
+</ul>
+</div>
+
+<div class="border-l-4 border-cyberPrimary pl-4">
+<p class="font-bold text-slate-50 mb-2">Right to Object:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Since we don't process your data on servers, there's nothing to object to</li>
+<li>You control all processing locally</li>
+</ul>
+</div>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">9.2 GDPR Compliance (EU/UK/Swiss Users)</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Cyberstition complies with GDPR through technical design:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li><strong>Data Minimization:</strong> We collect zero personal data</li>
+<li><strong>Purpose Limitation:</strong> No data processing for secondary purposes</li>
+<li><strong>Storage Limitation:</strong> No centralized storage</li>
+<li><strong>Integrity and Confidentiality:</strong> Client-side processing ensures data stays private</li>
+<li><strong>Accountability:</strong> This policy documents our practices</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">9.3 CCPA Compliance (California Residents)</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">California residents have rights under CCPA:</p>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<p class="font-semibold text-slate-200 mb-2">CCPA Disclosure:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li><strong>Categories of Personal Information Collected:</strong> None</li>
+<li><strong>Categories of Personal Information Sold:</strong> None (we don't sell any data)</li>
+<li><strong>Categories of Personal Information Disclosed:</strong> None</li>
+<li><strong>Right to Know:</strong> Not applicable (no data collected)</li>
+<li><strong>Right to Delete:</strong> Not applicable (no data stored on our servers)</li>
+<li><strong>Right to Opt-Out:</strong> Not applicable (no data sales)</li>
+</ul>
+
+<p class="text-slate-300 italic mt-4">Cyberstition's architecture makes traditional CCPA rights unnecessary because we never collect the data in the first place.</p>
+</div>
+
+<h2 id="section-10" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">10. INTERNATIONAL USERS</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">10.1 Data Transfers</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Since Cyberstition processes all data client-side in your browser, there are no international data transfers. Your data never leaves your device, regardless of where you're located.</p>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">10.2 Hosting Infrastructure</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">The Cyberstition web application is hosted on a global CDN (Content Delivery Network) and served from servers closest to your location for performance. However, the hosting servers only deliver the application code—they never receive or store your analysis data.</p>
+
+<h2 id="section-11" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">11. CHILDREN'S PRIVACY</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">11.1 Age Restrictions</h3>
+
+<div class="bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg my-6">
+<p class="font-bold text-slate-50 mb-3">Cyberstition is not directed at children under 13 years of age.</p>
+
+<p class="text-slate-300 mb-2">We do not knowingly collect information from children under 13. If you are under 13:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Do not use Cyberstition</li>
+<li>Do not provide any information to the application</li>
+<li>Have a parent or guardian contact us if you have used the service</li>
+</ul>
+
+<p class="text-slate-300 mt-4">However, since Cyberstition collects no data anyway, there is no personal information to delete even if a child under 13 uses the service.</p>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">11.2 Parental Control</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Parents can verify that Cyberstition collects no data by:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li>Using browser developer tools to monitor network traffic (no external calls during analysis)</li>
+<li>Running Cyberstition offline to confirm functionality</li>
+<li>Inspecting localStorage to see only local data storage</li>
+</ul>
+
+<h2 id="section-12" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">12. UPDATES TO THIS POLICY</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">12.1 Policy Changes</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">We may update this Privacy Policy from time to time to:</p>
+
+<ul class="list-disc pl-6 space-y-2 text-slate-300">
+<li>Reflect changes in our practices (though our no-collection policy is unlikely to change)</li>
+<li>Comply with new legal requirements</li>
+<li>Clarify existing provisions</li>
+<li>Add new features or services</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">12.2 Notification</h3>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6">
+<p class="font-bold text-slate-50 mb-3">Material Changes:</p>
+<p class="text-slate-300 mb-2">If we ever make material changes that would affect your privacy (such as introducing data collection):</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>We will update the "Last Updated" date at the top of this policy</li>
+<li>Display a prominent notice in the application</li>
+<li>Provide at least 30 days' notice before changes take effect</li>
+<li>Continued use after the effective date constitutes acceptance</li>
+</ul>
+
+<p class="font-bold text-slate-50 mt-4 mb-2">Non-Material Changes:</p>
+<p class="text-slate-300 mb-2">For clarifications or minor updates:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li>Update "Last Updated" date</li>
+<li>Changes effective immediately upon posting</li>
+</ul>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">12.3 Policy History</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">Previous versions of this Privacy Policy:</p>
+<ul class="list-disc pl-6 space-y-1 text-slate-300">
+<li><strong>Version 1.0:</strong> June 4, 2026 (current)</li>
+</ul>
+
+<h2 id="section-13" class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">13. CONTACT INFORMATION</h2>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">13.1 Privacy Questions</h3>
+
+<div class="bg-slate-800/30 rounded-lg p-6 my-6 space-y-3">
+<p class="text-slate-300"><strong>General Privacy Inquiries:</strong><br>
+Email: <a href="mailto:privacy@cyberstition.com" class="text-cyberPrimary hover:text-cyberAccent">privacy@cyberstition.com</a></p>
+
+<p class="text-slate-300"><strong>Security Concerns:</strong><br>
+Email: <a href="mailto:security@cyberstition.com" class="text-cyberPrimary hover:text-cyberAccent">security@cyberstition.com</a></p>
+
+<p class="text-slate-300"><strong>General Support:</strong><br>
+Email: <a href="mailto:support@cyberstition.com" class="text-cyberPrimary hover:text-cyberAccent">support@cyberstition.com</a></p>
+</div>
+
+<h3 class="text-xl font-semibold text-slate-50 mt-8 mb-4">13.2 Response Times</h3>
+
+<p class="text-sm text-slate-200 leading-relaxed mb-4">We aim to respond to all privacy inquiries within 5 business days. However, since we don't collect data, most privacy-related questions can be answered by this policy.</p>
+
+<h2 class="text-2xl font-bold text-slate-50 mt-12 mb-6 pb-3 border-b border-slate-700">SUMMARY: WHAT MAKES CYBERSTITION DIFFERENT</h2>
+
+<div class="bg-cyberPrimary/20 border-l-4 border-cyberPrimary p-6 rounded-r-lg my-8">
+<p class="font-bold text-slate-50 mb-4 text-lg">Cyberstition's Privacy Guarantee:</p>
+
+<ul class="space-y-3 text-slate-200">
+<li><strong>✓ Zero Data Collection:</strong> We don't collect any personal information or analysis content</li>
+<li><strong>✓ Complete Client-Side Processing:</strong> All analysis happens in your browser</li>
+<li><strong>✓ No Tracking or Analytics:</strong> We have no visibility into your usage</li>
+<li><strong>✓ No Account Required:</strong> Use core features without registration</li>
+<li><strong>✓ Offline Capable:</strong> Works completely offline, proving no data transmission</li>
+<li><strong>✓ Local Storage Only:</strong> Data stays on your device, under your control</li>
+<li><strong>✓ No Data Breaches Possible:</strong> We can't lose data we never collect</li>
+</ul>
+
+<p class="text-slate-200 mt-4 italic">This isn't just a privacy policy—it's how Cyberstition is fundamentally built. Your privacy is protected by architecture, not just promises.</p>
+</div>
+
+<div class="bg-slate-800/50 border-l-4 border-cyberPrimary p-6 rounded-r-lg my-8">
+<p class="text-base text-slate-200 leading-relaxed mb-2 flex gap-4">
+  <span class="w-40 text-slate-200"><strong>Effective Date:</strong></span>
+  <span class="text-slate-200">June 4, 2026</span>
+</p>
+<p class="text-base text-slate-200 leading-relaxed mb-2 flex gap-4">
+  <span class="w-40 text-slate-200"><strong>Last Updated:</strong></span>
+  <span class="text-slate-200">June 4, 2026</span>
+</p>
+<p class="text-base text-slate-200 leading-relaxed mt-4"><strong>By using Cyberstition, you acknowledge that you have read and understood this Privacy Policy.</strong></p>
+<p class="text-base text-slate-200 leading-relaxed mt-2">Given that we collect no data, there is effectively nothing to consent to beyond the local storage of your scan history on your own device.</p>
+</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="border-t border-slate-800 bg-slate-900 py-8">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="text-center">
+            <p class="text-xs text-slate-400 mb-4">
+              <a href="/" class="text-cyberPrimary hover:text-cyberAccent transition-colors">← Back to Home</a>
+            </p>
+            <p class="text-[11px] text-slate-500">
+              © <span id="year"></span> Cyberstition. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button
+      id="back-to-top"
+      class="fixed bottom-8 right-8 bg-cyberPrimary hover:bg-cyberAccent text-white p-4 rounded-full shadow-lg transition-all duration-300 z-30 hidden"
+      aria-label="Back to top"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
+
+    <script>
+      // Theme Toggle
+      (function initThemeToggle() {
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initThemeToggle);
+          return;
+        }
+
+        const body = document.getElementById('body');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        if (!body || !themeToggle || !themeIcon) return;
+
+        function updateThemeIcon(theme) {
+          const sunIcon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />';
+          const moonIcon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />';
+          themeIcon.innerHTML = theme === 'light' ? sunIcon : moonIcon;
+        }
+
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+          body.classList.add('light');
+          updateThemeIcon('light');
+        } else {
+          updateThemeIcon('dark');
+        }
+
+        themeToggle.addEventListener('click', function handleThemeToggle() {
+          body.classList.toggle('light');
+          const isLight = body.classList.contains('light');
+          const newTheme = isLight ? 'light' : 'dark';
+          localStorage.setItem('theme', newTheme);
+          updateThemeIcon(newTheme);
+        });
+      })();
+
+      // Year
+      document.getElementById("year").textContent = new Date().getFullYear().toString();
+
+      // Back to Top Button
+      (function initBackToTop() {
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initBackToTop);
+          return;
+        }
+
+        const backToTopButton = document.getElementById('back-to-top');
+        if (!backToTopButton) return;
+
+        window.addEventListener('scroll', function() {
+          if (window.pageYOffset > 300) {
+            backToTopButton.classList.remove('hidden');
+          } else {
+            backToTopButton.classList.add('hidden');
+          }
+        });
+
+        backToTopButton.addEventListener('click', function() {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>
