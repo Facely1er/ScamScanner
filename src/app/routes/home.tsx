@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Shield } from 'lucide-react';
+import { MessageSquare, User, Image as ImageIcon, Mail, FileText, Shield, Crosshair, ScanSearch, GitMerge, BarChart2 } from 'lucide-react';
 import TrustNotice from '../../components/common/TrustNotice';
 import NextSteps from '../../components/common/NextSteps';
 
@@ -43,7 +43,7 @@ export default function Home() {
         }}>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 20 }}>🎯</span> Context-Aware
+              <Crosshair size={16} style={{ color: 'var(--primary)', flexShrink: 0 }} /> Context-Aware
             </div>
             <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Analyzes based on how you received it
@@ -51,7 +51,7 @@ export default function Home() {
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 20 }}>🔍</span> Pattern Detection
+              <ScanSearch size={16} style={{ color: 'var(--primary)', flexShrink: 0 }} /> Pattern Detection
             </div>
             <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Identifies common scam tactics
@@ -59,7 +59,7 @@ export default function Home() {
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 20 }}>🔗</span> Cross-Signals
+              <GitMerge size={16} style={{ color: 'var(--primary)', flexShrink: 0 }} /> Cross-Signals
             </div>
             <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Finds inconsistencies across evidence
@@ -67,14 +67,14 @@ export default function Home() {
           </div>
           <div>
             <div className="small" style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 20 }}>📊</span> Confidence Score
+              <BarChart2 size={16} style={{ color: 'var(--primary)', flexShrink: 0 }} /> Confidence Score
             </div>
             <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>
               Shows reliability of assessment
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
           <Link className="btn primary" to="/scan" style={{ fontSize: '1.05em', padding: '12px 24px' }}>
             Start Guided Scan
           </Link>
@@ -193,7 +193,7 @@ export default function Home() {
         <p className="p" style={{ marginTop: 8 }}>
           All scan sessions and individual reports are saved to your dashboard. Review complete findings, pattern matches, confidence scores, and recommendations anytime.
         </p>
-        <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
           <Link className="btn primary" to="/dashboard">View Dashboard</Link>
           <Link className="btn" to="/account">Preferences</Link>
         </div>
