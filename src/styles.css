@@ -686,7 +686,7 @@ hr{
 .brand .brand-subtitle,
 .brand-text .brand-subtitle{
   font-size:14px !important;
-  color:#fbbf24;
+  color:var(--accent-secondary);
   font-weight: 500;
 }
 
@@ -709,7 +709,8 @@ hr{
   gap:6px;
 }
 
-.header-actions .btn{
+/* Icon-only header buttons (theme toggle wrapper, hamburger) — primary CTA keeps normal pill shape */
+.header-actions .btn:not(.primary){
   width:38px;
   height:38px;
   min-width:38px;
@@ -1003,12 +1004,23 @@ hr{
     gap:18px;
   }
 
-  .app-main{
+  .app-main:not(.web-main){
     padding-bottom: calc(92px + env(safe-area-inset-bottom));
   }
 
   .footer{
     display:none;
+  }
+
+  /* Web build footer stays visible on mobile — no bottom nav to replace it */
+  .footer.web-footer{
+    display:block;
+  }
+
+  .footer.web-footer .footer-links{
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
   }
 }
 

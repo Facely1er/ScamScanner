@@ -96,7 +96,7 @@ export default function HowItWorks() {
       </section>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-        <div style={{ display: 'flex', alignItems: 'start', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
           <div style={{
             padding: 12,
             borderRadius: 12,
@@ -177,12 +177,13 @@ export default function HowItWorks() {
 
 function ProcessStep({ number, icon, title, description, color }: any) {
   return (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'start' }}>
+    <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
       <div style={{
         minWidth: 56,
         height: 56,
         borderRadius: 12,
-        backgroundColor: 'var(--bg)',
+        backgroundColor: 'var(--bg-secondary)',
+        border: '1px solid var(--border)',
         color: color,
         display: 'flex',
         alignItems: 'center',
@@ -225,7 +226,7 @@ function ToolCard({ icon, title, description, color }: any) {
       border: '1px solid var(--border)',
       display: 'flex',
       gap: 12,
-      alignItems: 'start'
+      alignItems: 'flex-start'
     }}>
       <div style={{
         minWidth: 48,

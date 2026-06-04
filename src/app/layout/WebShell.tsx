@@ -112,9 +112,9 @@ export default function WebShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
-      <main id="main-content" className="container app-main">{children}</main>
+      <main id="main-content" className="container app-main web-main">{children}</main>
 
-      <footer className="footer">
+      <footer className="footer web-footer">
         <div className="inner">
           <div className="brand">
             <img src="/cyberstition_logo.png" alt="Cyberstition logo" className="brand-logo" />

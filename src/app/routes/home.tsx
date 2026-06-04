@@ -156,7 +156,7 @@ export default function Home() {
           <Shield size={16} /> How Guided Scans Work
         </div>
         <div style={{ marginTop: 16 }}>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'flex-start' }}>
             <div style={{
               minWidth: 32,
               height: 32,
@@ -175,7 +175,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'flex-start' }}>
             <div style={{
               minWidth: 32,
               height: 32,
@@ -194,7 +194,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'start' }}>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'flex-start' }}>
             <div style={{
               minWidth: 32,
               height: 32,
@@ -213,7 +213,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'start' }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
             <div style={{
               minWidth: 32,
               height: 32,

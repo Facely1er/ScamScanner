@@ -1,0 +1,24 @@
+# Netlify configuration — two sites share this repo:
+#
+#  app.cyberstition.com  (cyberstition-app.netlify.app)
+#    Build command : npm run build:app
+#    Publish dir   : dist/app
+#    [configured below as the default]
+#
+#  www.cyberstition.com  (cyberstition-web.netlify.app)
+#    Build command : npm run build:web        ← override in Netlify UI
+#    Publish dir   : dist/web                 ← override in Netlify UI
+#    (cannot be in netlify.toml — same repo, different site settings)
+
+[build]
+  command = "npm run build:app"
+  publish = "dist/app"
+
+# Client-side routing — all paths serve index.html
+[[redirects]]
+  from = "/*"
+  to   = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "20"
