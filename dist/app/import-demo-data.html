@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Demo Data - Cyberstition</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #0a0f1a;
+            color: #e0e0e0;
+        }
+        .container {
+            background: #0f1623;
+            border: 1px solid #1a2332;
+            border-radius: 12px;
+            padding: 30px;
+        }
+        h1 {
+            color: #3b82f6;
+            margin-top: 0;
+        }
+        .button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #2563eb;
+        }
+        .button.danger {
+            background: #ef4444;
+        }
+        .button.danger:hover {
+            background: #dc2626;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #1a2332;
+        }
+        .status.success {
+            background: #065f46;
+            color: #6ee7b7;
+        }
+        .status.error {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+        .info {
+            background: #1e3a5f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #1a2332;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Cyberstition Demo Data Importer</h1>
+        
+        <div class="info">
+            <p><strong>Instructions:</strong></p>
+            <ol>
+                <li>Open your Cyberstition app in another tab</li>
+                <li>Open Developer Tools (F12) and go to the Console tab</li>
+                <li>Click "Load Demo Data" below</li>
+                <li>Copy the code that appears</li>
+                <li>Paste it into the Console tab of your app</li>
+                <li>Press Enter to execute</li>
+            </ol>
+        </div>
+
+        <button class="button" onclick="loadDemoData()">Load Demo Data</button>
+        <button class="button danger" onclick="clearAllData()">Clear All Data</button>
+
+        <div id="status"></div>
+        <div id="codeOutput" style="display: none; margin-top: 20px;">
+            <h3>Copy this code to your app's console:</h3>
+            <pre id="codeBlock" style="background: #1a2332; padding: 15px; border-radius: 8px; overflow-x: auto; color: #6ee7b7;"></pre>
+        </div>
+    </div>
+
+    <script>
+        async function loadDemoData() {
+            try {
+                const response = await fetch('/demo-data.json');
+                const data = await response.json();
+                
+                // Generate import code
+                const importCode = `
+// Import Demo Data for Cyberstition
+(async function() {
+    try {
+        // Fetch demo data
+        const response = await fetch('/demo-data.json');
+        const data = await response.json();
+        
+        // Import reports
+        if (data.reports) {
+            localStorage.setItem('cyberstition_reports', JSON.stringify(data.reports));
+            console.log('✅ Imported ' + data.reports.length + ' reports');
+        }
+        
+        // Import documents
+        if (data.documents) {
+            localStorage.setItem('cyberstition_documents', JSON.stringify(data.documents));
+            console.log('✅ Imported ' + data.documents.length + ' documents');
+        }
+        
+        // Import preferences
+        if (data.preferences) {
+            localStorage.setItem('cyberstition_preferences', JSON.stringify(data.preferences));
+            console.log('✅ Imported preferences');
+        }
+        
+        // Import sessions (requires Zustand store)
+        if (data.sessions && window.__CYBERSTITION_IMPORT_SESSIONS__) {
+            window.__CYBERSTITION_IMPORT_SESSIONS__(data.sessions);
+            console.log('✅ Imported ' + data.sessions.length + ' sessions');
+        } else if (data.sessions) {
+            // Store sessions in localStorage as fallback
+            localStorage.setItem('cyberstition_sessions', JSON.stringify(data.sessions));
+            console.log('✅ Stored ' + data.sessions.length + ' sessions (refresh page to load)');
+        }
+        
+        alert('Demo data imported successfully! Refresh the page to see it.');
+    } catch (error) {
+        console.error('Import failed:', error);
+        alert('Import failed: ' + error.message);
+    }
+})();
+                `.trim();
+                
+                document.getElementById('codeBlock').textContent = importCode;
+                document.getElementById('codeOutput').style.display = 'block';
+                
+                document.getElementById('status').innerHTML = `
+                    <div class="status success">
+                        <strong>✅ Demo data loaded!</strong><br>
+                        Found ${data.reports?.length || 0} reports, ${data.sessions?.length || 0} sessions, and ${data.documents?.length || 0} documents.
+                        <br><br>
+                        Copy the code above and paste it into your app's console.
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('status').innerHTML = `
+                    <div class="status error">
+                        <strong>❌ Error loading demo data:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear ALL data? This cannot be undone.')) {
+                const clearCode = `
+// Clear All Cyberstition Data
+localStorage.removeItem('cyberstition_reports');
+localStorage.removeItem('cyberstition_documents');
+localStorage.removeItem('cyberstition_preferences');
+localStorage.removeItem('cyberstition_sessions');
+console.log('✅ All data cleared');
+alert('All data cleared! Refresh the page.');
+                `.trim();
+                
+                document.getElementById('codeBlock').textContent = clearCode;
+                document.getElementById('codeOutput').style.display = 'block';
+                
+                document.getElementById('status').innerHTML = `
+                    <div class="status">
+                        <strong>⚠️ Clear Data Code Generated</strong><br>
+                        Copy the code above and paste it into your app's console to clear all data.
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
+

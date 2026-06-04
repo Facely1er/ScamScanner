@@ -29,7 +29,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               />
               <div className="brand-text">
                 <strong>Cyberstition™</strong>
-                <span className="brand-subtitle">Trust Signals</span>
+                <span className="brand-subtitle">Trust Before You Click.</span>
                 <span className="brand-subtext">by ERMITS</span>
               </div>
             </div>
@@ -84,9 +84,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             />
             <strong>Cyberstition™</strong>
           </div>
-          <p className="footer-tagline">Digital Safety Tools for Everyone</p>
+          <p className="footer-tagline">Trust Before You Click.</p>
           <div className="footer-links">
             <NavLink to="/about" className="footer-link">About</NavLink>
+            <NavLink to="/pricing" className="footer-link">Pricing</NavLink>
+            <NavLink to="/privacy" className="footer-link">Privacy Policy</NavLink>
+            <NavLink to="/terms" className="footer-link">Terms</NavLink>
           </div>
         </div>
       </footer>

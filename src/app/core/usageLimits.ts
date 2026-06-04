@@ -4,6 +4,7 @@
  */
 
 const USAGE_EVENT = 'cyberstition:usage';
+const FREE_MONTHLY_LIMIT = 5;
 
 // Tool IDs mapping
 export const TOOL_IDS = {
@@ -35,6 +36,11 @@ function getNextMidnightMs(now = new Date()): number {
   return tomorrow.getTime();
 }
 
+function getNextMonthStart(): number {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() + 1, 1).getTime();
+}
+
 /**
  * Get usage status for a tool (always unlocked).
  */
@@ -54,6 +60,30 @@ export function getUsageStatus(toolId: string): {
     resetAt: getNextMidnightMs(),
     isUnlocked: true,
   };
+}
+
+export function getInvestigationStatus(): {
+  used: number;
+  remaining: number;
+  limit: number;
+  limitReached: boolean;
+  resetAt: number;
+} {
+  return {
+    used: 0,
+    remaining: FREE_MONTHLY_LIMIT,
+    limit: FREE_MONTHLY_LIMIT,
+    limitReached: false,
+    resetAt: getNextMonthStart(),
+  };
+}
+
+export function canStartInvestigation(): boolean {
+  return true;
+}
+
+export function consumeInvestigation(): boolean {
+  return true;
 }
 
 /**
