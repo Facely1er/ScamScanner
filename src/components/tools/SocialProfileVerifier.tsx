@@ -92,7 +92,9 @@ const SocialProfileVerifier: React.FC = () => {
     try {
       const u = new URL(url);
       const p = u.pathname;
-      if (u.hostname.includes('linkedin.com')) {
+      const hostname = u.hostname.toLowerCase();
+      const isLinkedInHost = hostname === 'linkedin.com' || hostname.endsWith('.linkedin.com');
+      if (isLinkedInHost) {
         const m = p.match(/\/in\/([^/]+)/);
         return m ? m[1] : null;
       }
