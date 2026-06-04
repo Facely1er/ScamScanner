@@ -116,49 +116,44 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
   if (!showDetails || !selectedOrigin) {
     return (
       <section className="card">
-        <div className="kicker" style={{ marginBottom: 8 }}>Step 1 of 3</div>
+        <div className="kicker mb-8">Step 1 of 3</div>
         <h2 className="h2">Where did you receive this?</h2>
-        <p className="p" style={{ marginTop: 8 }}>
+        <p className="p mt-8">
           Select how you received the suspicious content. This helps us analyze it correctly.
         </p>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 16,
-          marginTop: 24
-        }}>
+        <div
+          className="d-grid gap-16 mt-24"
+          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}
+        >
           {origins.map((origin) => (
             <button
               key={origin.id}
               onClick={() => handleOriginSelect(origin.id)}
-              className="card"
+              className="card cursor-pointer text-left"
               style={{
                 padding: 20,
                 border: selectedOrigin === origin.id ? `2px solid ${origin.color}` : '1px solid var(--border)',
-                cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                textAlign: 'left',
-                backgroundColor: 'var(--bg)'
+                backgroundColor: 'var(--bg)',
               }}
             >
-              <div style={{
-                width: 56,
-                height: 56,
-                borderRadius: 12,
-                backgroundColor: `${origin.color}15`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 12,
-                color: origin.color
-              }}>
+              <div
+                className="d-flex items-center justify-center mb-12"
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 12,
+                  backgroundColor: `${origin.color}15`,
+                  color: origin.color,
+                }}
+              >
                 {origin.icon}
               </div>
-              <div className="small" style={{ fontWeight: 600, marginBottom: 4 }}>
+              <div className="small font-semibold mb-4">
                 {origin.title}
               </div>
-              <div className="small" style={{ opacity: 0.7, fontSize: '0.85rem' }}>
+              <div className="small opacity-7" style={{ fontSize: '0.85rem' }}>
                 {origin.description}
               </div>
             </button>
@@ -172,32 +167,32 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
 
   return (
     <section className="card">
-      <div className="kicker" style={{ marginBottom: 8 }}>Step 1 of 3</div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-        <div style={{
-          width: 48,
-          height: 48,
-          borderRadius: 10,
-          backgroundColor: `${selectedOriginData?.color}15`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: selectedOriginData?.color
-        }}>
+      <div className="kicker mb-8">Step 1 of 3</div>
+      <div className="d-flex items-center gap-12 mb-12">
+        <div
+          className="d-flex items-center justify-center"
+          style={{
+            width: 48,
+            height: 48,
+            borderRadius: 10,
+            backgroundColor: `${selectedOriginData?.color}15`,
+            color: selectedOriginData?.color,
+          }}
+        >
           {selectedOriginData?.icon}
         </div>
         <div>
-          <h2 className="h2" style={{ margin: 0 }}>Tell us more details</h2>
-          <p className="small" style={{ margin: 0, marginTop: 4, opacity: 0.7 }}>
+          <h2 className="h2 m-0">Tell us more details</h2>
+          <p className="small m-0 mt-4 opacity-7">
             Optional but helpful for better analysis
           </p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} style={{ marginTop: 24 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <form onSubmit={handleSubmit} className="mt-24">
+        <div className="d-flex flex-col gap-16">
           <div>
-            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+            <label className="small d-block mb-6 font-semibold">
               Sender Name
             </label>
             <input
@@ -205,21 +200,19 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
               type="text"
               value={senderName}
               onChange={(e) => setSenderName(e.target.value)}
-              className="btn"
-              style={{ width: '100%', textAlign: 'left' }}
+              className="btn w-full text-left"
               placeholder="e.g., John Smith, Support Team, unknown number"
             />
           </div>
 
           <div>
-            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+            <label className="small d-block mb-6 font-semibold">
               Your relationship to sender
             </label>
             <select
               value={relationship}
               onChange={(e) => setRelationship(e.target.value)}
-              className="btn"
-              style={{ width: '100%', textAlign: 'left' }}
+              className="btn w-full text-left"
             >
               <option value="">Select...</option>
               <option value="stranger">Complete stranger</option>
@@ -232,28 +225,26 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
           </div>
 
           <div>
-            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+            <label className="small d-block mb-6 font-semibold">
               What action are they requesting?
             </label>
             <input
               type="text"
               value={requestedAction}
               onChange={(e) => setRequestedAction(e.target.value)}
-              className="btn"
-              style={{ width: '100%', textAlign: 'left' }}
+              className="btn w-full text-left"
               placeholder="e.g., send money, verify account, click link, provide info"
             />
           </div>
 
           <div>
-            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+            <label className="small d-block mb-6 font-semibold">
               Did they send an image, photo, or screenshot?
             </label>
             <select
               value={hasImage}
               onChange={(e) => setHasImage(e.target.value)}
-              className="btn"
-              style={{ width: '100%', textAlign: 'left' }}
+              className="btn w-full text-left"
             >
               <option value="">Select...</option>
               <option value="yes">Yes, they sent an image</option>
@@ -264,7 +255,7 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
           {hasImage === 'yes' && (
             <>
               <div>
-                <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+                <label className="small d-block mb-6 font-semibold">
                   How was the image received?
                 </label>
                 <input
@@ -272,21 +263,20 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
                   type="text"
                   value={imageReceived}
                   onChange={(e) => setImageReceived(e.target.value)}
-                  className="btn"
-                  style={{ width: '100%', textAlign: 'left' }}
+                  className="btn w-full text-left"
                   placeholder="e.g., attached to email, in chat message, via link"
                 />
               </div>
 
               <div>
-                <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+                <label className="small d-block mb-6 font-semibold">
                   What was the image about and why did they send it?
                 </label>
                 <textarea
                   value={imageContext}
                   onChange={(e) => setImageContext(e.target.value)}
-                  className="btn"
-                  style={{ width: '100%', textAlign: 'left', minHeight: 60, resize: 'vertical' }}
+                  className="btn w-full text-left"
+                  style={{ minHeight: 60, resize: 'vertical' }}
                   placeholder="e.g., proof of payment, verification document, identity card, product photo"
                 />
               </div>
@@ -294,24 +284,22 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
           )}
 
           <div>
-            <label className="small" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>
+            <label className="small d-block mb-6 font-semibold">
               When did you receive this?
             </label>
             <input
               type="text"
               value={additionalNotes}
               onChange={(e) => setAdditionalNotes(e.target.value)}
-              className="btn"
-              style={{ width: '100%', textAlign: 'left' }}
+              className="btn w-full text-left"
               placeholder="e.g., today, yesterday, 2 days ago, last week"
             />
           </div>
 
-          <div style={{ display: 'flex', gap: 12, marginTop: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div className="d-flex gap-12 mt-8 flex-wrap items-center">
             <button
               type="submit"
-              className="btn primary"
-              style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+              className="btn primary d-flex items-center gap-8"
             >
               Continue to Analysis <ArrowRight size={16} />
             </button>
@@ -322,7 +310,7 @@ export default function ContextSelector({ onComplete }: ContextSelectorProps) {
             >
               Back
             </button>
-            <span className="small" style={{ opacity: 0.6, marginLeft: 'auto' }}>
+            <span className="small opacity-6 ml-auto">
               Press Enter to continue • Esc to go back
             </span>
           </div>

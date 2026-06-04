@@ -8,7 +8,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
   if (loading) {
     return (
-      <div className="grid container-sm" style={{ gap: 14 }}>
+      <div className="grid container-sm gap-14">
         <section className="card text-center p-40">
           <div className="p">Loading...</div>
         </section>

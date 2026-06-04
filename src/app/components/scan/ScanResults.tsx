@@ -59,13 +59,9 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
 
   const getRiskMessage = () => {
     const score = session.overallRiskScore;
-    if (score >= 70) {
-      return 'High Risk - Exercise Extreme Caution';
-    } else if (score >= 40) {
-      return 'Medium Risk - Proceed with Caution';
-    } else {
-      return 'Low Risk - Appears Legitimate';
-    }
+    if (score >= 70) return 'High Risk - Exercise Extreme Caution';
+    if (score >= 40) return 'Medium Risk - Proceed with Caution';
+    return 'Low Risk - Appears Legitimate';
   };
 
   const getRiskDescription = () => {
@@ -79,91 +75,86 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
     }
   };
 
+  const riskColor = getRiskColor();
+
   return (
     <>
-      <section className="card" style={{
-        background: `linear-gradient(135deg, ${getRiskColor()}10 0%, var(--bg) 100%)`,
-        border: `2px solid ${getRiskColor()}`
-      }}>
-        <div className="kicker" style={{ marginBottom: 8 }}>Step 3 of 3</div>
-        <div style={{ display: 'flex', alignItems: 'start', gap: 16, marginBottom: 16 }}>
-          <div style={{
-            padding: 16,
-            borderRadius: 16,
-            backgroundColor: `${getRiskColor()}15`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+      <section
+        className="card"
+        style={{
+          background: `linear-gradient(135deg, ${riskColor}10 0%, var(--bg) 100%)`,
+          border: `2px solid ${riskColor}`,
+        }}
+      >
+        <div className="kicker mb-8">Step 3 of 3</div>
+        <div className="d-flex items-start gap-16 mb-16">
+          <div
+            className="d-flex items-center justify-center"
+            style={{
+              padding: 16,
+              borderRadius: 16,
+              backgroundColor: `${riskColor}15`,
+            }}
+          >
             {getRiskIcon()}
           </div>
-          <div style={{ flex: 1 }}>
-            <h2 className="h2" style={{ margin: 0, color: getRiskColor() }}>
+          <div className="flex-1">
+            <h2 className="h2 m-0" style={{ color: riskColor }}>
               {getRiskMessage()}
             </h2>
-            <p className="p" style={{ margin: 0, marginTop: 8 }}>
+            <p className="p m-0 mt-8">
               {getRiskDescription()}
             </p>
           </div>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-          gap: 16,
-          marginTop: 20,
-          padding: 20,
-          backgroundColor: 'var(--bg)',
-          borderRadius: 8
-        }}>
+        <div
+          className="stats-grid mt-20 p-20 bg-base"
+          style={{ borderRadius: 8 }}
+        >
           <div>
-            <div className="small" style={{ opacity: 0.7, marginBottom: 4 }}>Risk Score</div>
-            <div className="h2" style={{ color: getRiskColor(), margin: 0 }}>
+            <div className="small opacity-7 mb-4">Risk Score</div>
+            <div className="h2 m-0" style={{ color: riskColor }}>
               {session.overallRiskScore}/100
             </div>
           </div>
           <div>
-            <div className="small" style={{ opacity: 0.7, marginBottom: 4 }}>Confidence</div>
-            <div className="h2" style={{ margin: 0 }}>
+            <div className="small opacity-7 mb-4">Confidence</div>
+            <div className="h2 m-0">
               {Math.round(session.confidence * 100)}%
             </div>
           </div>
           <div>
-            <div className="small" style={{ opacity: 0.7, marginBottom: 4 }}>Evidence</div>
-            <div className="h2" style={{ margin: 0 }}>
+            <div className="small opacity-7 mb-4">Evidence</div>
+            <div className="h2 m-0">
               {session.evidence.length}
             </div>
           </div>
           <div>
-            <div className="small" style={{ opacity: 0.7, marginBottom: 4 }}>Patterns</div>
-            <div className="h2" style={{ margin: 0 }}>
+            <div className="small opacity-7 mb-4">Patterns</div>
+            <div className="h2 m-0">
               {session.patternMatches.length}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-        <div className="kicker" style={{ marginBottom: 8 }}>
+      <section className="card card-secondary">
+        <div className="kicker mb-8">
           <FileText size={16} /> Executive Summary
         </div>
-        <p className="p" style={{ marginBottom: 12 }}>{narrative.summary}</p>
-        <p className="p" style={{ marginBottom: 12 }}>{narrative.findings}</p>
-        <p className="p" style={{ opacity: 0.75, fontSize: '0.9rem' }}>{narrative.confidence}</p>
+        <p className="p mb-12">{narrative.summary}</p>
+        <p className="p mb-12">{narrative.findings}</p>
+        <p className="p opacity-75" style={{ fontSize: '0.9rem' }}>{narrative.confidence}</p>
       </section>
 
       {session.threatCategory && session.threatCategory !== 'unknown' && (
-        <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-          <div className="kicker" style={{ marginBottom: 8 }}>
+        <section className="card card-secondary">
+          <div className="kicker mb-8">
             <AlertTriangle size={16} /> Threat Category
           </div>
-          <div style={{
-            padding: 16,
-            backgroundColor: 'var(--bg)',
-            borderRadius: 8,
-            border: '1px solid var(--border)'
-          }}>
-            <div className="h3" style={{ margin: 0, textTransform: 'capitalize' }}>
+          <div className="p-16 bg-base capitalize" style={{ borderRadius: 8, border: '1px solid var(--border)' }}>
+            <div className="h3 m-0">
               {session.threatCategory.replace(/_/g, ' ')}
             </div>
           </div>
@@ -172,38 +163,35 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
 
       {session.patternMatches.length > 0 && (
         <section className="card">
-          <div className="kicker" style={{ marginBottom: 12 }}>
+          <div className="kicker mb-12">
             <TrendingUp size={16} /> Pattern Matches Detected
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="d-flex flex-col gap-12">
             {session.patternMatches.map((pattern, index) => (
               <div
                 key={index}
-                className="card"
-                style={{
-                  padding: 16,
-                  backgroundColor: 'var(--bg-secondary)',
-                  border: '1px solid var(--border)'
-                }}
+                className="card p-16 bg-secondary"
+                style={{ border: '1px solid var(--border)' }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: 12 }}>
-                  <div style={{ flex: 1 }}>
-                    <div className="small" style={{ fontWeight: 600, marginBottom: 6 }}>
+                <div className="d-flex justify-between items-start gap-12">
+                  <div className="flex-1">
+                    <div className="small font-semibold mb-6">
                       {pattern.patternName}
                     </div>
-                    <div className="small" style={{ opacity: 0.8 }}>
+                    <div className="small opacity-8">
                       {pattern.description}
                     </div>
                   </div>
-                  <div style={{
-                    padding: '4px 12px',
-                    borderRadius: 12,
-                    backgroundColor: 'var(--primary)',
-                    color: 'white',
-                    fontSize: '0.85rem',
-                    fontWeight: 600,
-                    whiteSpace: 'nowrap'
-                  }}>
+                  <div
+                    className="font-semibold whitespace-nowrap"
+                    style={{
+                      padding: '4px 12px',
+                      borderRadius: 12,
+                      backgroundColor: 'var(--primary)',
+                      color: 'white',
+                      fontSize: '0.85rem',
+                    }}
+                  >
                     {Math.round(pattern.confidence * 100)}% match
                   </div>
                 </div>
@@ -215,19 +203,15 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
 
       {session.crossReferences.length > 0 && (
         <section className="card">
-          <div className="kicker" style={{ marginBottom: 12 }}>
+          <div className="kicker mb-12">
             <Info size={16} /> Cross-Reference Findings
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div className="d-flex flex-col gap-10">
             {session.crossReferences.map((ref, index) => (
               <div
                 key={index}
-                style={{
-                  padding: 14,
-                  backgroundColor: 'var(--bg-secondary)',
-                  borderRadius: 6,
-                  border: '1px solid var(--border)'
-                }}
+                className="p-14 bg-secondary"
+                style={{ borderRadius: 6, border: '1px solid var(--border)' }}
               >
                 <div className="small">{ref.description}</div>
               </div>
@@ -237,51 +221,45 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
       )}
 
       <section className="card">
-        <div className="kicker" style={{ marginBottom: 12 }}>
+        <div className="kicker mb-12">
           <FileText size={16} /> Evidence Analyzed ({session.evidence.length})
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div className="d-flex flex-col gap-12">
           {session.evidence.map((evidence) => (
             <div
               key={evidence.id}
-              className="card"
-              style={{
-                padding: 16,
-                backgroundColor: 'var(--bg-secondary)',
-                border: '1px solid var(--border)'
-              }}
+              className="card p-16 bg-secondary"
+              style={{ border: '1px solid var(--border)' }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <div className="small" style={{ fontWeight: 600, textTransform: 'capitalize' }}>
+              <div className="d-flex justify-between items-center mb-8">
+                <div className="small font-semibold capitalize">
                   {evidence.type}
                 </div>
-                <div style={{
-                  padding: '4px 10px',
-                  borderRadius: 10,
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  backgroundColor: evidence.riskLevel === 'high' ? 'rgb(239 68 68)' :
-                                 evidence.riskLevel === 'medium' ? 'rgb(251 146 60)' : 'rgb(34 197 94)',
-                  color: 'white'
-                }}>
+                <div
+                  className="font-semibold"
+                  style={{
+                    padding: '4px 10px',
+                    borderRadius: 10,
+                    fontSize: '0.8rem',
+                    backgroundColor: evidence.riskLevel === 'high' ? 'rgb(239 68 68)' :
+                                   evidence.riskLevel === 'medium' ? 'rgb(251 146 60)' : 'rgb(34 197 94)',
+                    color: 'white',
+                  }}
+                >
                   {evidence.riskLevel}
                 </div>
               </div>
-              <div className="small" style={{ opacity: 0.7 }}>
+              <div className="small opacity-7">
                 {evidence.signals.length} signal{evidence.signals.length !== 1 ? 's' : ''} detected
               </div>
               {evidence.signals.length > 0 && (
-                <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div className="mt-10 d-flex flex-col gap-6">
                   {evidence.signals.map((signal, idx) => (
                     <div
                       key={idx}
-                      className="small"
+                      className="small signal-item"
                       style={{
-                        padding: '6px 10px',
-                        backgroundColor: 'var(--bg)',
-                        borderRadius: 4,
-                        fontSize: '0.85rem',
-                        borderLeft: `3px solid ${signal.severity === 'high' ? 'rgb(239 68 68)' : signal.severity === 'medium' ? 'rgb(251 146 60)' : 'rgb(34 197 94)'}`
+                        borderLeft: `3px solid ${signal.severity === 'high' ? 'rgb(239 68 68)' : signal.severity === 'medium' ? 'rgb(251 146 60)' : 'rgb(34 197 94)'}`,
                       }}
                     >
                       {signal.description}
@@ -294,11 +272,14 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
         </div>
       </section>
 
-      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: `2px solid ${getRiskColor()}` }}>
-        <div className="kicker" style={{ marginBottom: 12, color: getRiskColor() }}>
+      <section
+        className="card"
+        style={{ backgroundColor: 'var(--bg-secondary)', border: `2px solid ${riskColor}` }}
+      >
+        <div className="kicker mb-12" style={{ color: riskColor }}>
           <Shield size={16} /> Recommended Actions
         </div>
-        <ul style={{ marginTop: 12, paddingLeft: 20, marginBottom: 0 }}>
+        <ul className="mt-12 pl-5 mb-0">
           {session.nextSteps.map((step, index) => (
             <li key={index} className="p" style={{ marginTop: index > 0 ? 10 : 0 }}>
               {step}
@@ -308,44 +289,40 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
       </section>
 
       <section className="card">
-        <div className="kicker" style={{ marginBottom: 8 }}>Investigation Report</div>
-        <p className="p" style={{ marginBottom: 16 }}>
+        <div className="kicker mb-8">Investigation Report</div>
+        <p className="p mb-16">
           Download a full PDF investigation report with executive summary, all findings, pattern analysis, and recommended actions.
           {credits > 0 && (
-            <span style={{ marginLeft: 8, fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600 }}>
+            <span className="ml-8 font-semibold text-primary" style={{ fontSize: '0.85rem' }}>
               {credits} credit{credits !== 1 ? 's' : ''} available
             </span>
           )}
         </p>
         <button
           onClick={handleDownload}
-          className="btn primary"
-          style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}
+          className="btn primary d-flex items-center gap-8 mb-20"
         >
           <Download size={16} />
           {credits > 0 ? 'Download Investigation Report' : 'Get Report Credits'}
         </button>
 
-        <div className="kicker" style={{ marginBottom: 8 }}>What's Next?</div>
-        <div style={{ display: 'flex', gap: 12, marginTop: 8, flexWrap: 'wrap' }}>
+        <div className="kicker mb-8">What's Next?</div>
+        <div className="d-flex gap-12 mt-8 flex-wrap">
           <button
             onClick={onComplete}
-            className="btn"
-            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            className="btn d-flex items-center gap-8"
           >
             <FileText size={16} /> Save to Dashboard
           </button>
           <button
             onClick={onStartNew}
-            className="btn"
-            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            className="btn d-flex items-center gap-8"
           >
             <RotateCcw size={16} /> Start New Scan
           </button>
           <Link
             to="/"
-            className="btn"
-            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            className="btn d-flex items-center gap-8"
           >
             <Home size={16} /> Home
           </Link>

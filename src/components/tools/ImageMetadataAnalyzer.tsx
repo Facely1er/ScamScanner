@@ -4,56 +4,6 @@ import { analyzeImageMetadata, getImageRiskLevel } from '../../utils/imageMetada
 import { mapImageAnalysisToAlert } from '../../mappers/imageToCautionAlert';
 import { useCautionStore } from '../../state/cautionStore';
 
-const s = {
-  wrap: { maxWidth: 768 } as React.CSSProperties,
-  card: {
-    background: 'var(--bg-secondary)',
-    border: '1px solid var(--border)',
-    borderRadius: 12,
-    padding: '20px 24px',
-    marginBottom: 16,
-  } as React.CSSProperties,
-  resultCard: (color: string) => ({
-    border: `2px solid ${color}`,
-    borderRadius: 12,
-    padding: '20px 24px',
-    background: 'var(--bg-secondary)',
-    marginBottom: 16,
-  } as React.CSSProperties),
-  infoBox: {
-    background: 'var(--bg-secondary)',
-    border: '1px solid var(--border)',
-    borderRadius: 8,
-    padding: '10px 14px',
-    marginBottom: 16,
-    display: 'flex',
-    gap: 10,
-    alignItems: 'flex-start',
-  } as React.CSSProperties,
-  dropZone: (isDragging: boolean) => ({
-    border: `2px dashed ${isDragging ? 'var(--primary)' : 'var(--border)'}`,
-    borderRadius: 10,
-    padding: '48px 24px',
-    textAlign: 'center' as const,
-    background: isDragging ? 'var(--bg)' : 'transparent',
-    cursor: 'pointer',
-  } as React.CSSProperties),
-  subCard: {
-    background: 'var(--bg)',
-    border: '1px solid var(--border)',
-    borderRadius: 8,
-    padding: '12px 16px',
-    marginBottom: 12,
-  } as React.CSSProperties,
-  eduBox: {
-    background: 'var(--bg-secondary)',
-    border: '1px solid var(--border)',
-    borderRadius: 12,
-    padding: '16px 20px',
-    marginTop: 24,
-  } as React.CSSProperties,
-};
-
 const ImageMetadataAnalyzer: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -142,34 +92,44 @@ const ImageMetadataAnalyzer: React.FC = () => {
     : 'var(--border)';
 
   return (
-    <div style={s.wrap}>
-      <div style={{ marginBottom: 20 }}>
-        <p className="p" style={{ marginBottom: 12 }}>
+    <div style={{ maxWidth: 768 }}>
+      <div className="mb-20">
+        <p className="p mb-12">
           Upload an image to analyze its metadata for signs of manipulation or suspicious patterns
         </p>
-        <div style={s.infoBox}>
-          <Info size={16} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: 2 }} />
-          <p className="small" style={{ margin: 0 }}>
+        <div className="tool-info-box">
+          <Info size={16} className="text-primary flex-shrink-0 mt-2" />
+          <p className="small m-0">
             <strong>Privacy First:</strong> All analysis happens in your browser. Your image never leaves your device.
           </p>
         </div>
       </div>
 
-      <div style={s.card}>
+      <div className="tool-card">
         {!preview ? (
-          <div ref={dropZoneRef} style={s.dropZone(isDragging)}>
-            <Upload size={40} style={{ color: 'var(--text-secondary)', margin: '0 auto 12px' }} />
-            <label style={{ cursor: 'pointer' }}>
-              <span style={{ color: 'var(--primary)', fontWeight: 500 }}>Click to upload an image</span>
-              <input type="file" accept="image/*" onChange={handleFileSelect} style={{ display: 'none' }} />
+          <div
+            ref={dropZoneRef}
+            style={{
+              border: `2px dashed ${isDragging ? 'var(--primary)' : 'var(--border)'}`,
+              borderRadius: 10,
+              padding: '48px 24px',
+              textAlign: 'center',
+              background: isDragging ? 'var(--bg)' : 'transparent',
+              cursor: 'pointer',
+            }}
+          >
+            <Upload size={40} className="text-secondary-color mx-auto mb-12" />
+            <label className="cursor-pointer">
+              <span className="text-primary font-medium">Click to upload an image</span>
+              <input type="file" accept="image/*" onChange={handleFileSelect} className="d-none" />
             </label>
-            <p className="small" style={{ marginTop: 8, color: 'var(--text-secondary)' }}>
+            <p className="small mt-8 text-secondary-color">
               JPG, PNG, GIF, WebP up to 50MB · Or drag & drop · Or paste from clipboard
             </p>
           </div>
         ) : (
           <div>
-            <div style={{ position: 'relative', marginBottom: 12 }}>
+            <div className="relative mb-12">
               <img
                 src={preview}
                 alt="Preview"
@@ -190,8 +150,8 @@ const ImageMetadataAnalyzer: React.FC = () => {
             <button
               onClick={handleAnalyze}
               disabled={isAnalyzing}
-              className="btn primary"
-              style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: 6, opacity: isAnalyzing ? 0.6 : 1 }}
+              className="btn primary w-full justify-center d-flex items-center gap-6"
+              style={{ opacity: isAnalyzing ? 0.6 : 1 }}
             >
               <Image size={14} /> {isAnalyzing ? 'Analyzing...' : 'Analyze Image'}
             </button>
@@ -199,36 +159,42 @@ const ImageMetadataAnalyzer: React.FC = () => {
         )}
 
         {error && (
-          <div style={{ marginTop: 12, background: 'var(--bg)', border: '1px solid #ef4444', borderRadius: 8, padding: '10px 14px' }}>
-            <p className="small" style={{ margin: 0, color: '#ef4444' }}>{error}</p>
+          <div className="mt-12" style={{ background: 'var(--bg)', border: '1px solid #ef4444', borderRadius: 8, padding: '10px 14px' }}>
+            <p className="small m-0" style={{ color: '#ef4444' }}>{error}</p>
           </div>
         )}
       </div>
 
       {result && (
-        <div style={s.resultCard(riskColor)}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+        <div style={{
+          border: `2px solid ${riskColor}`,
+          borderRadius: 12,
+          padding: '20px 24px',
+          background: 'var(--bg-secondary)',
+          marginBottom: 16,
+        }}>
+          <div className="tool-result-header">
             {result.isSuspicious
               ? <AlertTriangle size={28} style={{ color: riskColor, flexShrink: 0 }} />
               : <ShieldCheck size={28} style={{ color: '#22c55e', flexShrink: 0 }} />}
             <div>
-              <p style={{ margin: 0, fontWeight: 700, fontSize: 16, color: riskColor }}>
+              <p className="m-0 font-bold" style={{ fontSize: 16, color: riskColor }}>
                 {result.isSuspicious
                   ? result.riskScore >= 70 ? '🚨 CRITICAL RISK' : '⚠️ HIGH RISK'
                   : '✓ Low Risk'}
               </p>
-              <p className="small" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+              <p className="small m-0 text-secondary-color">
                 Risk Score: <strong>{result.riskScore}%</strong> ({riskLevel})
               </p>
             </div>
           </div>
 
           {result.issues.length > 0 && (
-            <div style={{ marginBottom: 12 }}>
-              <p className="small" style={{ fontWeight: 600, marginBottom: 6 }}>Detected Issues:</p>
-              <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <div className="mb-12">
+              <p className="small font-semibold mb-6">Detected Issues:</p>
+              <ul className="tool-list-none">
                 {result.issues.map((issue: string, i: number) => (
-                  <li key={i} className="small" style={{ display: 'flex', gap: 6 }}>
+                  <li key={i} className="small d-flex gap-6">
                     <span style={{ color: '#ef4444' }}>•</span>
                     <span>{issue}</span>
                   </li>
@@ -237,40 +203,40 @@ const ImageMetadataAnalyzer: React.FC = () => {
             </div>
           )}
 
-          <div style={s.subCard}>
-            <p className="small" style={{ fontWeight: 600, marginBottom: 6 }}>Metadata Information:</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 4 }}>
-              <p className="small" style={{ margin: 0 }}>
-                <span style={{ color: 'var(--text-secondary)' }}>EXIF Data:</span>{' '}
+          <div className="tool-sub-card">
+            <p className="small font-semibold mb-6">Metadata Information:</p>
+            <div className="tool-grid2-gap4">
+              <p className="small m-0">
+                <span className="text-secondary-color">EXIF Data:</span>{' '}
                 <strong>{result.metadata.hasExif ? 'Yes' : 'No'}</strong>
               </p>
               {result.metadata.dimensions && (
-                <p className="small" style={{ margin: 0 }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>Dimensions:</span>{' '}
+                <p className="small m-0">
+                  <span className="text-secondary-color">Dimensions:</span>{' '}
                   <strong>{result.metadata.dimensions.width} × {result.metadata.dimensions.height}</strong>
                 </p>
               )}
               {result.metadata.format && (
-                <p className="small" style={{ margin: 0 }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>Format:</span>{' '}
+                <p className="small m-0">
+                  <span className="text-secondary-color">Format:</span>{' '}
                   <strong>{result.metadata.format}</strong>
                 </p>
               )}
               {result.metadata.fileSize && (
-                <p className="small" style={{ margin: 0 }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>File Size:</span>{' '}
+                <p className="small m-0">
+                  <span className="text-secondary-color">File Size:</span>{' '}
                   <strong>{(result.metadata.fileSize / 1024).toFixed(1)} KB</strong>
                 </p>
               )}
               {result.metadata.device && (
-                <p className="small" style={{ margin: 0, gridColumn: '1 / -1' }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>Device:</span>{' '}
+                <p className="small m-0" style={{ gridColumn: '1 / -1' }}>
+                  <span className="text-secondary-color">Device:</span>{' '}
                   <strong>{result.metadata.device}</strong>
                 </p>
               )}
               {result.metadata.software && (
-                <p className="small" style={{ margin: 0, gridColumn: '1 / -1' }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>Software:</span>{' '}
+                <p className="small m-0" style={{ gridColumn: '1 / -1' }}>
+                  <span className="text-secondary-color">Software:</span>{' '}
                   <strong>{result.metadata.software}</strong>
                 </p>
               )}
@@ -278,8 +244,8 @@ const ImageMetadataAnalyzer: React.FC = () => {
           </div>
 
           <div>
-            <p className="small" style={{ fontWeight: 600, marginBottom: 6 }}>Recommendations:</p>
-            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <p className="small font-semibold mb-6">Recommendations:</p>
+            <ul className="tool-list-none">
               {result.recommendations.map((rec: string, i: number) => (
                 <li key={i} className="small">{rec}</li>
               ))}
@@ -288,9 +254,9 @@ const ImageMetadataAnalyzer: React.FC = () => {
         </div>
       )}
 
-      <div style={s.eduBox}>
-        <p className="small" style={{ fontWeight: 600, marginBottom: 8 }}>💡 What to look for:</p>
-        <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <div className="tool-edu-box">
+        <p className="small font-semibold mb-8">💡 What to look for:</p>
+        <ul className="tool-list-none">
           {[
             'Missing or manipulated EXIF metadata',
             'Future dates in creation timestamps',
@@ -298,7 +264,7 @@ const ImageMetadataAnalyzer: React.FC = () => {
             'Unusual dimensions or file sizes',
             'Always verify images through reverse image search',
           ].map((item) => (
-            <li key={item} className="small" style={{ color: 'var(--text-secondary)' }}>{item}</li>
+            <li key={item} className="small text-secondary-color">{item}</li>
           ))}
         </ul>
       </div>

@@ -54,7 +54,6 @@ export default function ReportCreditModal({ isOpen, onClose, onCreditAdded }: Re
     setError('');
     setSuccess('');
 
-    // Small delay for UX feedback
     setTimeout(() => {
       const result = validateAndRedeemKey(key);
       if (result.valid) {
@@ -74,75 +73,60 @@ export default function ReportCreditModal({ isOpen, onClose, onCreditAdded }: Re
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed', inset: 0,
-        backgroundColor: 'rgba(0,0,0,0.55)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        zIndex: 1000, padding: 20,
-      }}
-      onClick={onClose}
-    >
+    <div className="modal-overlay" onClick={onClose}>
       <div
-        className="card"
-        style={{ maxWidth: 480, width: '100%', position: 'relative', backgroundColor: 'var(--bg)' }}
+        className="card relative bg-base"
+        style={{ maxWidth: 480, width: '100%' }}
         onClick={e => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          style={{ position: 'absolute', top: 12, right: 12, background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--text-secondary)', display: 'flex' }}
+          className="close-btn"
           aria-label="Close"
         >
           <X size={20} />
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-          <FileText size={22} style={{ color: 'var(--primary)' }} />
-          <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>Get Report Credits</h2>
+        <div className="d-flex items-center gap-10 mb-6">
+          <FileText size={22} className="text-primary" />
+          <h2 className="m-0" style={{ fontSize: 20, fontWeight: 700 }}>Get Report Credits</h2>
         </div>
 
         {credits > 0 && (
-          <div style={{ padding: '8px 12px', borderRadius: 6, backgroundColor: 'rgb(240 253 244)', border: '1px solid rgb(34 197 94)', marginBottom: 16 }}>
-            <div className="small" style={{ color: 'rgb(21 128 61)', fontWeight: 600 }}>
+          <div className="credits-notice">
+            <div className="small text-green font-semibold">
               You have {credits} report credit{credits !== 1 ? 's' : ''} remaining.
             </div>
           </div>
         )}
 
-        <p className="p" style={{ marginBottom: 20 }}>
+        <p className="p mb-20">
           Purchase a credit pack from our store, then enter your license key below to unlock report downloads.
         </p>
 
-        {/* Packages */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+        <div className="d-flex flex-col gap-10 mb-24">
           {PACKAGES.map(pkg => (
             <div
               key={pkg.id}
-              style={{
-                padding: '12px 16px', borderRadius: 8,
-                border: pkg.popular ? '2px solid var(--primary)' : '1px solid var(--border)',
-                backgroundColor: pkg.popular ? 'var(--bg-secondary)' : 'var(--bg)',
-              }}
+              className={pkg.popular ? 'pkg-card pkg-card-popular' : 'pkg-card pkg-card-default'}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+              <div className="d-flex justify-between items-start mb-10">
                 <div>
                   {pkg.popular && (
-                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 2 }}>
-                      Best value
-                    </div>
+                    <div className="best-value-label">Best value</div>
                   )}
-                  <div style={{ fontWeight: 600 }}>{pkg.label}</div>
-                  <div className="small" style={{ opacity: 0.7 }}>{pkg.credits} PDF report{pkg.credits !== 1 ? 's' : ''}</div>
+                  <div className="font-semibold">{pkg.label}</div>
+                  <div className="small opacity-7">{pkg.credits} PDF report{pkg.credits !== 1 ? 's' : ''}</div>
                 </div>
-                <span style={{ fontWeight: 700, fontSize: 16 }}>{pkg.price}</span>
+                <span className="font-bold" style={{ fontSize: 16 }}>{pkg.price}</span>
               </div>
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div className="d-flex gap-8">
                 <a
                   href={pkg.stripeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn primary"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, padding: '6px 12px', textDecoration: 'none' }}
+                  className="btn primary d-inline-flex items-center gap-6"
+                  style={{ fontSize: 13, padding: '6px 12px', textDecoration: 'none' }}
                 >
                   Stripe <ExternalLink size={12} />
                 </a>
@@ -150,8 +134,8 @@ export default function ReportCreditModal({ isOpen, onClose, onCreditAdded }: Re
                   href={pkg.gumroadUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, padding: '6px 12px', textDecoration: 'none' }}
+                  className="btn d-inline-flex items-center gap-6"
+                  style={{ fontSize: 13, padding: '6px 12px', textDecoration: 'none' }}
                 >
                   Gumroad <ExternalLink size={12} />
                 </a>
@@ -160,51 +144,45 @@ export default function ReportCreditModal({ isOpen, onClose, onCreditAdded }: Re
           ))}
         </div>
 
-        {/* Redeem */}
-        <div style={{ borderTop: '1px solid var(--border)', paddingTop: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-            <Key size={16} style={{ color: 'var(--primary)' }} />
-            <span style={{ fontWeight: 600 }}>Enter License Key</span>
+        <div className="redeem-section">
+          <div className="d-flex items-center gap-8 mb-10">
+            <Key size={16} className="text-primary" />
+            <span className="font-semibold">Enter License Key</span>
           </div>
 
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className="d-flex gap-8">
             <input
               type="text"
               value={key}
               onChange={e => setKey(e.target.value.toUpperCase())}
               onKeyDown={handleKeyDown}
               placeholder="CBST-R5-A1B2C3D4-XXXXXXXX"
-              style={{
-                flex: 1, padding: '10px 12px', border: '1px solid var(--border)',
-                borderRadius: 6, fontSize: 14, fontFamily: 'monospace',
-                backgroundColor: 'var(--bg)',
-              }}
+              className="key-input"
               spellCheck={false}
             />
             <button
               onClick={handleRedeem}
               disabled={redeeming}
-              className="btn primary"
-              style={{ whiteSpace: 'nowrap' }}
+              className="btn primary whitespace-nowrap"
             >
               {redeeming ? 'Checking...' : 'Redeem'}
             </button>
           </div>
 
           {error && (
-            <div style={{ marginTop: 10, padding: '8px 12px', borderRadius: 6, backgroundColor: 'rgb(254 242 242)', border: '1px solid rgb(239 68 68)' }}>
-              <div className="small" style={{ color: 'rgb(153 27 27)' }}>{error}</div>
+            <div className="mt-10 p-8 notice-error" style={{ borderRadius: 6 }}>
+              <div className="small text-red">{error}</div>
             </div>
           )}
 
           {success && (
-            <div style={{ marginTop: 10, padding: '8px 12px', borderRadius: 6, backgroundColor: 'rgb(240 253 244)', border: '1px solid rgb(34 197 94)', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Check size={16} style={{ color: 'rgb(21 128 61)', flexShrink: 0 }} />
-              <div className="small" style={{ color: 'rgb(21 128 61)', fontWeight: 600 }}>{success}</div>
+            <div className="mt-10 p-8 notice-success d-flex items-center gap-8" style={{ borderRadius: 6 }}>
+              <Check size={16} className="text-green flex-shrink-0" />
+              <div className="small text-green font-semibold">{success}</div>
             </div>
           )}
 
-          <p className="small" style={{ marginTop: 14, opacity: 0.6 }}>
+          <p className="small mt-14 opacity-6">
             Keys are redeemed locally on this device. No account required. No data transmitted.
           </p>
         </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Shield, Search, Brain, FileCheck, Lock, Eye, Zap,
-  ArrowRight, CheckCircle, AlertTriangle, MessageSquare,
+  ArrowRight, MessageSquare,
   Mail, Image as ImageIcon, User
 } from 'lucide-react';
 import { appUrl } from '../config/product';
@@ -10,7 +10,7 @@ import { IS_WEB_BUILD } from '../../config/env';
 
 export default function HowItWorks() {
   return (
-    <div className="grid" style={{ gap: 20 }}>
+    <div className="grid gap-20">
       <section className="card">
         <div className="kicker">
           <Shield size={16} /> Understanding Cyberstition
@@ -24,7 +24,7 @@ export default function HowItWorks() {
 
       <section className="card">
         <h2 className="h2">Three-Step Analysis Process</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 24 }}>
+        <div className="d-flex flex-col gap-24 mt-24">
           <ProcessStep
             number={1}
             icon={<Search size={32} />}
@@ -51,10 +51,10 @@ export default function HowItWorks() {
 
       <section className="card">
         <h2 className="h2">Analysis Tools</h2>
-        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>
+        <p className="p mt-8 mb-20">
           We use four specialized analyzers to examine different aspects of suspicious content:
         </p>
-        <div style={{ display: 'grid', gap: 16 }}>
+        <div className="d-grid gap-16">
           <ToolCard
             icon={<MessageSquare size={24} />}
             title="Message Analysis"
@@ -84,10 +84,10 @@ export default function HowItWorks() {
 
       <section className="card">
         <h2 className="h2">Pattern Recognition System</h2>
-        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>
+        <p className="p mt-8 mb-20">
           Our system identifies known scam patterns across multiple threat categories:
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
+        <div className="grid-auto-250">
           <PatternCard title="Phishing" items={['Fake login pages', 'Credential harvesting', 'Account verification scams']} />
           <PatternCard title="Romance Scams" items={['Emotional manipulation', 'Investment schemes', 'Emergency fund requests']} />
           <PatternCard title="Investment Fraud" items={['Guaranteed returns', 'Pressure tactics', 'Fake testimonials']} />
@@ -96,21 +96,13 @@ export default function HowItWorks() {
       </section>
 
       <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-        <div style={{ display: 'flex', alignItems: 'start', gap: 16 }}>
-          <div style={{
-            padding: 12,
-            borderRadius: 12,
-            backgroundColor: 'var(--primary)',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+        <div className="d-flex items-start gap-16">
+          <div className="icon-badge-primary">
             <Lock size={32} />
           </div>
-          <div style={{ flex: 1 }}>
-            <h3 className="h3" style={{ margin: 0, marginBottom: 8 }}>Privacy-First Design</h3>
-            <p className="p" style={{ margin: 0 }}>
+          <div className="flex-1">
+            <h3 className="h3 m-0 mb-8">Privacy-First Design</h3>
+            <p className="p m-0">
               All analysis happens locally in your browser. Your data never leaves your device unless you explicitly choose to save sessions. We don't track, collect, or store your sensitive information.
             </p>
           </div>
@@ -119,10 +111,10 @@ export default function HowItWorks() {
 
       <section className="card">
         <h2 className="h2">Risk Assessment</h2>
-        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>
+        <p className="p mt-8 mb-20">
           Each analysis produces a comprehensive risk score based on multiple factors:
         </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="d-flex flex-col gap-16">
           <RiskLevel
             level="Low Risk"
             score="0–39"
@@ -146,7 +138,7 @@ export default function HowItWorks() {
 
       <section className="card">
         <h2 className="h2">Key Features</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginTop: 20 }}>
+        <div className="grid-auto-200 mt-20">
           <FeatureCard icon={<Eye size={20} />} title="Multi-Signal Detection" description="Analyzes multiple indicators simultaneously" />
           <FeatureCard icon={<Brain size={20} />} title="Pattern Matching" description="Identifies known scam patterns" />
           <FeatureCard icon={<Zap size={20} />} title="Cross-Reference" description="Correlates evidence across sources" />
@@ -158,15 +150,15 @@ export default function HowItWorks() {
 
       <section className="card">
         <h2 className="h2">Ready to Get Started?</h2>
-        <p className="p" style={{ marginTop: 8, marginBottom: 20 }}>
+        <p className="p mt-8 mb-20">
           Start analyzing suspicious content now with our guided scan workflow.
         </p>
         {IS_WEB_BUILD ? (
-          <a href={appUrl} className="btn primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <a href={appUrl} className="btn primary d-inline-flex items-center gap-8">
             Open App <ArrowRight size={16} />
           </a>
         ) : (
-          <Link to="/scan" className="btn primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <Link to="/scan" className="btn primary d-inline-flex items-center gap-8">
             Start Analysis <ArrowRight size={16} />
           </Link>
         )}
@@ -177,40 +169,16 @@ export default function HowItWorks() {
 
 function ProcessStep({ number, icon, title, description, color }: any) {
   return (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'start' }}>
-      <div style={{
-        minWidth: 56,
-        height: 56,
-        borderRadius: 12,
-        backgroundColor: 'var(--bg)',
-        color: color,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative'
-      }}>
+    <div className="d-flex gap-16 items-start">
+      <div className="hiw-process-icon" style={{ color }}>
         {icon}
-        <div style={{
-          position: 'absolute',
-          top: -8,
-          right: -8,
-          width: 28,
-          height: 28,
-          borderRadius: '50%',
-          backgroundColor: color,
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '0.9rem',
-          fontWeight: 600
-        }}>
+        <div className="hiw-step-number" style={{ backgroundColor: color }}>
           {number}
         </div>
       </div>
-      <div style={{ flex: 1 }}>
-        <h3 className="h3" style={{ margin: 0, marginBottom: 6 }}>{title}</h3>
-        <p className="p" style={{ margin: 0, opacity: 0.85 }}>{description}</p>
+      <div className="flex-1">
+        <h3 className="h3 m-0 mb-6">{title}</h3>
+        <p className="p m-0 opacity-85">{description}</p>
       </div>
     </div>
   );
@@ -218,30 +186,13 @@ function ProcessStep({ number, icon, title, description, color }: any) {
 
 function ToolCard({ icon, title, description, color }: any) {
   return (
-    <div style={{
-      padding: 16,
-      backgroundColor: 'var(--bg-secondary)',
-      borderRadius: 8,
-      border: '1px solid var(--border)',
-      display: 'flex',
-      gap: 12,
-      alignItems: 'start'
-    }}>
-      <div style={{
-        minWidth: 48,
-        height: 48,
-        borderRadius: 10,
-        backgroundColor: 'var(--bg)',
-        color: color,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
+    <div className="hiw-tool-card">
+      <div className="hiw-icon-box" style={{ color }}>
         {icon}
       </div>
-      <div style={{ flex: 1 }}>
-        <div className="small" style={{ fontWeight: 600, marginBottom: 4 }}>{title}</div>
-        <div className="small" style={{ opacity: 0.8, fontSize: '0.85rem' }}>{description}</div>
+      <div className="flex-1">
+        <div className="small font-semibold mb-4">{title}</div>
+        <div className="small opacity-8" style={{ fontSize: '0.85rem' }}>{description}</div>
       </div>
     </div>
   );
@@ -249,16 +200,11 @@ function ToolCard({ icon, title, description, color }: any) {
 
 function PatternCard({ title, items }: any) {
   return (
-    <div style={{
-      padding: 16,
-      backgroundColor: 'var(--bg-secondary)',
-      borderRadius: 8,
-      border: '1px solid var(--border)'
-    }}>
-      <div className="small" style={{ fontWeight: 600, marginBottom: 12 }}>{title}</div>
+    <div className="hiw-pattern-card">
+      <div className="small font-semibold mb-12">{title}</div>
       <ul style={{ margin: 0, paddingLeft: 20 }}>
         {items.map((item: string, index: number) => (
-          <li key={index} className="small" style={{ marginTop: index > 0 ? 6 : 0, opacity: 0.8 }}>
+          <li key={index} className={`small opacity-8${index > 0 ? ' mt-6' : ''}`}>
             {item}
           </li>
         ))}
@@ -276,13 +222,13 @@ function RiskLevel({ level, score, color, description }: any) {
       border: `2px solid ${color}`,
       display: 'flex',
       gap: 16,
-      alignItems: 'flex-start'
+      alignItems: 'flex-start',
     }}>
       <div style={{
         minWidth: 56,
         borderRadius: 8,
         border: `1px solid ${color}`,
-        color: color,
+        color,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -294,9 +240,9 @@ function RiskLevel({ level, score, color, description }: any) {
         <span style={{ fontWeight: 700, fontSize: '0.85rem', lineHeight: 1 }}>{score}</span>
         <span style={{ fontSize: '0.7rem', opacity: 0.8, lineHeight: 1 }}>score</span>
       </div>
-      <div style={{ flex: 1 }}>
-        <div className="small" style={{ fontWeight: 700, marginBottom: 4, color }}>{level}</div>
-        <div className="small" style={{ opacity: 0.85 }}>{description}</div>
+      <div className="flex-1">
+        <div className="small font-bold mb-4" style={{ color }}>{level}</div>
+        <div className="small opacity-85">{description}</div>
       </div>
     </div>
   );
@@ -304,28 +250,12 @@ function RiskLevel({ level, score, color, description }: any) {
 
 function FeatureCard({ icon, title, description }: any) {
   return (
-    <div style={{
-      padding: 16,
-      backgroundColor: 'var(--bg-secondary)',
-      borderRadius: 8,
-      border: '1px solid var(--border)',
-      textAlign: 'center'
-    }}>
-      <div style={{
-        width: 48,
-        height: 48,
-        borderRadius: 10,
-        backgroundColor: 'var(--primary)',
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: '0 auto 12px'
-      }}>
+    <div className="hiw-feature-card">
+      <div className="hiw-icon-primary">
         {icon}
       </div>
-      <div className="small" style={{ fontWeight: 600, marginBottom: 4 }}>{title}</div>
-      <div className="small" style={{ opacity: 0.8, fontSize: '0.85rem' }}>{description}</div>
+      <div className="small font-semibold mb-4">{title}</div>
+      <div className="small opacity-8" style={{ fontSize: '0.85rem' }}>{description}</div>
     </div>
   );
 }

@@ -55,17 +55,17 @@ export default function DashboardSessions() {
   return (
     <div className="grid" style={{ gap: 14 }}>
       <section className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+        <div className="d-flex justify-between items-center flex-wrap gap-12">
           <div>
             <div className="kicker"><Shield size={16} /> Scan Sessions</div>
             <h1 className="h1">Analysis History</h1>
             <p className="p">View and manage your complete scan sessions with pattern detection and confidence scores.</p>
           </div>
-          <div style={{ display: 'flex', gap: 12 }}>
-            <Link to="/scan" className="btn primary" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div className="d-flex gap-12">
+            <Link to="/scan" className="btn primary d-flex gap-8 items-center">
               <Shield size={16} /> New Scan
             </Link>
-            <Link to="/" className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <Link to="/" className="btn d-flex gap-8 items-center">
               <Home size={16} /> Home
             </Link>
           </div>
@@ -73,129 +73,115 @@ export default function DashboardSessions() {
       </section>
 
       {sortedSessions.length === 0 ? (
-        <section className="card" style={{ textAlign: 'center', padding: 40 }}>
-          <Shield size={48} style={{ margin: '0 auto 16px', opacity: 0.3 }} />
+        <section className="card text-center p-40">
+          <Shield size={48} className="mx-auto mb-16 opacity-3" />
           <p className="p">No scan sessions yet.</p>
-          <p className="small" style={{ marginTop: 8, marginBottom: 16 }}>
+          <p className="small mt-8 mb-16">
             Start a guided scan to analyze content with context-aware pattern detection.
           </p>
           <Link to="/scan" className="btn primary">Start Your First Scan</Link>
         </section>
       ) : (
-        <div className="grid" style={{ gap: 12 }}>
+        <div className="grid gap-12">
           {sortedSessions.map((session) => (
             <div
               key={session.id}
-              className="card"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 12,
-                padding: 16,
-              }}
+              className="card d-flex flex-col gap-12 p-16"
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                    <h3 className="h3" style={{ margin: 0 }}>
+              <div className="d-flex justify-between items-start">
+                <div className="flex-1">
+                  <div className="d-flex items-center gap-10 flex-wrap">
+                    <h3 className="h3 m-0">
                       {session.context.senderName || 'Unknown Sender'}
                     </h3>
                     <span
-                      className="badge"
+                      className="badge capitalize"
                       style={{
                         backgroundColor: getRiskColor(session.overallRiskLevel),
                         color: 'white',
-                        textTransform: 'capitalize',
                       }}
                     >
                       {session.overallRiskLevel} Risk
                     </span>
                     <span
-                      className="badge"
+                      className="badge capitalize"
                       style={{
                         backgroundColor: session.status === 'completed' ? 'var(--primary)' : 'var(--border)',
                         color: session.status === 'completed' ? 'white' : 'var(--text)',
-                        textTransform: 'capitalize',
                       }}
                     >
                       {session.status === 'in_progress' ? 'In Progress' : session.status}
                     </span>
                   </div>
 
-                  <div className="small" style={{ marginTop: 6, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                    <span style={{ textTransform: 'capitalize' }}>
+                  <div className="small mt-6 d-flex gap-12 flex-wrap">
+                    <span className="capitalize">
                       {session.context.origin.replace('_', ' ')}
                     </span>
                     {session.threatCategory !== 'unknown' && (
-                      <span style={{ color: 'var(--primary)', fontWeight: 600 }}>
+                      <span className="text-primary font-semibold">
                         {session.threatCategory.replace('_', ' ')}
                       </span>
                     )}
-                    <span style={{ opacity: 0.6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                    <span className="opacity-6 d-flex gap-4 items-center">
                       <Clock size={12} /> {formatDate(session.updatedAt)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                gap: 12,
-                padding: 12,
-                backgroundColor: 'var(--bg-secondary)',
-                borderRadius: 6
-              }}>
+              <div
+                className="d-grid gap-12 p-12 bg-secondary"
+                style={{
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                  borderRadius: 6,
+                }}
+              >
                 <div>
-                  <div className="small" style={{ opacity: 0.7 }}>Confidence</div>
-                  <div className="kicker" style={{ marginTop: 2 }}>
+                  <div className="small opacity-7">Confidence</div>
+                  <div className="kicker mt-2">
                     {Math.round(session.confidence * 100)}%
                   </div>
                 </div>
                 <div>
-                  <div className="small" style={{ opacity: 0.7 }}>Risk Score</div>
-                  <div className="kicker" style={{ marginTop: 2, color: getRiskColor(session.overallRiskLevel) }}>
+                  <div className="small opacity-7">Risk Score</div>
+                  <div className="kicker mt-2" style={{ color: getRiskColor(session.overallRiskLevel) }}>
                     {session.overallRiskScore}/100
                   </div>
                 </div>
                 <div>
-                  <div className="small" style={{ opacity: 0.7 }}>Evidence</div>
-                  <div className="kicker" style={{ marginTop: 2 }}>
+                  <div className="small opacity-7">Evidence</div>
+                  <div className="kicker mt-2">
                     {session.evidence.length} items
                   </div>
                 </div>
                 <div>
-                  <div className="small" style={{ opacity: 0.7 }}>Patterns</div>
-                  <div className="kicker" style={{ marginTop: 2 }}>
+                  <div className="small opacity-7">Patterns</div>
+                  <div className="kicker mt-2">
                     {session.patternMatches.length} found
                   </div>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <div className="d-flex gap-8 flex-wrap">
                 <button
                   onClick={() => setViewingSession(session.id)}
-                  className="btn primary"
-                  style={{ display: 'flex', gap: 8, alignItems: 'center' }}
+                  className="btn primary d-flex gap-8 items-center"
                 >
                   <Eye size={16} /> View Details
                 </button>
                 {session.status !== 'completed' && (
                   <button
                     onClick={() => handleResume(session.id)}
-                    className="btn"
-                    style={{ display: 'flex', gap: 8, alignItems: 'center' }}
+                    className="btn d-flex gap-8 items-center"
                   >
                     <Play size={16} /> Resume
                   </button>
                 )}
                 <button
                   onClick={() => handleDelete(session.id)}
-                  className="btn"
-                  style={{
-                    marginLeft: 'auto',
-                    color: 'rgb(239 68 68)',
-                  }}
+                  className="btn ml-auto"
+                  style={{ color: 'rgb(239 68 68)' }}
                 >
                   <Trash2 size={16} />
                 </button>
@@ -233,12 +219,12 @@ function SessionDetailView({ session, onBack }: any) {
   return (
     <div className="grid" style={{ gap: 14 }}>
       <section className="card">
-        <button onClick={onBack} className="btn" style={{ marginBottom: 12 }}>
+        <button onClick={onBack} className="btn mb-12">
           ← Back to Sessions
         </button>
         <div className="kicker"><Shield size={16} /> Scan Session Details</div>
         <h1 className="h1">{session.context.senderName || 'Unknown Sender'}</h1>
-        <div className="small" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 6 }}>
+        <div className="small d-flex gap-12 flex-wrap mt-6">
           <span>Origin: {session.context.origin.replace('_', ' ')}</span>
           <span>•</span>
           <span>{formatDate(session.createdAt)}</span>
@@ -247,34 +233,29 @@ function SessionDetailView({ session, onBack }: any) {
 
       <section className="card">
         <div className="kicker"><TrendingUp size={16} /> Risk Assessment</div>
-        <div style={{
-          marginTop: 16,
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-          gap: 16
-        }}>
-          <div style={{ padding: 16, backgroundColor: 'var(--bg-secondary)', borderRadius: 6 }}>
-            <div className="small" style={{ opacity: 0.7 }}>Overall Risk</div>
-            <div className="h2" style={{ marginTop: 4, color: getRiskColor(session.overallRiskLevel) }}>
+        <div className="stats-grid mt-16">
+          <div className="stat-box">
+            <div className="small opacity-7">Overall Risk</div>
+            <div className="h2 mt-4" style={{ color: getRiskColor(session.overallRiskLevel) }}>
               {session.overallRiskLevel}
             </div>
           </div>
-          <div style={{ padding: 16, backgroundColor: 'var(--bg-secondary)', borderRadius: 6 }}>
-            <div className="small" style={{ opacity: 0.7 }}>Risk Score</div>
-            <div className="h2" style={{ marginTop: 4, color: getRiskColor(session.overallRiskLevel) }}>
+          <div className="stat-box">
+            <div className="small opacity-7">Risk Score</div>
+            <div className="h2 mt-4" style={{ color: getRiskColor(session.overallRiskLevel) }}>
               {session.overallRiskScore}/100
             </div>
           </div>
-          <div style={{ padding: 16, backgroundColor: 'var(--bg-secondary)', borderRadius: 6 }}>
-            <div className="small" style={{ opacity: 0.7 }}>Confidence</div>
-            <div className="h2" style={{ marginTop: 4 }}>
+          <div className="stat-box">
+            <div className="small opacity-7">Confidence</div>
+            <div className="h2 mt-4">
               {Math.round(session.confidence * 100)}%
             </div>
           </div>
           {session.threatCategory !== 'unknown' && (
-            <div style={{ padding: 16, backgroundColor: 'var(--bg-secondary)', borderRadius: 6 }}>
-              <div className="small" style={{ opacity: 0.7 }}>Threat Category</div>
-              <div className="kicker" style={{ marginTop: 4, textTransform: 'capitalize' }}>
+            <div className="stat-box">
+              <div className="small opacity-7">Threat Category</div>
+              <div className="kicker mt-4 capitalize">
                 {session.threatCategory.replace('_', ' ')}
               </div>
             </div>
@@ -283,27 +264,29 @@ function SessionDetailView({ session, onBack }: any) {
       </section>
 
       {session.context.requestedAction && (
-        <section className="card" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+        <section className="card bg-secondary">
           <div className="kicker">Requested Action</div>
-          <p className="p" style={{ marginTop: 8 }}>{session.context.requestedAction}</p>
+          <p className="p mt-8">{session.context.requestedAction}</p>
         </section>
       )}
 
       {session.patternMatches.length > 0 && (
         <section className="card">
           <div className="kicker"><AlertTriangle size={16} /> Pattern Matches ({session.patternMatches.length})</div>
-          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="mt-12 d-flex flex-col gap-12">
             {session.patternMatches.map((pattern: any, index: number) => (
-              <div key={index} style={{
-                padding: 12,
-                backgroundColor: 'var(--bg-secondary)',
-                borderRadius: 6,
-                borderLeft: `4px solid ${getRiskColor(pattern.confidence > 0.7 ? 'high' : pattern.confidence > 0.4 ? 'medium' : 'low')}`
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+              <div
+                key={index}
+                className="p-12 bg-secondary"
+                style={{
+                  borderRadius: 6,
+                  borderLeft: `4px solid ${getRiskColor(pattern.confidence > 0.7 ? 'high' : pattern.confidence > 0.4 ? 'medium' : 'low')}`,
+                }}
+              >
+                <div className="d-flex justify-between items-start">
                   <div>
-                    <div className="small" style={{ fontWeight: 600 }}>{pattern.patternName}</div>
-                    <div className="small" style={{ marginTop: 4, opacity: 0.8 }}>{pattern.description}</div>
+                    <div className="small font-semibold">{pattern.patternName}</div>
+                    <div className="small mt-4 opacity-8">{pattern.description}</div>
                   </div>
                   <span className="badge">{Math.round(pattern.confidence * 100)}% match</span>
                 </div>
@@ -316,13 +299,13 @@ function SessionDetailView({ session, onBack }: any) {
       {session.crossReferences.length > 0 && (
         <section className="card">
           <div className="kicker">Cross-Reference Findings ({session.crossReferences.length})</div>
-          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="mt-12 d-flex flex-col gap-8">
             {session.crossReferences.map((ref: any, index: number) => (
-              <div key={index} style={{
-                padding: 12,
-                backgroundColor: 'var(--bg-secondary)',
-                borderRadius: 6
-              }}>
+              <div
+                key={index}
+                className="p-12 bg-secondary"
+                style={{ borderRadius: 6 }}
+              >
                 <div className="small">{ref.description}</div>
               </div>
             ))}
@@ -333,36 +316,39 @@ function SessionDetailView({ session, onBack }: any) {
       {session.evidence.length > 0 && (
         <section className="card">
           <div className="kicker">Evidence Analyzed ({session.evidence.length})</div>
-          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="mt-12 d-flex flex-col gap-12">
             {session.evidence.map((evidence: any) => (
-              <div key={evidence.id} style={{
-                padding: 12,
-                backgroundColor: 'var(--bg-secondary)',
-                borderRadius: 6
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                  <div className="small" style={{ fontWeight: 600, textTransform: 'capitalize' }}>
+              <div
+                key={evidence.id}
+                className="p-12 bg-secondary"
+                style={{ borderRadius: 6 }}
+              >
+                <div className="d-flex justify-between items-center mb-8">
+                  <div className="small font-semibold capitalize">
                     {evidence.type}
                   </div>
-                  <span className="badge" style={{
-                    backgroundColor: getRiskColor(evidence.riskLevel),
-                    color: 'white'
-                  }}>
+                  <span
+                    className="badge"
+                    style={{
+                      backgroundColor: getRiskColor(evidence.riskLevel),
+                      color: 'white',
+                    }}
+                  >
                     {evidence.riskLevel} risk
                   </span>
                 </div>
-                <div className="small" style={{ opacity: 0.8 }}>
+                <div className="small opacity-8">
                   {evidence.signals.length} signals detected
                 </div>
                 {evidence.signals.length > 0 && (
-                  <ul style={{ marginTop: 8, paddingLeft: 20 }}>
+                  <ul className="mt-8 pl-5">
                     {evidence.signals.slice(0, 3).map((signal: any, idx: number) => (
-                      <li key={idx} className="small" style={{ marginTop: 4, opacity: 0.9 }}>
+                      <li key={idx} className="small mt-4 opacity-9">
                         {signal.description}
                       </li>
                     ))}
                     {evidence.signals.length > 3 && (
-                      <li className="small" style={{ marginTop: 4, opacity: 0.7, fontStyle: 'italic' }}>
+                      <li className="small mt-4 opacity-7 italic">
                         +{evidence.signals.length - 3} more signals
                       </li>
                     )}
@@ -375,11 +361,11 @@ function SessionDetailView({ session, onBack }: any) {
       )}
 
       {session.nextSteps.length > 0 && (
-        <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+        <section className="card card-secondary">
           <div className="kicker">Recommended Actions</div>
-          <ul style={{ marginTop: 12, paddingLeft: 20 }}>
+          <ul className="mt-12 pl-5">
             {session.nextSteps.map((step: string, index: number) => (
-              <li key={index} className="p" style={{ marginTop: 8 }}>{step}</li>
+              <li key={index} className="p mt-8">{step}</li>
             ))}
           </ul>
         </section>
