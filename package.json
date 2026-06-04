@@ -12,7 +12,8 @@
     "build:app": "npm run build",
     "preview": "vite preview",
     "preview:web": "npm run preview",
-    "preview:app": "npm run preview"
+    "preview:app": "npm run preview",
+    "postinstall": "node -e \"const fs=require('fs');const d='node_modules/@capacitor/android/capacitor/.settings';fs.mkdirSync(d,{recursive:true});fs.writeFileSync(d+'/org.eclipse.buildship.core.prefs','connection.project.dir=\\neclipse.preferences.version=1\\n');\""
   },
   "dependencies": {
     "@capacitor/android": "^7.0.0",
