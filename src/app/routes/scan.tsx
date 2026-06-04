@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSessionStore } from '../../state/sessionStore';
 import { Shield, ArrowRight, Home, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ContextSelector from '../components/scan/ContextSelector';
 import AnalysisWizard from '../components/scan/AnalysisWizard';
 import ScanResults from '../components/scan/ScanResults';
@@ -10,9 +10,19 @@ import { canStartInvestigation, consumeInvestigation, getInvestigationStatus } f
 type ScanStep = 'context' | 'analysis' | 'results';
 
 export default function Scan() {
-  const { currentSession, completeSession, clearCurrentSession } = useSessionStore();
+  const { currentSession, completeSession, clearCurrentSession, resumeSession } = useSessionStore();
   const [currentStep, setCurrentStep] = useState<ScanStep>('context');
+  const [searchParams, setSearchParams] = useSearchParams();
   const status = getInvestigationStatus();
+
+  // Resume a session from URL param (e.g. /scan?session=abc)
+  useEffect(() => {
+    const sessionId = searchParams.get('session');
+    if (sessionId) {
+      resumeSession(sessionId);
+      setSearchParams({}, { replace: true });
+    }
+  }, []);
 
   useEffect(() => {
     if (!currentSession) {

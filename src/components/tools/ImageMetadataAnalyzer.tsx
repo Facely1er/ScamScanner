@@ -1,11 +1,58 @@
-// Image Metadata Analyzer Component
-// Analyzes image files for suspicious metadata patterns
-
-import React, { useState, Suspense, useEffect, useRef, useCallback } from 'react';
-import { Image, Upload, AlertTriangle, ShieldCheck, XCircle, Info, Loader2, Download } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Image, Upload, AlertTriangle, ShieldCheck, XCircle, Info } from 'lucide-react';
 import { analyzeImageMetadata, getImageRiskLevel } from '../../utils/imageMetadataAnalyzer';
 import { mapImageAnalysisToAlert } from '../../mappers/imageToCautionAlert';
 import { useCautionStore } from '../../state/cautionStore';
+
+const s = {
+  wrap: { maxWidth: 768 } as React.CSSProperties,
+  card: {
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border)',
+    borderRadius: 12,
+    padding: '20px 24px',
+    marginBottom: 16,
+  } as React.CSSProperties,
+  resultCard: (color: string) => ({
+    border: `2px solid ${color}`,
+    borderRadius: 12,
+    padding: '20px 24px',
+    background: 'var(--bg-secondary)',
+    marginBottom: 16,
+  } as React.CSSProperties),
+  infoBox: {
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border)',
+    borderRadius: 8,
+    padding: '10px 14px',
+    marginBottom: 16,
+    display: 'flex',
+    gap: 10,
+    alignItems: 'flex-start',
+  } as React.CSSProperties,
+  dropZone: (isDragging: boolean) => ({
+    border: `2px dashed ${isDragging ? 'var(--primary)' : 'var(--border)'}`,
+    borderRadius: 10,
+    padding: '48px 24px',
+    textAlign: 'center' as const,
+    background: isDragging ? 'var(--bg)' : 'transparent',
+    cursor: 'pointer',
+  } as React.CSSProperties),
+  subCard: {
+    background: 'var(--bg)',
+    border: '1px solid var(--border)',
+    borderRadius: 8,
+    padding: '12px 16px',
+    marginBottom: 12,
+  } as React.CSSProperties,
+  eduBox: {
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border)',
+    borderRadius: 12,
+    padding: '16px 20px',
+    marginTop: 24,
+  } as React.CSSProperties,
+};
 
 const ImageMetadataAnalyzer: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -16,118 +63,67 @@ const ImageMetadataAnalyzer: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const dropZoneRef = useRef<HTMLDivElement>(null);
 
-  const addAlert = useCautionStore((s) => s.addAlert);
+  const addAlert = useCautionStore((st) => st.addAlert);
 
   const processFile = useCallback((selectedFile: File) => {
-    // Validate file type
-    if (!selectedFile.type.startsWith('image/')) {
-      setError('Please select an image file');
-      return;
-    }
-
-    // Validate file size (max 50MB)
-    if (selectedFile.size > 50 * 1024 * 1024) {
-      setError('File size must be less than 50MB');
-      return;
-    }
-
+    if (!selectedFile.type.startsWith('image/')) { setError('Please select an image file'); return; }
+    if (selectedFile.size > 50 * 1024 * 1024) { setError('File size must be less than 50MB'); return; }
     setFile(selectedFile);
     setError(null);
     setResult(null);
-
-    // Create preview
     const reader = new FileReader();
-    reader.onload = (e) => {
-      setPreview(e.target?.result as string);
-    };
+    reader.onload = (e) => setPreview(e.target?.result as string);
     reader.readAsDataURL(selectedFile);
   }, []);
 
-  // Clipboard paste support
   useEffect(() => {
     const handlePaste = async (e: ClipboardEvent) => {
-      if (file) return; // Don't paste if file already selected
-      
+      if (file) return;
       const items = e.clipboardData?.items;
       if (items) {
         for (let i = 0; i < items.length; i++) {
-          const item = items[i];
-          if (item.type.indexOf('image') !== -1) {
-            const blob = item.getAsFile();
-            if (blob) {
-              const pastedFile = new File([blob], 'pasted-image.png', { type: blob.type });
-              processFile(pastedFile);
-            }
+          if (items[i].type.indexOf('image') !== -1) {
+            const blob = items[i].getAsFile();
+            if (blob) processFile(new File([blob], 'pasted-image.png', { type: blob.type }));
           }
         }
       }
     };
-
     window.addEventListener('paste', handlePaste);
     return () => window.removeEventListener('paste', handlePaste);
   }, [file, processFile]);
 
-  // Drag and drop support
   useEffect(() => {
-    const dropZone = dropZoneRef.current;
-    if (!dropZone) return;
-
-    const handleDragOver = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragging(true);
+    const dz = dropZoneRef.current;
+    if (!dz) return;
+    const over = (e: DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); };
+    const leave = (e: DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); };
+    const drop = (e: DragEvent) => {
+      e.preventDefault(); e.stopPropagation(); setIsDragging(false);
+      const f = e.dataTransfer?.files;
+      if (f && f.length > 0) processFile(f[0]);
     };
-
-    const handleDragLeave = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragging(false);
-    };
-
-    const handleDrop = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragging(false);
-
-      const droppedFiles = e.dataTransfer?.files;
-      if (droppedFiles && droppedFiles.length > 0) {
-        processFile(droppedFiles[0]);
-      }
-    };
-
-    dropZone.addEventListener('dragover', handleDragOver);
-    dropZone.addEventListener('dragleave', handleDragLeave);
-    dropZone.addEventListener('drop', handleDrop);
-
-    return () => {
-      dropZone.removeEventListener('dragover', handleDragOver);
-      dropZone.removeEventListener('dragleave', handleDragLeave);
-      dropZone.removeEventListener('drop', handleDrop);
-    };
+    dz.addEventListener('dragover', over);
+    dz.addEventListener('dragleave', leave);
+    dz.addEventListener('drop', drop);
+    return () => { dz.removeEventListener('dragover', over); dz.removeEventListener('dragleave', leave); dz.removeEventListener('drop', drop); };
   }, [processFile]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (!selectedFile) return;
-    processFile(selectedFile);
+    const f = e.target.files?.[0];
+    if (f) processFile(f);
   };
 
   const handleAnalyze = async () => {
     if (!file) return;
-
     setIsAnalyzing(true);
     setError(null);
-
     try {
       const analysis = await analyzeImageMetadata(file);
       setResult(analysis);
-
-      // Create alert if suspicious
       if (analysis.isSuspicious) {
         const alert = mapImageAnalysisToAlert(analysis, { id: `img-${Date.now()}`, fileName: file.name });
-        if (alert) {
-          addAlert(alert);
-        }
+        if (alert) addAlert(alert);
       }
     } catch (err: any) {
       setError(err.message || 'Failed to analyze image');
@@ -136,219 +132,176 @@ const ImageMetadataAnalyzer: React.FC = () => {
     }
   };
 
-  const handleClear = () => {
-    setFile(null);
-    setPreview(null);
-    setResult(null);
-    setError(null);
-  };
+  const handleClear = () => { setFile(null); setPreview(null); setResult(null); setError(null); };
 
   const riskLevel = result ? getImageRiskLevel(result.riskScore) : null;
+  const riskColor = result
+    ? result.isSuspicious
+      ? result.riskScore >= 70 ? 'var(--danger, #ef4444)' : '#f97316'
+      : '#22c55e'
+    : 'var(--border)';
 
-  // Free preview (description and privacy notice)
-  const freePreview = (
-    <div className="mb-6">
-      <p className="text-gray-600 dark:text-gray-400 mb-4">
-        Upload an image to analyze its metadata for signs of manipulation or suspicious patterns
-      </p>
-      {/* Privacy Notice */}
-      <div className="info-box primary">
-        <div className="flex items-start gap-3">
-          <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <p className="info-box-text text-blue-900 dark:text-blue-200" style={{ margin: 0 }}>
-              <span className="font-semibold">Privacy First:</span>{' '}
-              All analysis happens in your browser. Your image never leaves your device.
-            </p>
-          </div>
+  return (
+    <div style={s.wrap}>
+      <div style={{ marginBottom: 20 }}>
+        <p className="p" style={{ marginBottom: 12 }}>
+          Upload an image to analyze its metadata for signs of manipulation or suspicious patterns
+        </p>
+        <div style={s.infoBox}>
+          <Info size={16} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: 2 }} />
+          <p className="small" style={{ margin: 0 }}>
+            <strong>Privacy First:</strong> All analysis happens in your browser. Your image never leaves your device.
+          </p>
         </div>
       </div>
-    </div>
-  );
 
-  // Locked content (the actual tool)
-  const lockedContent = (
-    <>
-      {/* Upload Area */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 space-y-4 mb-6">
+      <div style={s.card}>
         {!preview ? (
-          <div 
-            ref={dropZoneRef}
-            className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-              isDragging 
-                ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-900/20' 
-                : 'border-gray-300 dark:border-gray-600'
-            }`}
-          >
-            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <label className="cursor-pointer">
-              <span className="text-cyan-500 hover:text-purple-700 font-medium">
-                Click to upload an image
-              </span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
+          <div ref={dropZoneRef} style={s.dropZone(isDragging)}>
+            <Upload size={40} style={{ color: 'var(--text-secondary)', margin: '0 auto 12px' }} />
+            <label style={{ cursor: 'pointer' }}>
+              <span style={{ color: 'var(--primary)', fontWeight: 500 }}>Click to upload an image</span>
+              <input type="file" accept="image/*" onChange={handleFileSelect} style={{ display: 'none' }} />
             </label>
-            <p className="text-sm text-gray-500 mt-2">
-              JPG, PNG, GIF, WebP up to 50MB • Or drag & drop • Or paste from clipboard
+            <p className="small" style={{ marginTop: 8, color: 'var(--text-secondary)' }}>
+              JPG, PNG, GIF, WebP up to 50MB · Or drag & drop · Or paste from clipboard
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
-            <div className="relative">
+          <div>
+            <div style={{ position: 'relative', marginBottom: 12 }}>
               <img
                 src={preview}
                 alt="Preview"
-                className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700"
+                style={{ maxWidth: '100%', height: 'auto', borderRadius: 8, border: '1px solid var(--border)', display: 'block' }}
               />
               <button
                 onClick={handleClear}
-                className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600"
+                style={{
+                  position: 'absolute', top: 8, right: 8,
+                  background: '#ef4444', border: 'none', borderRadius: '50%',
+                  width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: '#fff',
+                }}
               >
-                <XCircle className="h-5 w-5" />
+                <XCircle size={18} />
               </button>
             </div>
-            <div className="flex space-x-3">
-              <button
-                onClick={handleAnalyze}
-                disabled={isAnalyzing}
-                className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-cyan-600 to-teal-600 text-white rounded-lg font-medium hover:from-cyan-500 hover:to-teal-500 shadow-lg hover:shadow-cyan-500/30 transition-all duration-200 hover:scale-[1.02] disabled:opacity-50"
-              >
-                {isAnalyzing ? 'Analyzing...' : 'Analyze Image'}
-              </button>
-            </div>
+            <button
+              onClick={handleAnalyze}
+              disabled={isAnalyzing}
+              className="btn primary"
+              style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: 6, opacity: isAnalyzing ? 0.6 : 1 }}
+            >
+              <Image size={14} /> {isAnalyzing ? 'Analyzing...' : 'Analyze Image'}
+            </button>
           </div>
         )}
 
         {error && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+          <div style={{ marginTop: 12, background: 'var(--bg)', border: '1px solid #ef4444', borderRadius: 8, padding: '10px 14px' }}>
+            <p className="small" style={{ margin: 0, color: '#ef4444' }}>{error}</p>
           </div>
         )}
       </div>
 
-      {/* Results */}
       {result && (
-        <div className={`border-2 rounded-xl p-6 ${
-          result.isSuspicious
-            ? result.riskScore >= 70
-              ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
-              : 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-            : 'border-green-500 bg-green-50 dark:bg-green-900/20'
-        }`}>
-          <div className="flex items-center mb-4">
-            {result.isSuspicious ? (
-              <AlertTriangle className={`h-8 w-8 mr-3 ${
-                result.riskScore >= 70 ? 'text-red-600' : 'text-orange-600'
-              }`} />
-            ) : (
-              <ShieldCheck className="h-8 w-8 text-green-600 mr-3" />
-            )}
+        <div style={s.resultCard(riskColor)}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+            {result.isSuspicious
+              ? <AlertTriangle size={28} style={{ color: riskColor, flexShrink: 0 }} />
+              : <ShieldCheck size={28} style={{ color: '#22c55e', flexShrink: 0 }} />}
             <div>
-              <h3 className="text-xl font-bold">
-                {result.isSuspicious ? (
-                  <span className={result.riskScore >= 70 ? 'text-red-900 dark:text-red-200' : 'text-orange-900 dark:text-orange-200'}>
-                    {result.riskScore >= 70 ? '🚨 CRITICAL RISK' : '⚠️ HIGH RISK'}
-                  </span>
-                ) : (
-                  <span className="text-green-900 dark:text-green-200">✓ Low Risk</span>
-                )}
-              </h3>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+              <p style={{ margin: 0, fontWeight: 700, fontSize: 16, color: riskColor }}>
+                {result.isSuspicious
+                  ? result.riskScore >= 70 ? '🚨 CRITICAL RISK' : '⚠️ HIGH RISK'
+                  : '✓ Low Risk'}
+              </p>
+              <p className="small" style={{ margin: 0, color: 'var(--text-secondary)' }}>
                 Risk Score: <strong>{result.riskScore}%</strong> ({riskLevel})
               </p>
             </div>
           </div>
 
-          {/* Issues */}
           {result.issues.length > 0 && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Detected Issues:</h4>
-              <ul className="space-y-1">
+            <div style={{ marginBottom: 12 }}>
+              <p className="small" style={{ fontWeight: 600, marginBottom: 6 }}>Detected Issues:</p>
+              <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {result.issues.map((issue: string, i: number) => (
-                  <li key={i} className="flex items-start text-sm">
-                    <span className="text-red-600 dark:text-red-400 mr-2">•</span>
-                    <span className="text-gray-800 dark:text-gray-200">{issue}</span>
+                  <li key={i} className="small" style={{ display: 'flex', gap: 6 }}>
+                    <span style={{ color: '#ef4444' }}>•</span>
+                    <span>{issue}</span>
                   </li>
                 ))}
               </ul>
             </div>
           )}
 
-          {/* Metadata Info */}
-          <div className="mb-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Metadata Information:</h4>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div>
-                <span className="text-gray-600 dark:text-gray-400">EXIF Data:</span>{' '}
-                <span className="font-medium">{result.metadata.hasExif ? 'Yes' : 'No'}</span>
-              </div>
+          <div style={s.subCard}>
+            <p className="small" style={{ fontWeight: 600, marginBottom: 6 }}>Metadata Information:</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 4 }}>
+              <p className="small" style={{ margin: 0 }}>
+                <span style={{ color: 'var(--text-secondary)' }}>EXIF Data:</span>{' '}
+                <strong>{result.metadata.hasExif ? 'Yes' : 'No'}</strong>
+              </p>
               {result.metadata.dimensions && (
-                <div>
-                  <span className="text-gray-600 dark:text-gray-400">Dimensions:</span>{' '}
-                  <span className="font-medium">{result.metadata.dimensions.width} × {result.metadata.dimensions.height}</span>
-                </div>
+                <p className="small" style={{ margin: 0 }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Dimensions:</span>{' '}
+                  <strong>{result.metadata.dimensions.width} × {result.metadata.dimensions.height}</strong>
+                </p>
               )}
               {result.metadata.format && (
-                <div>
-                  <span className="text-gray-600 dark:text-gray-400">Format:</span>{' '}
-                  <span className="font-medium">{result.metadata.format}</span>
-                </div>
+                <p className="small" style={{ margin: 0 }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Format:</span>{' '}
+                  <strong>{result.metadata.format}</strong>
+                </p>
               )}
               {result.metadata.fileSize && (
-                <div>
-                  <span className="text-gray-600 dark:text-gray-400">File Size:</span>{' '}
-                  <span className="font-medium">{(result.metadata.fileSize / 1024).toFixed(1)} KB</span>
-                </div>
+                <p className="small" style={{ margin: 0 }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>File Size:</span>{' '}
+                  <strong>{(result.metadata.fileSize / 1024).toFixed(1)} KB</strong>
+                </p>
               )}
               {result.metadata.device && (
-                <div className="col-span-2">
-                  <span className="text-gray-600 dark:text-gray-400">Device:</span>{' '}
-                  <span className="font-medium">{result.metadata.device}</span>
-                </div>
+                <p className="small" style={{ margin: 0, gridColumn: '1 / -1' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Device:</span>{' '}
+                  <strong>{result.metadata.device}</strong>
+                </p>
               )}
               {result.metadata.software && (
-                <div className="col-span-2">
-                  <span className="text-gray-600 dark:text-gray-400">Software:</span>{' '}
-                  <span className="font-medium">{result.metadata.software}</span>
-                </div>
+                <p className="small" style={{ margin: 0, gridColumn: '1 / -1' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Software:</span>{' '}
+                  <strong>{result.metadata.software}</strong>
+                </p>
               )}
             </div>
           </div>
 
-          {/* Recommendations */}
-          <div className="mt-4">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Recommendations:</h4>
-            <ul className="space-y-1 text-sm">
+          <div>
+            <p className="small" style={{ fontWeight: 600, marginBottom: 6 }}>Recommendations:</p>
+            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3 }}>
               {result.recommendations.map((rec: string, i: number) => (
-                <li key={i} className="text-gray-800 dark:text-gray-200">{rec}</li>
+                <li key={i} className="small">{rec}</li>
               ))}
             </ul>
           </div>
         </div>
       )}
 
-      {/* Educational Footer */}
-      <div className="mt-8 p-6 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border border-cyan-200 dark:border-cyan-800 rounded-xl">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-2">💡 What to look for:</h3>
-        <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
-          <li>Missing or manipulated EXIF metadata</li>
-          <li>Future dates in creation timestamps</li>
-          <li>Editing software signatures</li>
-          <li>Unusual dimensions or file sizes</li>
-          <li>Always verify images through reverse image search</li>
+      <div style={s.eduBox}>
+        <p className="small" style={{ fontWeight: 600, marginBottom: 8 }}>💡 What to look for:</p>
+        <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3 }}>
+          {[
+            'Missing or manipulated EXIF metadata',
+            'Future dates in creation timestamps',
+            'Editing software signatures',
+            'Unusual dimensions or file sizes',
+            'Always verify images through reverse image search',
+          ].map((item) => (
+            <li key={item} className="small" style={{ color: 'var(--text-secondary)' }}>{item}</li>
+          ))}
         </ul>
       </div>
-    </>
-  );
-
-  return (
-    <div className="max-w-4xl mx-auto">
-      {freePreview}
-      {lockedContent}
     </div>
   );
 };
