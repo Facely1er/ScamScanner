@@ -10,9 +10,21 @@ interface ReportCreditModalProps {
 }
 
 const PACKAGES = [
-  { id: 'R1', label: '1 Report', price: '$4.99', credits: 1, gumroadUrl: 'https://cyberstition.gumroad.com/l/report-1' },
-  { id: 'R5', label: '5 Reports', price: '$14.99', credits: 5, gumroadUrl: 'https://cyberstition.gumroad.com/l/report-5', popular: true },
-  { id: 'R20', label: '20 Reports', price: '$39.99', credits: 20, gumroadUrl: 'https://cyberstition.gumroad.com/l/report-20' },
+  {
+    id: 'R1', label: '1 Report', price: '$4.99', credits: 1,
+    gumroadUrl: 'https://cyberstition.gumroad.com/l/report-1',
+    stripeUrl: 'https://buy.stripe.com/report-1',
+  },
+  {
+    id: 'R5', label: '5 Reports', price: '$14.99', credits: 5, popular: true,
+    gumroadUrl: 'https://cyberstition.gumroad.com/l/report-5',
+    stripeUrl: 'https://buy.stripe.com/report-5',
+  },
+  {
+    id: 'R20', label: '20 Reports', price: '$39.99', credits: 20,
+    gumroadUrl: 'https://cyberstition.gumroad.com/l/report-20',
+    stripeUrl: 'https://buy.stripe.com/report-20',
+  },
 ];
 
 export default function ReportCreditModal({ isOpen, onClose, onCreditAdded }: ReportCreditModalProps) {
@@ -104,32 +116,47 @@ export default function ReportCreditModal({ isOpen, onClose, onCreditAdded }: Re
         {/* Packages */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
           {PACKAGES.map(pkg => (
-            <a
+            <div
               key={pkg.id}
-              href={pkg.gumroadUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '12px 16px', borderRadius: 8, textDecoration: 'none', color: 'inherit',
+                padding: '12px 16px', borderRadius: 8,
                 border: pkg.popular ? '2px solid var(--primary)' : '1px solid var(--border)',
                 backgroundColor: pkg.popular ? 'var(--bg-secondary)' : 'var(--bg)',
               }}
             >
-              <div>
-                {pkg.popular && (
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 2 }}>
-                    Best value
-                  </div>
-                )}
-                <div style={{ fontWeight: 600 }}>{pkg.label}</div>
-                <div className="small" style={{ opacity: 0.7 }}>{pkg.credits} PDF investigation report{pkg.credits !== 1 ? 's' : ''}</div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                <div>
+                  {pkg.popular && (
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 2 }}>
+                      Best value
+                    </div>
+                  )}
+                  <div style={{ fontWeight: 600 }}>{pkg.label}</div>
+                  <div className="small" style={{ opacity: 0.7 }}>{pkg.credits} PDF report{pkg.credits !== 1 ? 's' : ''}</div>
+                </div>
                 <span style={{ fontWeight: 700, fontSize: 16 }}>{pkg.price}</span>
-                <ExternalLink size={14} style={{ opacity: 0.5 }} />
               </div>
-            </a>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <a
+                  href={pkg.stripeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, padding: '6px 12px', textDecoration: 'none' }}
+                >
+                  Stripe <ExternalLink size={12} />
+                </a>
+                <a
+                  href={pkg.gumroadUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, padding: '6px 12px', textDecoration: 'none' }}
+                >
+                  Gumroad <ExternalLink size={12} />
+                </a>
+              </div>
+            </div>
           ))}
         </div>
 

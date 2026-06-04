@@ -8,6 +8,7 @@ const PACKAGES = [
     label: '1 Report',
     price: '$4.99',
     gumroadUrl: 'https://cyberstition.gumroad.com/l/report-1',
+    stripeUrl: 'https://buy.stripe.com/report-1',
     features: ['1 PDF investigation report', 'Full signal breakdown', 'Narrative summary', 'Recommended actions'],
   },
   {
@@ -16,6 +17,7 @@ const PACKAGES = [
     price: '$14.99',
     popular: true,
     gumroadUrl: 'https://cyberstition.gumroad.com/l/report-5',
+    stripeUrl: 'https://buy.stripe.com/report-5',
     features: ['5 PDF investigation reports', 'Full signal breakdown', 'Narrative summary', 'Recommended actions'],
   },
   {
@@ -23,6 +25,7 @@ const PACKAGES = [
     label: '20 Reports',
     price: '$39.99',
     gumroadUrl: 'https://cyberstition.gumroad.com/l/report-20',
+    stripeUrl: 'https://buy.stripe.com/report-20',
     features: ['20 PDF investigation reports', 'Full signal breakdown', 'Narrative summary', 'Recommended actions'],
   },
 ];
@@ -88,15 +91,26 @@ export default function Pricing() {
             <ul style={{ paddingLeft: 0, listStyle: 'none', marginBottom: 16 }}>
               {pkg.features.map(f => <CheckItem key={f}>{f}</CheckItem>)}
             </ul>
-            <a
-              href={pkg.gumroadUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn primary"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
-            >
-              Buy {pkg.label} <ExternalLink size={14} />
-            </a>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <a
+                href={pkg.stripeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn primary"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
+              >
+                Buy with Stripe <ExternalLink size={14} />
+              </a>
+              <a
+                href={pkg.gumroadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
+              >
+                Buy with Gumroad <ExternalLink size={14} />
+              </a>
+            </div>
           </section>
         ))}
       </div>
