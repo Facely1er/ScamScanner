@@ -1,71 +1,36 @@
 # Build Guide
 
-This project supports two build targets:
+This project runs as a fully functional web app in all build modes.
 
-## Build Targets
+## Default Commands
 
-### Web Build (Landing Page)
-- **Purpose**: Marketing/landing page for the paid app
-- **Features**: No tool access, only "Get the app" CTAs
-- **Build Command**: `npm run build:web`
-- **Output**: `dist/web/`
-
-### App Build (Full Functionality)
-- **Purpose**: The actual paid app with all features
-- **Features**: Full tool access (users paid to download)
-- **Build Command**: `npm run build:app`
-- **Output**: `dist/app/`
+- **Development**: `npm run dev`
+- **Production build**: `npm run build`
+- **Preview**: `npm run preview`
+- **Output directory**: `dist/`
 
 ## Development
 
-### Run Web Build Locally
-```bash
-npm run dev:web
-```
-
-### Run App Build Locally
-```bash
-npm run dev:app
-```
-
-### Default Development
+### Start Local Development
 ```bash
 npm run dev
 ```
-Defaults to web build.
 
-## Building for Production
-
-### Build Web (Landing Page)
+### Build for Production
 ```bash
-npm run build:web
+npm run build
 ```
 
-### Build App (Full Functionality)
+### Preview Production Build
 ```bash
-npm run build:app
+npm run preview
 ```
 
 ## How It Works
 
-The build target is controlled by the `BUILD_TARGET` environment variable:
-- `web` = Landing page only (no tool access)
-- `app` = Full app (all features enabled)
-
-The `src/config/env.ts` file reads this variable and exports:
-- `IS_WEB_BUILD` - true for web builds
-- `IS_APP_BUILD` - true for app builds
-
-Components check these flags to conditionally render:
-- Web builds show "Get the app" messages
-- App builds show full functionality
+Feature-gating logic has been removed. The app always exposes guided scans and all analysis tools in normal web usage.
 
 ## Usage Limits
 
-- **Web builds**: Always locked (no tool access)
-- **App builds**: Always unlocked (users paid to download)
-
-The `isUnlocked()` function in `src/app/core/usageLimits.ts` automatically returns:
-- `false` for web builds
-- `true` for app builds (with TODO for Play Store purchase verification)
-
+- Tool access is always enabled.
+- Compatibility wrappers remain in place so existing components keep working without paywall enforcement.

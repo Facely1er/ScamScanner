@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, FileText } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -13,9 +13,9 @@ export default function PaywallModal({ isOpen, onClose, toolName }: PaywallModal
 
   if (!isOpen) return null;
 
-  const handleUnlock = () => {
+  const handleContinue = () => {
     onClose();
-    navigate('/pricing');
+    navigate('/tools');
   };
 
   return (
@@ -66,28 +66,27 @@ export default function PaywallModal({ isOpen, onClose, toolName }: PaywallModal
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <FileText size={24} style={{ color: 'var(--primary)' }} />
-          <h2 style={{ fontSize: 22, fontWeight: 600, margin: 0 }}>Report Credits</h2>
+          <ArrowRight size={24} style={{ color: 'var(--primary)' }} />
+          <h2 style={{ fontSize: 22, fontWeight: 600, margin: 0 }}>Continue</h2>
         </div>
 
         <p className="p" style={{ marginBottom: 24 }}>
-          {toolName
-            ? `${toolName} requires a report credit. Purchase a credit pack to download PDF reports.`
-            : 'Downloading investigation reports requires a report credit. No subscription, no account.'}
+          {toolName 
+            ? `${toolName} is available now. Open tools to continue your analysis.`
+            : "This feature is available now. Open tools to continue your analysis."}
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <button
-            onClick={handleUnlock}
+            onClick={handleContinue}
             className="btn primary"
             style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
           >
-            <FileText size={16} />
-            View Pricing
+            <ArrowRight size={16} />
+            Open Tools
           </button>
         </div>
       </div>
     </div>
   );
 }
-

@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:web": "vite --mode web",
-    "dev:app": "cross-env BUILD_TARGET=app vite",
+    "dev:web": "npm run dev",
+    "dev:app": "npm run dev",
     "build": "tsc -b && vite build",
-    "build:web": "tsc -b && cross-env BUILD_TARGET=web vite build",
-    "build:app": "tsc -b && cross-env BUILD_TARGET=app vite build",
+    "build:web": "npm run build",
+    "build:app": "npm run build",
     "preview": "vite preview",
-    "preview:web": "vite preview --outDir dist/web",
-    "preview:app": "vite preview --outDir dist/app"
+    "preview:web": "npm run preview",
+    "preview:app": "npm run preview"
   },
   "dependencies": {
     "lucide-react": "^0.542.0",

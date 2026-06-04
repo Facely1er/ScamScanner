@@ -159,16 +159,16 @@ export default function Preferences() {
 
       <section className="card">
         <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Download size={20} /> Get the App
+          <Download size={20} /> Access & Support
         </h2>
         <div className="grid" style={{ gap: 12 }}>
           <Link to="/pricing" className="card" style={{ padding: 16, display: 'block', textDecoration: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <Download size={20} style={{ color: 'var(--primary)' }} />
               <div>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Purchase the App</div>
+                <div style={{ fontWeight: 600, marginBottom: 4 }}>View Access Details</div>
                 <div className="small" style={{ opacity: 0.8 }}>
-                  Get full access with a one-time purchase
+                  Full web access is available now. Optional support details are listed here.
                 </div>
               </div>
             </div>
