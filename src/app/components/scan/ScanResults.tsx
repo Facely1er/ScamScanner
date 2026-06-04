@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Shield, AlertTriangle, CheckCircle, Info, FileText,
-  TrendingUp, AlertCircle, XCircle, Home, RotateCcw
+  TrendingUp, AlertCircle, XCircle, Home, RotateCcw, Download
 } from 'lucide-react';
 import { ScanSession } from '../../../types/scan';
+import { generateNarrative } from '../../../utils/investigationNarrative';
+import { downloadReport } from '../../../utils/reportExporter';
 
 interface ScanResultsProps {
   session: ScanSession;
@@ -13,6 +15,8 @@ interface ScanResultsProps {
 }
 
 export default function ScanResults({ session, onComplete, onStartNew }: ScanResultsProps) {
+  const narrative = generateNarrative(session);
+
   const getRiskIcon = () => {
     switch (session.overallRiskLevel) {
       case 'high':
@@ -119,6 +123,15 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+        <div className="kicker" style={{ marginBottom: 8 }}>
+          <FileText size={16} /> Executive Summary
+        </div>
+        <p className="p" style={{ marginBottom: 12 }}>{narrative.summary}</p>
+        <p className="p" style={{ marginBottom: 12 }}>{narrative.findings}</p>
+        <p className="p" style={{ opacity: 0.75, fontSize: '0.9rem' }}>{narrative.confidence}</p>
       </section>
 
       {session.threatCategory && session.threatCategory !== 'unknown' && (
@@ -241,7 +254,7 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
               </div>
               {evidence.signals.length > 0 && (
                 <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {evidence.signals.slice(0, 3).map((signal, idx) => (
+                  {evidence.signals.map((signal, idx) => (
                     <div
                       key={idx}
                       className="small"
@@ -249,17 +262,13 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
                         padding: '6px 10px',
                         backgroundColor: 'var(--bg)',
                         borderRadius: 4,
-                        fontSize: '0.85rem'
+                        fontSize: '0.85rem',
+                        borderLeft: `3px solid ${signal.severity === 'high' ? 'rgb(239 68 68)' : signal.severity === 'medium' ? 'rgb(251 146 60)' : 'rgb(34 197 94)'}`
                       }}
                     >
                       {signal.description}
                     </div>
                   ))}
-                  {evidence.signals.length > 3 && (
-                    <div className="small" style={{ opacity: 0.6, fontSize: '0.85rem', marginTop: 4 }}>
-                      +{evidence.signals.length - 3} more signal{evidence.signals.length - 3 !== 1 ? 's' : ''}
-                    </div>
-                  )}
                 </div>
               )}
             </div>
@@ -267,30 +276,37 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
         </div>
       </section>
 
-      {session.nextSteps.length > 0 && (
-        <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: `2px solid ${getRiskColor()}` }}>
-          <div className="kicker" style={{ marginBottom: 12, color: getRiskColor() }}>
-            <Shield size={16} /> Recommended Actions
-          </div>
-          <ul style={{ marginTop: 12, paddingLeft: 20, marginBottom: 0 }}>
-            {session.nextSteps.map((step, index) => (
-              <li key={index} className="p" style={{ marginTop: index > 0 ? 10 : 0 }}>
-                {step}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <section className="card" style={{ backgroundColor: 'var(--bg-secondary)', border: `2px solid ${getRiskColor()}` }}>
+        <div className="kicker" style={{ marginBottom: 12, color: getRiskColor() }}>
+          <Shield size={16} /> Recommended Actions
+        </div>
+        <ul style={{ marginTop: 12, paddingLeft: 20, marginBottom: 0 }}>
+          {session.nextSteps.map((step, index) => (
+            <li key={index} className="p" style={{ marginTop: index > 0 ? 10 : 0 }}>
+              {step}
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <section className="card">
-        <div className="kicker" style={{ marginBottom: 8 }}>What's Next?</div>
-        <p className="p">
-          This scan session has been saved to your dashboard. You can review it anytime or start a new analysis.
+        <div className="kicker" style={{ marginBottom: 8 }}>Investigation Report</div>
+        <p className="p" style={{ marginBottom: 16 }}>
+          Download a full PDF investigation report with executive summary, all findings, pattern analysis, and recommended actions.
         </p>
-        <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
+        <button
+          onClick={() => downloadReport(session)}
+          className="btn primary"
+          style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}
+        >
+          <Download size={16} /> Download Investigation Report
+        </button>
+
+        <div className="kicker" style={{ marginBottom: 8 }}>What's Next?</div>
+        <div style={{ display: 'flex', gap: 12, marginTop: 8, flexWrap: 'wrap' }}>
           <button
             onClick={onComplete}
-            className="btn primary"
+            className="btn"
             style={{ display: 'flex', alignItems: 'center', gap: 8 }}
           >
             <FileText size={16} /> Save to Dashboard
