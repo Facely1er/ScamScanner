@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Shield, AlertTriangle, CheckCircle, Info, FileText,
@@ -7,6 +7,8 @@ import {
 import { ScanSession } from '../../../types/scan';
 import { generateNarrative } from '../../../utils/investigationNarrative';
 import { downloadReport } from '../../../utils/reportExporter';
+import { getCredits, consumeCredit, subscribeToCredits } from '../../core/creditStore';
+import ReportCreditModal from '../ReportCreditModal';
 
 interface ScanResultsProps {
   session: ScanSession;
@@ -16,6 +18,22 @@ interface ScanResultsProps {
 
 export default function ScanResults({ session, onComplete, onStartNew }: ScanResultsProps) {
   const narrative = generateNarrative(session);
+  const [credits, setCredits] = useState(getCredits());
+  const [showCreditModal, setShowCreditModal] = useState(false);
+
+  useEffect(() => {
+    return subscribeToCredits(() => setCredits(getCredits()));
+  }, []);
+
+  const handleDownload = () => {
+    if (credits <= 0) {
+      setShowCreditModal(true);
+      return;
+    }
+    consumeCredit();
+    downloadReport(session);
+    setCredits(getCredits());
+  };
 
   const getRiskIcon = () => {
     switch (session.overallRiskLevel) {
@@ -293,13 +311,19 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
         <div className="kicker" style={{ marginBottom: 8 }}>Investigation Report</div>
         <p className="p" style={{ marginBottom: 16 }}>
           Download a full PDF investigation report with executive summary, all findings, pattern analysis, and recommended actions.
+          {credits > 0 && (
+            <span style={{ marginLeft: 8, fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600 }}>
+              {credits} credit{credits !== 1 ? 's' : ''} available
+            </span>
+          )}
         </p>
         <button
-          onClick={() => downloadReport(session)}
+          onClick={handleDownload}
           className="btn primary"
           style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}
         >
-          <Download size={16} /> Download Investigation Report
+          <Download size={16} />
+          {credits > 0 ? 'Download Investigation Report' : 'Get Report Credits'}
         </button>
 
         <div className="kicker" style={{ marginBottom: 8 }}>What's Next?</div>
@@ -327,6 +351,11 @@ export default function ScanResults({ session, onComplete, onStartNew }: ScanRes
           </Link>
         </div>
       </section>
+      <ReportCreditModal
+        isOpen={showCreditModal}
+        onClose={() => setShowCreditModal(false)}
+        onCreditAdded={() => setShowCreditModal(false)}
+      />
     </>
   );
 }

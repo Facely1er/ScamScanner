@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSessionStore } from '../../state/sessionStore';
-import { Shield, ArrowRight, Home, CheckCircle2, Info } from 'lucide-react';
+import { Shield, ArrowRight, Home, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ContextSelector from '../components/scan/ContextSelector';
 import AnalysisWizard from '../components/scan/AnalysisWizard';
 import ScanResults from '../components/scan/ScanResults';
+import { canStartInvestigation, consumeInvestigation, getInvestigationStatus } from '../core/usageLimits';
 
 type ScanStep = 'context' | 'analysis' | 'results';
 
 export default function Scan() {
   const { currentSession, completeSession, clearCurrentSession } = useSessionStore();
   const [currentStep, setCurrentStep] = useState<ScanStep>('context');
+  const status = getInvestigationStatus();
 
   useEffect(() => {
     if (!currentSession) {
@@ -23,6 +25,7 @@ export default function Scan() {
   }, [currentSession]);
 
   const handleContextComplete = () => {
+    consumeInvestigation();
     setCurrentStep('analysis');
   };
 
@@ -50,15 +53,37 @@ export default function Scan() {
             </div>
             <h1 className="h1">Smart Analysis Workflow</h1>
           </div>
-          <Link to="/" className="btn" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Home size={16} /> Home
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span className="small" style={{ opacity: 0.7 }}>
+              {status.remaining}/{status.limit} free this month
+            </span>
+            <Link to="/" className="btn" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Home size={16} /> Home
+            </Link>
+          </div>
         </div>
 
         <StepIndicator currentStep={currentStep} />
       </section>
 
-      {currentStep === 'context' && <ContextSelector onComplete={handleContextComplete} />}
+      {currentStep === 'context' && !canStartInvestigation() && (
+        <section className="card" style={{ border: '2px solid rgb(251 146 60)', backgroundColor: 'rgb(255 247 237)' }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+            <AlertTriangle size={20} style={{ color: 'rgb(234 88 12)', flexShrink: 0, marginTop: 2 }} />
+            <div>
+              <div style={{ fontWeight: 700, color: 'rgb(154 52 18)', marginBottom: 6 }}>Monthly limit reached</div>
+              <p className="small" style={{ color: 'rgb(154 52 18)', marginBottom: 12 }}>
+                You've used all {status.limit} free investigations this month. Your limit resets on {new Date(status.resetAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}.
+              </p>
+              <Link to="/pricing" className="btn primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                View Pricing
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {currentStep === 'context' && canStartInvestigation() && <ContextSelector onComplete={handleContextComplete} />}
       {currentStep === 'analysis' && <AnalysisWizard onComplete={handleAnalysisComplete} />}
       {currentStep === 'results' && (
         <ScanResults

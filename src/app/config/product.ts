@@ -3,9 +3,10 @@
  * Avoid duplication by importing from here
  */
 
-export const appName = "Cyberstition – Trust Signals";
+export const appName = "Cyberstition";
 export const brandName = "Cyberstition";
-export const tagline = "Trust signals";
+export const tagline = "Trust Before You Click.";
 export const publisher = "by ERMITS";
-export const priceLabel = "$5.99 one-time";
+export const appUrl = "https://app.cyberstition.com";
+export const priceLabel = "Free · Report credits from $4.99";
 
