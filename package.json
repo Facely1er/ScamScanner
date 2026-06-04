@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "preview:web": "npm run preview",
     "preview:app": "npm run preview",
-    "postinstall": "node -e \"const fs=require('fs');const d='node_modules/@capacitor/android/capacitor/.settings';fs.mkdirSync(d,{recursive:true});fs.writeFileSync(d+'/org.eclipse.buildship.core.prefs','connection.project.dir=\\neclipse.preferences.version=1\\n');\""
+    "postinstall": "node -e \"const fs=require('fs');const prefs='connection.project.dir=\\neclipse.preferences.version=1\\n';['node_modules/@capacitor/android/capacitor','node_modules/@capacitor/app/android','node_modules/@capacitor/splash-screen/android','node_modules/@capacitor/status-bar/android'].forEach(p=>{const d=p+'/.settings';fs.mkdirSync(d,{recursive:true});fs.writeFileSync(d+'/org.eclipse.buildship.core.prefs',prefs);});\""
   },
   "dependencies": {
     "@capacitor/android": "^7.0.0",
