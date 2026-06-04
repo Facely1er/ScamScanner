@@ -1,7 +1,7 @@
 import React from 'react';
 import { FileText } from 'lucide-react';
 
-const LAST_UPDATED = 'June 4, 2025';
+const LAST_UPDATED = 'June 4, 2026';
 const CONTACT_EMAIL = 'support@cyberstition.com';
 
 export default function Terms() {

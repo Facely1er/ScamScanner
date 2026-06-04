@@ -41,7 +41,7 @@ function CheckItem({ children }: { children: React.ReactNode }) {
 
 export default function Pricing() {
   return (
-    <div className="grid" style={{ gap: 16, maxWidth: 640, margin: '0 auto' }}>
+    <div className="grid" style={{ gap: 16, maxWidth: 720, margin: '0 auto' }}>
       <section className="card">
         <h1 className="h1">{brandName} Pricing</h1>
         <p className="p" style={{ marginTop: 8 }}>
