@@ -1,0 +1,144 @@
+---
+description: CSS design system conventions for ScamScanner. Enforces token usage, no-inline-styles policy, and class selection rules for all React/CSS work.
+globs: **/*.{tsx,ts,css}
+alwaysApply: true
+---
+
+# ScamScanner Design System
+
+All styling lives in `src/styles.css`. No CSS Modules, no CSS-in-JS, no Tailwind.
+
+---
+
+## 1. CSS Variables — Always Use These
+
+Never write raw hex colors or raw pixel radii. Reference the tokens below.
+
+### Colors
+```css
+/* Brand */
+var(--primary)            /* accent purple — #9b7dd4 dark / #7c3aed light */
+var(--accent-blue)        /* #3b82f6 */
+var(--accent-secondary)   /* gold */
+
+/* Status */
+var(--success)            /* #10b981 green */
+var(--warning)            /* #f59e0b amber */
+var(--error)              /* #ef4444 red */
+var(--danger)             /* alias for --error */
+
+/* Semantic palette (use instead of raw hex) */
+var(--color-red)          /* #ef4444 */
+var(--color-orange)       /* #f97316 */
+var(--color-orange-dark)  /* #ea580c */
+var(--color-yellow)       /* #f59e0b */
+var(--color-green)        /* #22c55e */
+var(--color-blue)         /* #3b82f6 */
+
+/* Surfaces */
+var(--bg)                 /* page background */
+var(--bg-secondary)       /* slightly elevated surface */
+var(--card)               /* card background */
+var(--card-hover)         /* card hover state */
+
+/* Text */
+var(--text)               /* primary text */
+var(--text-secondary)     /* secondary text */
+var(--text-muted)         /* muted / label text */
+
+/* Borders */
+var(--border)             /* default border */
+var(--border-hover)       /* hover border */
+```
+
+### Radii
+```css
+var(--radius-sm)   /* 6px  — inputs, small chips */
+var(--radius-md)   /* 8px  — sub-cards, tags */
+var(--radius-lg)   /* 12px — cards, panels */
+var(--radius-xl)   /* 16px — main .card, modals */
+var(--radius-full) /* 9999px — pills, badges */
+```
+
+### Spacing
+```css
+var(--space-4)  var(--space-6)  var(--space-8)  var(--space-10)
+var(--space-12) var(--space-16) var(--space-20) var(--space-24)
+var(--space-32) var(--space-40) var(--space-48)
+```
+
+---
+
+## 2. No Inline Styles — Policy
+
+```tsx
+// ❌ BAD — static value that belongs in CSS
+<div style={{ display: 'flex', gap: 8, color: '#22c55e' }}>
+
+// ✅ GOOD — use utility or component class
+<div className="d-flex gap-8 text-green">
+```
+
+**Allowed inline styles** (truly dynamic, runtime-computed values only):
+- Color driven by a JS variable: `style={{ color: riskColor }}`
+- Conditional opacity/cursor on disabled state: `style={{ opacity: disabled ? 0.5 : 1 }}`
+- Grid/absolute positioning that depends on a prop: `style={{ gridColumn: '1 / -1' }}`
+- Drag-and-drop border states or animation widths
+
+**Never** inline: `display`, `flex-direction`, `gap`, `padding`, `margin`, `text-align`, `font-weight`, or any static color.
+
+---
+
+## 3. Component Classes (canonical names)
+
+Use these before creating new classes.
+
+| Pattern | Class |
+|---|---|
+| Page card | `.card` |
+| Secondary card / shaded box | `.card-secondary` or `.tool-card` |
+| Sub-card (nested, bg=`--bg`) | `.tool-sub-card` |
+| Primary icon badge | `.icon-badge-primary` |
+| Feature icon (centered, primary bg) | `.feature-icon` or `.hiw-icon-primary` |
+| Numbered step circle | `.step-badge` (`.step-circle` is an alias) |
+| Step layout row | `.step-item` |
+| Row w/ icon + text | `.info-row` or `.heading-with-icon` |
+| Notice (success/error/warning) | `.notice-success` / `.notice-error` / `.notice-warning` |
+| Modal backdrop | `.modal-overlay` |
+| Tab bar | `.tab-nav` + `.tab-btn` + `.tab-active` |
+| Tool input card | `.tool-card` + `.tool-label` + `.tool-textarea` / `.tool-input` |
+| Edu/help box | `.tool-edu-box` / `.tool-help-box` / `.tool-info-box` |
+| Grid auto-fit (250px cols) | `.grid-auto-250` |
+| Grid auto-fit (200px cols) | `.grid-auto-200` |
+
+---
+
+## 4. Utility Classes (layout / spacing)
+
+```
+Display:    .d-flex  .d-inline-flex  .d-grid  .d-block  .d-none
+Flex:       .flex-col  .flex-wrap  .flex-1  .flex-shrink-0
+Align:      .items-center  .items-start  .items-end
+Justify:    .justify-center  .justify-between  .justify-end
+Gap:        .gap-4 .. .gap-24
+Margin:     .m-0  .mt-{n}  .mb-{n}  .ml-{n}  .mx-auto
+Padding:    .p-{n}  .pt-{n}  .pb-{n}  .pl-{n}
+Width:      .w-full  .min-w-auto
+Text:       .text-center  .text-left  .font-semibold  .font-bold  .small  .capitalize
+Color:      .text-primary  .text-error  .text-green  .text-red  .text-orange-dark
+            .text-secondary-color  .text-text  .text-link
+Background: .bg-secondary  .bg-base
+Opacity:    .opacity-3  .opacity-6  .opacity-7  .opacity-8  .opacity-85
+Position:   .relative  .absolute  .fixed  .inset-0
+Misc:       .cursor-pointer  .overflow-hidden  .border-top  .rounded-full  .d-none
+```
+
+---
+
+## 5. Adding New Styles
+
+1. **New component pattern** → add a named class to `src/styles.css` in the appropriate section, using CSS variable tokens.
+2. **One-off layout** → compose existing utility classes.
+3. **Dynamic value** → inline style is acceptable; document why in a comment if non-obvious.
+4. **Never** add `!important` except for accessibility overrides already present (reduced motion, etc.).
+5. **Never** hardcode hex/rgb colors — always use a CSS variable from section 1.
